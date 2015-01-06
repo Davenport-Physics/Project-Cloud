@@ -493,6 +493,10 @@ void Map::print_map_around_player(int bounds) {
 				
 				cout << "@" << " ";
 				
+			} else if (this->map[y][x] == 'X') {
+				
+				cout << "  ";
+				
 			} else {
 				
 				cout << this->map[y][x] << " ";
