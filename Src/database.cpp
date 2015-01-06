@@ -62,7 +62,7 @@ void Database::create_table( string table , string variables) {
 	
 }
 
-void update_data(string table, string set, string where) {
+void Database::update_data(string table, string set, string where) {
 
 	string command 	= "UPDATE " + table + "SET " + set + "WHERE " + where;
 	char *sql		= (char *)command.c_str();
@@ -71,7 +71,7 @@ void update_data(string table, string set, string where) {
 	
 }
 
-void delete_data(string table , string values) {
+void Database::delete_data(string table , string values) {
 	
 	string command	= "DELETE " + values + "FROM " + table;
 	char *sql		= (char *)command.c_str();
