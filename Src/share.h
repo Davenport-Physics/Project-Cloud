@@ -26,6 +26,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <cstdlib>
 
 #define MAXCOLUMNS 40
@@ -33,6 +34,7 @@
 using std::cout;
 using std::string;
 using std::endl;
+using std::vector;
 
 template<int numrows,int numcolumns>
 void print_2d_array(char (&array)[numrows][numcolumns]) {
@@ -54,5 +56,7 @@ void print_2d_array(char (&array)[numrows][numcolumns]) {
 int convert_string_to_int(string line);
 
 float convert_string_to_float(string line);
+
+vector<string> delimit_string(string str, char delimiter);
 
 #endif

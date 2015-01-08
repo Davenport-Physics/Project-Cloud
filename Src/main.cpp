@@ -41,7 +41,7 @@ int get_user_input();
 
 void run_game();
 
-static string files[3] = {"Saves/save1","Saves/save2","Saves/save3"};
+static string files[3] = {"Saves/save1.db","Saves/save2.db","Saves/save3.db"};
 static int SaveChoice;
 
 static vector<Map *> maps(30);
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
 		stop_music_thread();
 		for (int x = 0; x < 3;x++) {
 		
-			saves[x] = check_for_saves(files[x]); 
+			saves[x] = check_for_saves_db(files[x]); 
 			
 		}
 	
@@ -212,7 +212,7 @@ int handle_user_input(int input) {
 	switch (input) {
 		
 		case NO: return NO;
-		case SAVE: save_game(files[SaveChoice],player,maps); mygetch(); return NO; break;
+		case SAVE: save_game_db(files[SaveChoice],player,maps); mygetch(); return NO; break;
 		case GOLD: player->add_random_gold(); mygetch(); break;
 	
 	}

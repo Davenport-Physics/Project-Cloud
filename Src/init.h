@@ -41,6 +41,13 @@ using std::string;
 using std::vector;
 
 enum {
+
+	SUCCESS = 0,
+	FAILURE
+	
+};
+
+enum {
 	
 	FIRST = 0,
 	SECOND,
@@ -65,6 +72,13 @@ void load_maps(character *player , ifstream *file , vector<Map *> *maps);
 string check_for_saves_db(string fileame);
 string convert_player_vars_to_string(Player *player);
 string convert_map_vars_to_string(unsigned int index, Map *map);
+
+void save_game_db(string filename, Player *player , vector<Map *> maps);
+
+Player * load_game_db(string filename, vector<Map *> *maps);
+
+int load_player_vars_db(character *player , vector<string> str);
+int load_maps_db(vector<Map *> *maps);
 
 #endif
 

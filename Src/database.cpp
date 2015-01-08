@@ -80,7 +80,7 @@ void Database::delete_data(string table , string values) {
 	
 }
 
-vector <string> Database::retrieve_data(string parameters, string table) {
+vector <string> Database::retrieve_data(string table , string parameters) {
 	
 	const char *error_message;
 

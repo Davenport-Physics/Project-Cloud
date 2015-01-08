@@ -36,4 +36,19 @@ float convert_string_to_float(string line) {
 	return strtof(line.c_str(), NULL);
 	
 }
+vector<string> delimit_string(string str, char delimiter) {
+	
+	vector<string> strings;
+	
+	do {
+		
+		strings.push_back(str.substr(0 , str.find(delimiter)));
+		
+		str = str.substr(str.find(delimiter) + 1,str.length());
+		
+	} while (str.find(delimiter) != string::npos);
+	
+	return strings;
+	
+}
 

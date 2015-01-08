@@ -1,6 +1,6 @@
 OBJS = main.o menus.o mygetch.o init.o music.o generation.o share.o controls.o character.o database.o
 CC = g++
-DEBUG = -g
+DEBUG =
 CFLAGS = -Wall -c -O3 $(DEBUG)
 LFLAGS = -pthread -lSDL2 -lSDL2_mixer -lsqlite3 $(DEBUG)
 

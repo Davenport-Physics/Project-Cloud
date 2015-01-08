@@ -27,6 +27,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#define NUM_ATTRIBUTES 12
+
 using std::string;
 using std::cout;
 

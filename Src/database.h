@@ -89,7 +89,7 @@ public:
 	
 	int check_if_table_exists(string table);
 	
-	vector <string> retrieve_data(string parameter , string table);
+	vector <string> retrieve_data(string table , string parameter);
 	
 };
 

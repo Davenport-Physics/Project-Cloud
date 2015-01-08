@@ -64,7 +64,7 @@ string check_for_saves_db(string filename) {
 	
 	Database db(filename);
 	
-	vector<string> lines = db.retrieve_data("name","Player");
+	vector<string> lines = db.retrieve_data("Player","name");
 	
 	if (lines.size() == 0) {
 	
@@ -298,11 +298,77 @@ void save_game( string filename , Player *player , vector<Map *> maps ) {
 }
 
 static string tables[] = {"Player","Map"};
+Player * load_game_db(string filename, vector<Map *> *maps) {
+
+	Database db(filename);
+	character PlayerVars;
+
+	vector<string> player = db.retrieve_data(tables[0],"*");
+	
+	if (player.size() == 1) {
+		
+		player = delimit_string(player[0] , '|');
+		
+	} else {
+	
+		cout << "More than one player string found\n";
+		
+		return new Player("Error");
+		
+	}
+	if (load_player_vars_db(&PlayerVars , player ) == FAILURE) {
+	
+		cout << "Short on Vectors\n";
+		return new Player("Error");
+		
+	}
+	if (load_maps_db(maps) == FAILURE) {
+	
+		cout << "Something went wrong loading the maps";
+		return new Player("Error");
+		
+	}
+	
+	return new Player(PlayerVars);
+	
+	
+}
+int load_player_vars_db(character *player , vector<string> str) {
+	
+	if (str.size() == NUM_ATTRIBUTES ) {
+		
+		player->name 			= str[0];
+		player->PlayerHealth 	= atoi(str[1].c_str());
+		player->MaxHealth		= atoi(str[2].c_str());
+		player->PlayerLevel		= atoi(str[3].c_str());
+		player->exp				= atoi(str[4].c_str());
+		player->attack			= atoi(str[5].c_str());
+		player->accuracy		= atoi(str[6].c_str());
+		player->MapIndex		= atoi(str[7].c_str());
+		player->gold			= atoi(str[8].c_str());
+		player->Mana			= atof(str[9].c_str());
+		player->MaxMana			= atof(str[10].c_str());
+		player->ManaRegen		= atof(str[11].c_str());
+		
+		return SUCCESS;
+		
+	}
+	
+	return FAILURE;
+	
+}
+
+int load_maps_db(vector<Map *> *maps) {
+	
+	return FAILURE;
+	
+}
+
 static string variables[] = 
 {"Name TINYTEXT,Health INT,MaxHealth INT,Level INT,Exp INT,Attack INT,Accuracy INT,MapIndex INT,Gold INT,Mana DOUBLE,MaxMana DOUBLE,ManaRegen DOUBLE",
 	
- "Id INT,NumRows INT,NumColumns INT,FirstX INT,FirstY INT,SecondX INT, SecondY INT,Map TEXT"};
-void save_game_db(string filename, Player *player , vector<Map *> *maps) {
+ "Id INT,NumRows INT,NumColumns INT,FirstX INT,FirstY INT,SecondX INT, SecondY INT,CharMap TEXT"};
+void save_game_db(string filename, Player *player , vector<Map *> maps) {
 	
 	Database db(filename);
 	
@@ -313,12 +379,13 @@ void save_game_db(string filename, Player *player , vector<Map *> *maps) {
 		
 		db.insert_data(tables[0], convert_player_vars_to_string(player));
 		
-		for (unsigned int x = 0; x < (*maps).size();x++) {
+		for (unsigned int x = 0; x < maps.size();x++) {
 		
-			db.insert_data(tables[1] , convert_map_vars_to_string(x,(*maps)[x]));
+			db.insert_data(tables[1] , convert_map_vars_to_string(x,maps[x]));
 			
 		}
 		
+	//TODO, saving again.
 	} else {
 		
 		
@@ -360,15 +427,13 @@ string convert_map_vars_to_string(unsigned int index,Map *map) {
 	
 	char MapArray[map->get_rows()][map->get_columns()];
 	
-	values += "\'";
+	values += ",\'";
 	for (int y = 0;y < map->get_rows();y++) {
 	
 		values += string(MapArray[y]) + "\n";
 		
 	}
 	values += "\'";
-	
-	
 	return values;
 	
 }
