@@ -137,17 +137,16 @@ public:
 	int get_columns();
 	int * get_first_position();
 	int * get_second_position();
+	int check_if_player_can_move(int x, int y);
 	
 	char ** get_map();
 	
 	void print_map();
 	void print_map_around_player(int bounds);
 	void save_map(string filename);
-	
 	void transition_to_new_map(int *x,int *y, int Direction);
-	int check_if_player_can_move(int x, int y);
 	
-	
+	string convert_map_to_string();
 	
 };
 

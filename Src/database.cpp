@@ -48,7 +48,7 @@ void Database::insert_data( string table, string values ) {
 	string command	= "INSERT INTO " + table + " VALUES(" + values + ")";
 	char *sql		= (char *)command.c_str();
 	
-	execute(sql, "Could not insert data into table");
+	execute(sql, "Could not insert data into table\n");
 	
 }
 
@@ -93,7 +93,7 @@ vector <string> Database::retrieve_data(string table , string parameters) {
 	
 	if (rc != SQLITE_OK) {
 	
-		cout << "Had some type of error reading data";
+		//cout << "Had some type of error reading data";
 		
 	} else {
 	

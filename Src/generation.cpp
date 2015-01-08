@@ -613,6 +613,24 @@ int Map::get_columns() {
 	
 }
 
+string Map::convert_map_to_string() {
+	
+	string map = "";
+	for (int y = 0;y < this->rows;y++) {
+		
+		map += string(this->map[y]);
+		
+		if (y < this->rows-1) {
+		
+			map += "~";
+			
+		}
+		
+	}
+	
+	return map;
+}
+
 Map::~Map() {
 	
 	delete [] this->map;

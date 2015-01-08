@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 				
 				if (pick_save(saves) == FILLED) {
 				
-					player = load_game(files[SaveChoice], &maps);
+					player = load_game_db(files[SaveChoice], &maps);
 				
 				//TODO tell user there is no save file	
 				} else {

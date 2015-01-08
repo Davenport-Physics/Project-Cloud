@@ -34,6 +34,10 @@
 #include "share.h"
 #include "database.h"
 
+/*
+ * Converts integer to string.
+ * 
+ * */
 #define SSTR( x ) dynamic_cast< std::ostringstream & >( \
         ( std::ostringstream() << std::dec << x ) ).str()
 
@@ -57,28 +61,17 @@ enum {
 	
 };
 
-//new prototypes
 Player * new_game(string filename, vector<Map *> *maps);
-void save_game(string filename , Player *player , vector<Map *> maps);
+Player * load_game_db(string filename, vector<Map *> *maps);
 
-string check_for_saves(string filename);
-
-Player * load_game(string filename, vector<Map *> *maps);
-
-void load_player_vars( character *player , ifstream *file);
-void load_maps(character *player , ifstream *file , vector<Map *> *maps);
-
-//database prototypes
 string check_for_saves_db(string fileame);
 string convert_player_vars_to_string(Player *player);
 string convert_map_vars_to_string(unsigned int index, Map *map);
 
 void save_game_db(string filename, Player *player , vector<Map *> maps);
 
-Player * load_game_db(string filename, vector<Map *> *maps);
-
 int load_player_vars_db(character *player , vector<string> str);
-int load_maps_db(vector<Map *> *maps);
+int load_maps_db(vector<Map *> *maps , vector<string> str);
 
 #endif
 
