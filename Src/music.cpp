@@ -29,7 +29,7 @@ static int SoundTrack;
 
 static pthread_t MusicThread;
 
-static string tracks[5] = 
+static const string tracks[5] = 
 {"Music/title1.ogg","Music/track1.ogg","Music/track2.ogg","Music/track3.ogg","Music/track4.ogg"};
 
 void *playerthread(void *n) {
@@ -59,32 +59,38 @@ void playerstart() {
 		
 	}
 
-	Mix_Music *music;
-	
-	switch (SoundTrack) {
-		
-		case TITLE:
-		case MAP1:
-		case MAP2: music 	= Mix_LoadMUS(tracks[SoundTrack].c_str()); break;
-		case RANDOM: music	= Mix_LoadMUS(tracks[1+rand()%NUMTRACKS].c_str()); break;
-		default: return; break;
-		
-	}
-	if (music == NULL) {
-		 
-		printf("Unable to load Ogg file: %s\n", Mix_GetError()); 
-		return;
-		
-	} 
-	if (Mix_PlayMusic(music, 2) == -1) {
-		
-		 printf("Unable to play Ogg file: %s\n", Mix_GetError());
-		 return;
-		 
-	}
+	Mix_Music *music = NULL;
 	
 	while (ContinueMusic) {
 		
+		if(Mix_PlayingMusic() == 0) {
+		
+			switch (SoundTrack) {
+		
+				case TITLE:
+				case MAP1:
+				case MAP2: 		music = Mix_LoadMUS(tracks[SoundTrack].c_str()); break;
+				case RANDOM:	music = Mix_LoadMUS(tracks[1+rand()%NUMTRACKS].c_str()); break;
+				default: return; break;
+		
+			}
+			
+			if (music == NULL) {
+		 
+				printf("Unable to load Ogg file: %s\n", Mix_GetError()); 
+				return;
+		
+			}
+			
+			if (Mix_PlayMusic(music, 1) == -1) {
+		
+				printf("Unable to play Ogg file: %s\n", Mix_GetError());
+				return;
+		 
+			}
+		
+		}
+	
 		SDL_Delay(100);
 	}
 	

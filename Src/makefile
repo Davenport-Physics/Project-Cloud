@@ -25,10 +25,10 @@ share.o : share.h share.cpp
 controls.o : controls.h controls.cpp mygetch.h
 	$(CC) $(CFLAGS) controls.cpp
 
-character.o : character.h character.cpp
+character.o : character.h character.cpp share.h
 	$(CC) $(CFLAGS) character.cpp
 
-generation.o : generation.h generation.cpp
+generation.o : generation.h generation.cpp share.h
 	$(CC) $(CFLAGS) generation.cpp
 
 mygetch.o : mygetch.h mygetch.cpp

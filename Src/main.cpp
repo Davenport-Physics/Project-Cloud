@@ -159,6 +159,8 @@ void run_game() {
 		system("clear");
 		
 		maps[player->vars.MapIndex]->print_map_around_player(10);
+		cout << "Health:" << player->vars.PlayerHealth << " Mana: " << player->vars.Mana;
+		cout << " gold " << player->vars.gold << endl;
 		
 	} while (get_user_input() != QUIT);
 	
@@ -211,9 +213,21 @@ int handle_user_input(int input) {
 	
 	switch (input) {
 		
-		case NO: return NO;
+		case NO: return NO; break;
 		case SAVE: save_game_db(files[SaveChoice],player,maps); mygetch(); return NO; break;
 		case GOLD: player->add_random_gold(); mygetch(); break;
+		case FORWARD: 
+		
+			player->vars.MapIndex++; player->reset_positions();
+			maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,FORWARD);
+			
+		break;
+		case BACKWARD: 
+		
+			player->vars.MapIndex--; player->reset_positions(); 
+			maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,BACKWARD);
+		
+		break;
 	
 	}
 	return YES;

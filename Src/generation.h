@@ -31,6 +31,8 @@
 #include <cmath>
 #include <cstring>
 
+#include "share.h"
+
 #define NUM_MAPS 30
 
 /*
@@ -45,19 +47,8 @@ enum {
 	YES = 0,
 	NO,
 	GOLD,
-	SAVE
-	
-};
-
-
-/*
- * Used when determining how a program should transition during a map
- * change.
- * 
- * */
-enum {
-
-	FORWARD = 0,
+	SAVE,
+	FORWARD,
 	BACKWARD
 	
 };

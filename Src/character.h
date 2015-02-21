@@ -27,6 +27,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "share.h"
+
 #define NUM_ATTRIBUTES 12
 
 using std::string;
@@ -85,6 +87,7 @@ public:
 	
 	void add_random_gold();
 	void check_if_leveled_up();
+	void reset_positions();
 	
 	character get_character_vars();
 	

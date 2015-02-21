@@ -111,6 +111,13 @@ void Player::check_if_leveled_up() {
 	
 }
 
+void Player::reset_positions() {
+	
+	this->vars.x = RESET_POSITION;
+	this->vars.y = RESET_POSITION;
+	
+}
+
 character Player::get_character_vars() {
 	
 	return this->vars;

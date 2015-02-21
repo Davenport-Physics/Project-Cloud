@@ -1,7 +1,7 @@
 /*
- * share.h
+ * engine.h
  * 
- * Copyright 2014 Michael Davenport <Davenport.physics@gmail.com>
+ * Copyright 2015 Michael Davenport <Davenport.physics@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,43 +21,29 @@
  * 
  */
 
-#ifndef SHARE_H
-#define SHARE_H
+#ifndef ENGINE_H
+#define ENGINE_H
 
 #include <iostream>
-#include <string>
-#include <vector>
-#include <cstdlib>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
-#define MAXCOLUMNS 40
-#define RESET_POSITION 0
-
-using std::cout;
 using std::string;
-using std::endl;
-using std::vector;
+using std::cout;
 
-template<int numrows,int numcolumns>
-void print_2d_array(char (&array)[numrows][numcolumns]) {
-
-	for ( int y = 0; y < numrows; y++ ) {
-		
-		for ( int x = 0; x < numcolumns; x++ ) {
-		
-			cout << array[y][x] << " ";
-			
-		}
-		
-		cout << endl;
-		
-	}
+typedef enum TextRendering {
 	
-}
+	FAST = 0,
+	SHADED,
+	BLENDED
+	
+} Text;
 
-int convert_string_to_int(string line);
+void init_engine(Text type);
 
-float convert_string_to_float(string line);
+void draw_array();
 
-vector<string> delimit_string(string str, char delimiter);
+void quit_engine();
 
 #endif
+

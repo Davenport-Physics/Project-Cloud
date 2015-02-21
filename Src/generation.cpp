@@ -327,7 +327,7 @@ void Map::add_forward_backwards() {
 			
 			if (determine_if_suitable_position(x,y)) {
 				
-				if (this->Number != -1) {
+				if (this->Number != 0) {
 					
 					this->map[y][x] = '<';
 					
@@ -353,9 +353,13 @@ void Map::add_forward_backwards() {
 				
 				if (determine_if_suitable_position(x,y)) {
 				
-					this->map[y][x] = '>';
+					if (this->Number != NUM_MAPS-1) {
+				
+						this->map[y][x] = '>';
 					
-					initialize_position(x , y , SecondPosition);
+						initialize_position(x , y , SecondPosition);
+						
+					}
 					
 					break;
 					
@@ -568,15 +572,19 @@ void Map::transition_to_new_map(int *x , int *y , int Direction) {
 	this->x = x;
 	this->y = y;
 	
-	if (Direction == FORWARD) {
+	if (*this->x == RESET_POSITION && *this->y == RESET_POSITION) {
 	
-		*this->x = FirstPosition[0];
-		*this->y = FirstPosition[1];
+		if (Direction == FORWARD) {
+	
+			*this->x = FirstPosition[0];
+			*this->y = FirstPosition[1];
 		
-	} else if (Direction == BACKWARD) {
+		} else if (Direction == BACKWARD) {
 	
-		*this->x = SecondPosition[0];
-		*this->y = SecondPosition[1];
+			*this->x = SecondPosition[0];
+			*this->y = SecondPosition[1];
+		
+		}
 		
 	}
 	
@@ -593,8 +601,10 @@ int Map::check_if_player_can_move(int x , int y) {
 		
 		break;
 		
-		case '+':  this->map[y][x] = '.'; return GOLD; break;
+		case '+': this->map[y][x] = '.'; return GOLD; break;
 		case 's': return SAVE; break;
+		case '>': return FORWARD; break;
+		case '<': return BACKWARD; break;
 		default: return YES; break;
 		
 	}
