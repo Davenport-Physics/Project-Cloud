@@ -25,12 +25,18 @@
 
 static const string FontPath = "Fonts/LiberationMonoRegular.ttf";
 
-static SDL_Window *Window;
-static SDL_Surface *Screen;
+static SDL_Window *Window	= NULL;
+static SDL_Surface *Screen	= NULL;
+static TTF_Font *Font 		= NULL;
 
-static TTF_Font *Font;
+static SDL_Color Color 				= {255, 255, 255};
+static SDL_Color BackgroundColor	= {0, 0, 0};
 
 static Text RenderingType;
+
+static SDL_Surface *(*RenderFunction)(TTF_Font *, const char *, SDL_Color);
+
+void update_window();
 
 void init_engine(Text type) {
 	
@@ -45,7 +51,7 @@ void init_engine(Text type) {
 							
 	Screen = SDL_GetWindowSurface(Window);
 	
-	if (!TTF_Init() == -1) {
+	if (!(TTF_Init() == -1)) {
 	
 		cout << "Error initializing True Text Font Engine";
 		
@@ -63,6 +69,52 @@ void init_engine(Text type) {
 	 * 
 	 * */
 	RenderingType = type;
+	
+	/*
+	 * TODO, add shaded option.
+	 * 
+	 * */
+	switch (RenderingType) {
+	
+		case FAST: 		RenderFunction = TTF_RenderText_Solid; break;
+		case SHADED:
+		case BLENDED:	RenderFunction = TTF_RenderText_Blended; break;
+		
+		
+	}
+	
+}
+
+void draw_2d_array(char **array, int rows) {
+	
+	SDL_FillRect(Screen, NULL, 0x000000);
+	SDL_UpdateWindowSurface(Window);
+	
+	SDL_Surface *Surface;
+	SDL_Rect Rect;
+	
+	Rect.x = 0;
+	
+	for (int y = 0;y < rows; y++) {
+	
+		Rect.y = y * 20;
+		
+		if (!(Surface = RenderFunction(Font, array[y], Color))) {
+		
+			cout << "Something went wrong with drawing 2D array";
+			
+			exit(2);
+			
+		} else {
+		
+			SDL_BlitSurface(Surface, NULL, Screen, &Rect);
+			SDL_FreeSurface(Surface);
+			
+		}
+		
+	}
+	
+	SDL_UpdateWindowSurface(Window);
 	
 }
 

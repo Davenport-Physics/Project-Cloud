@@ -22,17 +22,21 @@
 
 #ifndef MENUS_H
 #define MENUS_H
+
 #include <iostream>
 #include <cstdlib>
 #include <pthread.h>
+#include <vector>
 
 #include "controls.h"
 #include "mygetch.h"
 #include "share.h"
+#include "engine.h"
 
 using std::cout;
 using std::endl;
 using std::cin;
+using std::vector;
 
 enum {
 

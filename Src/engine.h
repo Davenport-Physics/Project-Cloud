@@ -40,10 +40,27 @@ typedef enum TextRendering {
 } Text;
 
 void init_engine(Text type);
-
-void draw_array();
-
+void draw_2d_array(char **array, int rows);
 void quit_engine();
+
+template<int numrows, int numcolumns>
+void draw_2d_stack_array(char (&array)[numrows][numcolumns]) {
+
+	char **Stack = new char *[numrows];
+	
+	for (int y = 0;y < numrows;y++) {
+	
+		Stack[y] = new char[numcolumns + 1];
+		
+		strncpy(Stack[y], array[y], numcolumns);
+		Stack[y][numcolumns] = '\0';
+		
+	}
+	
+	draw_2d_array(Stack, numrows);
+	
+	delete [] Stack;
+}
 
 #endif
 

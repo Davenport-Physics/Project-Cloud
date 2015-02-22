@@ -34,6 +34,7 @@
 #include "character.h"
 #include "generation.h"
 #include "mygetch.h"
+#include "engine.h"
 
 int pick_save(string *saves);
 int handle_user_input(int input);
@@ -60,7 +61,15 @@ int main(int argc, char **argv) {
 	
 	string saves[3];
 	
-	create_music_thread(TITLE);
+	//create_music_thread(TITLE);
+	
+	
+	/*
+	 * This should be user defined later on, for now it is shaded.
+	 * 
+	 * */
+	init_engine(SHADED);
+	
 	int game = main_menu();
 	while (game != EXITGAME) {
 		

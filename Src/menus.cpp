@@ -50,7 +50,9 @@ char MainArray[height][width] = {
 		
 		MainArray[y][x] = '>';
 		
-		print_2d_array(MainArray);
+		draw_2d_stack_array(MainArray);
+		
+		//print_2d_array(MainArray);
 		
 		char command = mygetch();
 		switch (UserControls.check_control(command)) {
