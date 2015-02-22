@@ -140,7 +140,7 @@ char OptionsArray[5][10] =
 		
 		OptionsArray[y][x] = '>';
 		
-		print_2d_array(OptionsArray);
+		draw_2d_stack_array(OptionsArray);
 		
 		char command = mygetch();
 		switch (UserControls.check_control(command)) {

@@ -23,7 +23,7 @@
 
 #include "engine.h"
 
-static const string FontPath = "Fonts/LiberationMonoRegular.ttf";
+static const string FontPath = "Fonts/LiberationMono-Regular.ttf";
 
 static SDL_Window *Window	= NULL;
 static SDL_Surface *Screen	= NULL;
@@ -51,9 +51,10 @@ void init_engine(Text type) {
 							
 	Screen = SDL_GetWindowSurface(Window);
 	
-	if (!(TTF_Init() == -1)) {
+	if (TTF_Init() == -1) {
 	
-		cout << "Error initializing True Text Font Engine";
+		cout << "Error initializing True Text Font Engine: " << TTF_GetError();
+		exit(2);
 		
 	}
 	
@@ -62,6 +63,13 @@ void init_engine(Text type) {
 	 * 
 	 * */
 	Font = TTF_OpenFont(FontPath.c_str(), 20);
+	
+	if (!Font) {
+		
+		cout << "Error opening font: " << TTF_GetError() << "\n";
+		exit(2);
+		
+	}
 	
 	/*
 	 * Might give the user the possibility of changing rendering type
