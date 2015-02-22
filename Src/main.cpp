@@ -61,8 +61,8 @@ int main(int argc, char **argv) {
 	
 	string saves[3];
 	
-	//create_music_thread(TITLE);
-	
+	init_sound_engine();
+	create_music_thread(TITLE);
 	
 	/*
 	 * This should be user defined later on, for now it is shaded.

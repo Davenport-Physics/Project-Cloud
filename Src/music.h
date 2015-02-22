@@ -50,6 +50,7 @@ enum {
 void *playerthread(void *n);
 void playerstart();
 
+void init_sound_engine();
 void create_music_thread(int track);
 void stop_music_thread();
 

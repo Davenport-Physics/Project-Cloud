@@ -32,6 +32,7 @@
 #include <cstring>
 
 #include "share.h"
+#include "engine.h"
 
 #define NUM_MAPS 30
 

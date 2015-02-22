@@ -489,7 +489,35 @@ void Map::print_map_around_player(int bounds) {
 	if (FinalY > this->rows)
 		FinalY = this->rows;
 		
-	for (int y = InitialY; y < FinalY;y++) {
+	int dY = FinalY - InitialY;
+	int dX = FinalX - InitialX;
+		
+	char **map = new char *[dY];
+	
+	for (int y = 0;y < dY; y++) {
+	
+		map[y] = new char[dX + 1];
+		
+		for (int x = 0; x < dX; x++) {
+		
+			if (InitialY + y == (*this->y) && InitialX + x == (*this->x)) {
+			
+				map[y][x] = '@';
+				
+			} else {
+				
+				map[y][x] = this->map[InitialY + y][InitialX + x];
+				
+			}
+			
+		}
+		map[y][dX] = '\0';
+		
+	}
+	
+	draw_2d_array(map, dY);
+		
+	/*for (int y = InitialY; y < FinalY;y++) {
 	
 		for (int x = InitialX; x < FinalX;x++) {
 		
@@ -510,8 +538,8 @@ void Map::print_map_around_player(int bounds) {
 		}
 		cout << endl;
 		
-	}
-	
+	}*/
+	delete [] map;
 }
 
 /*
