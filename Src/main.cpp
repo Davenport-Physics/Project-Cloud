@@ -37,6 +37,10 @@
 #include "engine.h"
 
 int pick_save(string *saves);
+
+int determine_new_game(string *saves);
+int determine_load_game(string *saves);
+
 int handle_user_input(int input);
 int get_user_input();
 
@@ -79,51 +83,47 @@ int main(int argc, char **argv) {
 			saves[x] = check_for_saves_db(files[x]); 
 			
 		}
+		
+		int (*determine)(string *);
+		Player *(*start)(string, vector<Map *> *);
+		if (game == NEWGAME) {
+			
+			determine	= &determine_new_game;
+			start		= &new_game;
+			
+		} else if (game == LOADGAME) {
+		
+			determine	= &determine_load_game;
+			start		= &load_game_db;
+			
+		}
 	
 		switch (game) {
 		
-			case NEWGAME:
-				
-				if (pick_save(saves) != FILLED) {
-				
-					player = new_game(files[SaveChoice] , &maps);
-				
-				//TODO prompt the user to make sure they want to overwrite	
-				} else {
-					
-					continue;
-					
-				}
-				
-				run_game();
-			
-			break;
-			
+			case NEWGAME: 
 			case LOADGAME:
+			
+				{
+					bool done = false;
 				
-				if (pick_save(saves) == FILLED) {
+					while (!done) {
 				
-					player = load_game_db(files[SaveChoice], &maps);
-				
-				//TODO tell user there is no save file	
-				} else {
-				
-					continue;
+						switch (determine(saves)) {
+					
+							case YES: player = start(files[SaveChoice], &maps); run_game(); done = true; break;
+							case NO: continue; break;
+							default: done = true; break;
+						
+						}
+					
+					}
 					
 				}
-				
-				run_game();
 			
 			break;
+			case OPTIONS: 
 			
-			case OPTIONS:
-			
-				switch (options()) {
-				
-					case CONTROLS: controls(); break;
-					case CREDITS: credits(); break;
-					
-				}
+				switch (options()) { case CONTROLS: controls(); break; case CREDITS: credits(); break; }
 			
 			break;
 			
@@ -136,12 +136,75 @@ int main(int argc, char **argv) {
 	
 	delete player;
 	
+	quit_engine();
+	quit_sound_engine();
+	
 	return 0;
 }
+
+
+int determine_new_game(string *saves) {
+
+	int choice = pick_save(saves);
+				
+	if (choice == QUIT) {
+		
+		return QUIT;
+				
+	} else if (choice != FILLED) {
+					
+		return YES;
+					
+	} else {
+				
+		draw_append_string("Do you wish to overwrite this file? y/n");
+		
+		if(get_raw_input() == 'y' || get_raw_input() == 'Y') {
+		
+			return YES;
+			
+		} else {
+		
+			return NO;
+			
+		}
+									
+	}
+	
+}
+
+int determine_load_game(string *saves) {
+	
+	int choice = pick_save(saves);
+	if (choice == FILLED) {
+				
+		return YES;
+				
+	} else if (choice == QUIT) {
+	
+		return QUIT;
+	
+	} else {
+				
+		draw_append_string("There is no save file here");
+		get_raw_input();
+		return NO;
+					
+	}
+	
+}
+
 
 int pick_save(string *saves) {
 	
 	SaveChoice = show_saves(saves);
+	
+	if (SaveChoice == -1) { 
+	
+		return QUIT;
+		
+	}
+	
 	if (saves[SaveChoice].compare("empty") == 0) {
 	
 		return SaveChoice;
@@ -165,11 +228,12 @@ void run_game() {
 	
 	do {
 		
-		system("clear");
+		maps[player->vars.MapIndex]->print_map_around_player(15);
 		
-		maps[player->vars.MapIndex]->print_map_around_player(10);
-		cout << "Health:" << player->vars.PlayerHealth << " Mana: " << player->vars.Mana;
-		cout << " gold " << player->vars.gold << endl;
+		string temp = "Health:" + SSTR(player->vars.PlayerHealth) + " Mana:" + convert_float_to_string(player->vars.Mana);
+		temp 	   += " gold:" + SSTR(player->vars.gold);
+		
+		draw_append_string(temp);
 		
 	} while (get_user_input() != QUIT);
 	
@@ -179,10 +243,8 @@ void run_game() {
 int get_user_input() {
 
 		
-		char command = mygetch();
-		
 		//TODO refactor using a function.
-		switch (UserControls.check_control(command)) {
+		switch (UserControls.get_input()) {
 		
 			case UP:
 			

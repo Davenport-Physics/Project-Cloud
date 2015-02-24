@@ -33,13 +33,7 @@
 #include "generation.h"
 #include "share.h"
 #include "database.h"
-
-/*
- * Converts integer to string.
- * 
- * */
-#define SSTR( x ) dynamic_cast< std::ostringstream & >( \
-        ( std::ostringstream() << std::dec << x ) ).str()
+#include "engine.h"
 
 using std::string;
 using std::vector;

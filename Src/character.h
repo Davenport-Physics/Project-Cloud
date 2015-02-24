@@ -28,6 +28,7 @@
 #include <cstdlib>
 
 #include "share.h"
+#include "engine.h"
 
 #define NUM_ATTRIBUTES 12
 

@@ -10,13 +10,13 @@ mc : $(OBJS)
 main.o : main.cpp init.h menus.h music.h character.h generation.h engine.h
 	$(CC) $(CFLAGS) main.cpp
 
-init.o : init.h init.cpp character.h generation.h share.h database.h
+init.o : init.h init.cpp character.h generation.h share.h database.h engine.h
 	$(CC) $(CFLAGS) init.cpp
 
 database.o : database.h database.cpp
 	$(CC) $(CFLAGS) database.cpp
 
-menus.o : menus.h menus.cpp controls.h mygetch.h share.h engine.h
+menus.o : menus.h menus.cpp controls.h mygetch.h share.h engine.h init.h
 	$(CC) $(CFLAGS) menus.cpp
 
 share.o : share.h share.cpp
@@ -25,7 +25,7 @@ share.o : share.h share.cpp
 controls.o : controls.h controls.cpp mygetch.h
 	$(CC) $(CFLAGS) controls.cpp
 
-character.o : character.h character.cpp share.h
+character.o : character.h character.cpp share.h engine.h
 	$(CC) $(CFLAGS) character.cpp
 
 generation.o : generation.h generation.cpp share.h

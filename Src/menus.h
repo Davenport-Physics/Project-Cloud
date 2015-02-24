@@ -25,9 +25,11 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cstring>
 #include <pthread.h>
 #include <vector>
 
+#include "init.h"
 #include "controls.h"
 #include "mygetch.h"
 #include "share.h"

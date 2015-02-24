@@ -36,6 +36,17 @@ float convert_string_to_float(string line) {
 	return strtof(line.c_str(), NULL);
 	
 }
+
+string convert_float_to_string(float var) {
+
+	char buffer[512];
+
+	snprintf(buffer, sizeof(buffer) , "%f" , var);
+	
+	return string(buffer);
+	
+}
+
 vector<string> delimit_string(string str, char delimiter) {
 	
 	vector<string> strings;

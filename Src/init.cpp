@@ -23,17 +23,21 @@
 
 string check_for_saves_db(string filename) {
 	
-	Database db(filename);
+	if (check_if_database_exists(filename)) {
 	
-	vector<string> lines = db.retrieve_data("Player","name");
+		Database db(filename);
 	
-	if (lines.size() == 0) {
+		vector<string> lines = db.retrieve_data("Player","name");
 	
-		return "empty";
+		if (lines.size() == 0) {
+	
+			return "empty";
 		
-	} else {
+		} else {
 	
-		return lines[0];
+			return lines[0];
+		
+		}
 		
 	}
 	
@@ -44,6 +48,12 @@ string check_for_saves_db(string filename) {
 Player * new_game(string filename, vector<Map *> *maps) {
 	
 	string name;
+	/*
+	 * TODO
+	 * 
+	 * Show input on SDL rendering screen
+	 * 
+	 * */
 	cout << "Please enter your name -> ";
 	getline(cin , name);
 	
@@ -173,31 +183,37 @@ static string variables[] =
  "Id INT,NumRows INT,NumColumns INT,FirstX INT,FirstY INT,SecondX INT, SecondY INT,CharMap TEXT"};
 void save_game_db(string filename, Player *player , vector<Map *> maps) {
 	
-	Database db(filename);
 	
-	cout << "Saving..." << endl;
+	Database *db = new Database(filename);
+	draw_append_string("Saving...");
 	
-	if (db.check_if_table_exists("Player") != EXISTS ) {
+	if (db->check_if_table_exists("Player") == EXISTS ) {
 	
-		db.create_table(tables[0], variables[0]);
-		db.create_table(tables[1], variables[1]);
+		delete db;
+		if (!delete_file(filename)) {
 		
-		db.insert_data(tables[0], convert_player_vars_to_string(player));
-		
-		for (unsigned int x = 0; x < maps.size();x++) {
-		
-			db.insert_data(tables[1] , convert_map_vars_to_string(x,maps[x]));
+			return;
 			
 		}
-		
-	//TODO, saving again.
-	} else {
-		
-		
-		
+	
 	}
 	
-	cout << "Finished Saving" << endl;
+	db = new Database(filename);
+	
+	db->create_table(tables[0], variables[0]);
+	db->create_table(tables[1], variables[1]);
+		
+	db->insert_data(tables[0], convert_player_vars_to_string(player));
+		
+	for (unsigned int x = 0; x < maps.size();x++) {
+		
+			db->insert_data(tables[1] , convert_map_vars_to_string(x,maps[x]));
+			
+	}
+	
+	delete db;
+	
+	draw_append_string("Finished Saving");
 	
 }
 

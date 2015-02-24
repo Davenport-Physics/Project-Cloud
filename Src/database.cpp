@@ -162,9 +162,30 @@ void Database::execute( char *sql, string IfError ) {
 	
 	if ( rc != SQLITE_OK ) {
 	
-		cout << IfError;
+		cout << IfError << ": " << sql;
 		
 	}
+	
+}
+
+bool check_if_database_exists(string filename) {
+	
+	ifstream file(filename.c_str());
+	
+	return file.good();
+	
+}
+
+bool delete_file(string filename) {
+	
+	if ( remove(filename.c_str()) != 0) {
+		
+		cout << "Unable to delete file\n";
+		return false;
+		
+	} 
+	
+	return true;
 	
 }
 

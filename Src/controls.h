@@ -73,8 +73,11 @@ public:
 	void print_controls();
 	
 	int check_control(char control);
+	int get_input();
 	
 };
+
+char get_raw_input();
 
 extern Controls UserControls;
 

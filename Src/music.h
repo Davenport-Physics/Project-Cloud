@@ -54,4 +54,6 @@ void init_sound_engine();
 void create_music_thread(int track);
 void stop_music_thread();
 
+void quit_sound_engine();
+
 #endif

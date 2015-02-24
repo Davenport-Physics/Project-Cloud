@@ -504,6 +504,10 @@ void Map::print_map_around_player(int bounds) {
 			
 				map[y][x] = '@';
 				
+			} else if (this->map[InitialY + y][InitialX + x] == 'X') {
+				
+				map[y][x] = ' ';
+				
 			} else {
 				
 				map[y][x] = this->map[InitialY + y][InitialX + x];
@@ -517,28 +521,6 @@ void Map::print_map_around_player(int bounds) {
 	
 	draw_2d_array(map, dY);
 		
-	/*for (int y = InitialY; y < FinalY;y++) {
-	
-		for (int x = InitialX; x < FinalX;x++) {
-		
-			if (y == (*this->y) && x == (*this->x)) {
-				
-				cout << "@" << " ";
-				
-			} else if (this->map[y][x] == 'X') {
-				
-				cout << "  ";
-				
-			} else {
-				
-				cout << this->map[y][x] << " ";
-				
-			}
-			
-		}
-		cout << endl;
-		
-	}*/
 	delete [] map;
 }
 

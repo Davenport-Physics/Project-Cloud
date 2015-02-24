@@ -123,3 +123,20 @@ int Controls::check_control(char control) {
 	return NOTSET;
 	
 }
+
+/*
+ * These functions will eventually use sdl, but for now they're still
+ * using the terminal input.
+ * 
+ * */
+int Controls::get_input() {
+		
+	return check_control(mygetch());
+	
+}
+
+char get_raw_input() {
+
+	return mygetch();
+	
+}

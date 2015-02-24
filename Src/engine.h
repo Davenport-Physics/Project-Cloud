@@ -40,11 +40,26 @@ typedef enum TextRendering {
 } Text;
 
 void init_engine(Text type);
+
+/*
+ * TODO add parameter to change parameter. This will effect how append,
+ * works as well.
+ * 
+ * */
+void draw_1d_array(char *array);
 void draw_2d_array(char **array, int rows);
+void draw_string(string str);
+
+void draw_append_1d_array(char *array);
+void draw_append_2d_array(char **array, int rows);
+void draw_append_string(string str);
+
+void draw_animation_bottom_top(char **array, int rows);
+
 void quit_engine();
 
 template<int numrows, int numcolumns>
-void draw_2d_stack_array(char (&array)[numrows][numcolumns]) {
+void draw_2d_stack_array(char (&array)[numrows][numcolumns], void (*DrawFunction)(char **, int)) {
 
 	char **Stack = new char *[numrows];
 	
@@ -57,7 +72,7 @@ void draw_2d_stack_array(char (&array)[numrows][numcolumns]) {
 		
 	}
 	
-	draw_2d_array(Stack, numrows);
+	DrawFunction(Stack, numrows);
 	
 	delete [] Stack;
 }

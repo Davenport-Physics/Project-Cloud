@@ -44,13 +44,11 @@ char MainArray[height][width] = {
 	int oldy = y;
 	string load = "";
 	
-	system("clear");
-	
 	while (true) {
 		
 		MainArray[y][x] = '>';
 		
-		draw_2d_stack_array(MainArray);
+		draw_2d_stack_array(MainArray,&draw_2d_array);
 		
 		//print_2d_array(MainArray);
 		
@@ -121,6 +119,10 @@ char MainArray[height][width] = {
 }
 
 
+/*
+ * TODO Add music option to increase/decrease/mute volume
+ * 
+ * */
 int options() {
 
 char OptionsArray[5][10] = 
@@ -129,8 +131,6 @@ char OptionsArray[5][10] =
 {' ','C','r','e','d','i','t','s',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}};
-	
-	system("clear");
 
 	int x = 0;
 	int y = 0;
@@ -140,7 +140,7 @@ char OptionsArray[5][10] =
 		
 		OptionsArray[y][x] = '>';
 		
-		draw_2d_stack_array(OptionsArray);
+		draw_2d_stack_array(OptionsArray, &draw_2d_array);
 		
 		char command = mygetch();
 		switch (UserControls.check_control(command)) {
@@ -173,7 +173,6 @@ char OptionsArray[5][10] =
 			yo = y;
 			
 		}
-		system("clear");
 		
 	}
 	return -1;
@@ -183,29 +182,43 @@ int show_saves(string *saves) {
 	
 	int YPosition = 0;
 	
-	char command;
+	/*
+	 * Potential for issue if the user has a really large name;
+	 * 
+	 * */
+	char **SavesArray = new char *[3];
+	for (int y = 0;y < 3;y++) {
 	
-	system("clear");
+		SavesArray[y] = new char[64];
+		
+		memset(SavesArray[y], ' ', 64);
+		
+		SavesArray[y][63] = '\0';
+	}
+	
 	while (true) {
 		
 		for (int y = 0;y < 3;y++) {
-		
+			
 			if (YPosition == y) {
 				
-				cout << "> " << saves[y] << "\n\n";
+				string temp = "> " + saves[y];
+				strncpy(SavesArray[y], temp.c_str(), 63);
 				
 			} else {
 			
-				cout << "  " << saves[y] << "\n\n";
+				strncpy(SavesArray[y], saves[y].c_str(), 63);
 				
 			}
 			
 		}
 		
-		command = mygetch();
-		switch(UserControls.check_control(command)) {
+		draw_2d_array(SavesArray, 3);
+		
+		switch(UserControls.get_input()) {
 		
 			case ENTER: return YPosition; break;
+			case QUIT: return -1; break;
 			case UP:
 			
 				if (YPosition > 0) {
@@ -215,7 +228,6 @@ int show_saves(string *saves) {
 				}
 				
 			break;
-			
 			case DOWN:
 			
 				if (YPosition < 2) {
@@ -227,11 +239,10 @@ int show_saves(string *saves) {
 			break;
 			
 		}
-		
-		system("clear");
 	
 	}
 
+	delete [] SavesArray;
 	
 }
 
@@ -252,21 +263,22 @@ void controls() {
 
 void credits() {
 	
-	system("clear");
-	
-	std::cout << "Credits" << std::endl;
-	std::cout << "LP-Michael Davenport" << std::endl;
-	std::cout << "HP-Alex Fatum" << std::endl;
-	std::cout << "SAG-Max Mitchell" << std::endl;
-	std::cout << std::endl;
-	std::cout << "Special thanks to:" << std::endl;
-	std::cout << "James Thomas" << std::endl;
-	std::cout << "Linteg" << std::endl;
-	std::cout << "Music by:" << std::endl;	
-	std::cout << "Title1 - Max Mitchell" << std::endl;
-	std::cout << "map2 - Midnight cloud - Max Mitchell" << std::endl;
-	std::cout << "map1 - Waltz into the moonlight - tryad" << std::endl;
-	
-	std::cin.get();
+static char CreditsArray[13][20] =
+{{'C','r','e','d','i','t','s',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {'L','e','a','d',' ','P','r','o','g','r','a','m','m','e','r',' ',' ',' ',' ',' '},
+ {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ','M','i','c','h','a','e','l',' ','D','a','v','e','n','p','o','r','t'},
+ {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {'M','u','s','i','c',' ','b','y',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ','G','e','o','r','g','e',' ','M','i','t','c','h','e','l','l',' ',' '},
+ {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ',' ',' ',' ',' ','a','k','a',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ',' ','/','d','e','v','/','z','e','r','o',' ',' ',' ',' ',' ',' ',' '}};
+
+
+	draw_2d_stack_array(CreditsArray, &draw_animation_bottom_top);
 	
 }

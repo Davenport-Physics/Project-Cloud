@@ -93,7 +93,7 @@ void Player::add_random_gold() {
 
 	int gold = (1 + rand() % 15);
 	
-	cout << "Received " << gold << " gold pieces!\n"; 
+	draw_append_string("Recieved " + SSTR(gold) + " gold pieces!");
 
 	this->vars.gold += gold;
 	
@@ -105,7 +105,7 @@ void Player::check_if_leveled_up() {
 	
 		this->vars.PlayerLevel++;
 		
-		cout << "Leveled up!";
+		draw_append_string("Leveled up!");
 		
 	}
 	

@@ -25,12 +25,21 @@
 #define SHARE_H
 
 #include <iostream>
+#include <cstdio>
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <sstream>
 
 #define MAXCOLUMNS 40
 #define RESET_POSITION 0
+
+/*
+ * Converts integer to string.
+ * 
+ * */
+#define SSTR( x ) dynamic_cast< std::ostringstream & >( \
+        ( std::ostringstream() << std::dec << x ) ).str()
 
 using std::cout;
 using std::string;
@@ -57,6 +66,8 @@ void print_2d_array(char (&array)[numrows][numcolumns]) {
 int convert_string_to_int(string line);
 
 float convert_string_to_float(string line);
+
+string convert_float_to_string(float var);
 
 vector<string> delimit_string(string str, char delimiter);
 

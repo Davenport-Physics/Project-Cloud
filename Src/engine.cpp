@@ -30,7 +30,9 @@ static SDL_Surface *Screen	= NULL;
 static TTF_Font *Font 		= NULL;
 
 static SDL_Color Color 				= {255, 255, 255};
-static SDL_Color BackgroundColor	= {0, 0, 0};
+//static SDL_Color BackgroundColor	= {0, 0, 0};
+
+static SDL_Rect LastRect;
 
 static Text RenderingType;
 
@@ -121,8 +123,88 @@ void draw_2d_array(char **array, int rows) {
 		}
 		
 	}
+	LastRect = Rect;
 	
 	SDL_UpdateWindowSurface(Window);
+	
+}
+
+void draw_append_string(string str) {
+
+	char *array = new char[str.length() + 1];
+	strcpy(array, str.c_str());
+	array[str.length()] = '\0';
+	
+	SDL_Surface *Surface;
+	
+	if (!(Surface = RenderFunction(Font, array, Color))) {
+	
+		cout << "Something went wrong drawing string";
+		exit(2);
+		
+	} else {
+		
+		LastRect.y += 20;
+	
+		SDL_BlitSurface(Surface, NULL, Screen, &LastRect);
+		SDL_FreeSurface(Surface);
+	
+		SDL_UpdateWindowSurface(Window);
+	}
+	
+	delete [] array;
+	
+}
+
+void draw_animation_bottom_top(char **array, int rows) {
+
+	SDL_Surface *Surface;
+	SDL_Rect Rect[rows];
+	
+	SDL_FillRect(Screen, NULL, 0x000000);
+	SDL_UpdateWindowSurface(Window);
+	
+	for (int y = 0;y < rows;y++) {
+	
+		Rect[y].x = 300;
+		Rect[y].y = 780 + y * 20;
+		
+	}
+	
+	while (Rect[rows - 1].y != 0) {
+		
+		for (int y = 0;y < rows;y++) {
+			
+			if (Rect[y].y < 780 && Rect[y].y > 0) {
+			
+				if (!(Surface = RenderFunction(Font, array[y], Color))) {
+				
+					cout << "Unable to run draw_animation_bottom_top function";
+					exit(2);
+				
+				} else {
+			
+					SDL_BlitSurface(Surface, NULL, Screen, &Rect[y]);
+					SDL_FreeSurface(Surface);
+				
+				}
+				
+			}
+			
+		}
+		SDL_UpdateWindowSurface(Window);
+		
+		for (int y = 0;y < rows;y++) {
+			
+			Rect[y].y -= 1;
+			
+		}
+		SDL_Delay(1000/60);
+		
+		SDL_FillRect(Screen, NULL, 0x000000);
+		SDL_UpdateWindowSurface(Window);
+		
+	}
 	
 }
 

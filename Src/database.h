@@ -26,11 +26,15 @@
 #define DATABASE_H
 
 #include <iostream>
+#include <cstdio>
+#include <fstream>
 #include <vector>
 #include <cstring>
 #include <string>
 
 #include <sqlite3.h>
+
+using std::ifstream;
 
 enum {
 	
@@ -92,6 +96,9 @@ public:
 	vector <string> retrieve_data(string table , string parameter);
 	
 };
+
+bool check_if_database_exists(string filename);
+bool delete_file(string filename);
 
 #endif
 
