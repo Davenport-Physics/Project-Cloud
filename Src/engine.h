@@ -46,6 +46,9 @@ void init_engine(Text type);
  * works as well.
  * 
  * */
+ 
+void clear_screen();
+ 
 void draw_1d_array(char *array);
 void draw_2d_array(char **array, int rows);
 void draw_string(string str);
@@ -54,7 +57,13 @@ void draw_append_1d_array(char *array);
 void draw_append_2d_array(char **array, int rows);
 void draw_append_string(string str);
 
+void draw_append_char_horizontal(char c);
+void draw_append_string_horizontal(string str);
+
 void draw_animation_bottom_top(char **array, int rows);
+
+void reset_horizontal();
+void reset_vertical();
 
 void quit_engine();
 

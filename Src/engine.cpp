@@ -95,10 +95,20 @@ void init_engine(Text type) {
 	
 }
 
-void draw_2d_array(char **array, int rows) {
+void clear_screen() {
+	
+	LastRect.y = 0;
+	LastRect.x = 0;
 	
 	SDL_FillRect(Screen, NULL, 0x000000);
 	SDL_UpdateWindowSurface(Window);
+	
+	
+}
+
+void draw_2d_array(char **array, int rows) {
+	
+	clear_screen();
 	
 	SDL_Surface *Surface;
 	SDL_Rect Rect;
@@ -128,9 +138,42 @@ void draw_2d_array(char **array, int rows) {
 	SDL_UpdateWindowSurface(Window);
 	
 }
+void draw_string(string str) {
+	
+	clear_screen();
+
+	char *array = new char[str.length() + 1];
+	strcpy(array, str.c_str());
+	array[str.length()] = '\0';
+	
+	SDL_Surface *Surface;
+	
+	SDL_Rect Rect;
+	Rect.y = 0;
+	Rect.x = 0;
+	
+	if (!(Surface = RenderFunction(Font, array, Color))) {
+	
+		cout << "could not draw string";
+		exit(2);
+		
+	} else {
+	
+		SDL_BlitSurface(Surface, NULL, Screen, &Rect);
+		SDL_FreeSurface(Surface);
+		
+		SDL_UpdateWindowSurface(Window);
+		
+		LastRect = Rect;
+		
+	}
+	
+	delete [] array;
+	
+}
 
 void draw_append_string(string str) {
-
+	
 	char *array = new char[str.length() + 1];
 	strcpy(array, str.c_str());
 	array[str.length()] = '\0';
@@ -155,6 +198,33 @@ void draw_append_string(string str) {
 	delete [] array;
 	
 }
+
+void draw_append_char_horizontal(char c) {
+
+	char array[2];
+	array[0] = c;
+	array[1] = '\0';
+
+	SDL_Surface *Surface;
+	
+	LastRect.x += 20;
+	
+	if (!(Surface = RenderFunction(Font, array, Color))) {
+		
+		cout << "Could not append char horizontal";
+		exit(2);
+		
+	} else {
+		
+		SDL_BlitSurface(Surface, NULL, Screen, &LastRect);
+		SDL_FreeSurface(Surface);
+		
+		SDL_UpdateWindowSurface(Window);
+		
+	}
+	
+}
+
 
 void draw_animation_bottom_top(char **array, int rows) {
 
@@ -201,10 +271,20 @@ void draw_animation_bottom_top(char **array, int rows) {
 		}
 		SDL_Delay(1000/60);
 		
-		SDL_FillRect(Screen, NULL, 0x000000);
-		SDL_UpdateWindowSurface(Window);
+		clear_screen();
 		
 	}
+	
+}
+
+void reset_horizontal() {
+
+	LastRect.x = 0;
+	
+}
+void reset_vertical() {
+
+	LastRect.y = 0;
 	
 }
 

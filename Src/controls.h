@@ -29,6 +29,7 @@
 #include <cstring>
 
 #include "mygetch.h"
+#include "engine.h"
 
 #define NOTSET -1
 

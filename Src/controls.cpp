@@ -75,11 +75,14 @@ void Controls::set_controls_manually() {
 	do {
 	
 		Error = false;
+		clear_screen();
 		for (int i = 0; i < this->length;i++) {
 	
-			cout << this->control_types[i];
-			this->controls[i] = mygetch();
-			cout << "\n";
+			draw_append_string(this->control_types[i]);
+			this->controls[i] = get_raw_input();
+			
+			draw_append_char_horizontal(this->controls[i]);
+			reset_horizontal();
 		
 		}
 		
@@ -92,7 +95,7 @@ void Controls::set_controls_manually() {
 				
 			}
 			
-		}
+		}	
 		
 	} while (Error == true);
 	

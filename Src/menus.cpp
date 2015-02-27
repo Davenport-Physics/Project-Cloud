@@ -246,7 +246,18 @@ int show_saves(string *saves) {
 	
 }
 
+/*
+ * TODO
+ * 
+ * Port to renderer. Add option to change controls.
+ * 
+ * */
 void controls() {
+	
+static char ControlsArray[3][20] = 
+{{' ','V','i','e','w',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ','C','h','a','n','g','e',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' '}};
 	
 	cout << "Default Controls:" << endl;
 	cout << "w,a,s,d - Movement" << endl;
@@ -257,7 +268,6 @@ void controls() {
 	cout << "Press enter to continue" << endl;
 	
 	cin.get();
-	system("clear");
 
 }
 
