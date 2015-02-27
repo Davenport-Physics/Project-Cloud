@@ -22,7 +22,7 @@ menus.o : menus.h menus.cpp controls.h mygetch.h share.h engine.h init.h
 share.o : share.h share.cpp
 	$(CC) $(CFLAGS) share.cpp
 
-controls.o : controls.h controls.cpp mygetch.h engine.h
+controls.o : controls.h controls.cpp mygetch.h engine.h controls.h
 	$(CC) $(CFLAGS) controls.cpp
 
 character.o : character.h character.cpp share.h engine.h

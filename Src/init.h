@@ -30,6 +30,7 @@
 #include <sstream>
 
 #include "character.h"
+#include "controls.h"
 #include "generation.h"
 #include "share.h"
 #include "database.h"

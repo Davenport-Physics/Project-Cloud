@@ -164,7 +164,15 @@ void draw_string(string str) {
 		
 		SDL_UpdateWindowSurface(Window);
 		
-		LastRect = Rect;
+		/*
+		 * TODO
+		 * 
+		 * May want to have last position variables and last rectangle
+		 * variable.
+		 * 
+		 * */
+		LastRect.y = Rect.y;
+		LastRect.x = str.length() * 15;
 		
 	}
 	

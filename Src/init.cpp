@@ -54,8 +54,16 @@ Player * new_game(string filename, vector<Map *> *maps) {
 	 * Show input on SDL rendering screen
 	 * 
 	 * */
-	cout << "Please enter your name -> ";
-	getline(cin , name);
+	char c;
+	clear_screen();
+	draw_string("Please enter your name -> ");
+	while ((c = get_raw_input()) != '\n') {
+		
+		draw_append_char_horizontal(c);
+		
+		name += c;
+		
+	}
 	
 	for ( int x = 0; x < NUM_MAPS; x++ ) {
 	
