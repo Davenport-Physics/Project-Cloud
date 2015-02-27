@@ -51,7 +51,8 @@ Player * new_game(string filename, vector<Map *> *maps) {
 	/*
 	 * TODO
 	 * 
-	 * Show input on SDL rendering screen
+	 * Backspace does not work, so most likely this will be
+	 * handled by a specific renderer function call.
 	 * 
 	 * */
 	char c;
