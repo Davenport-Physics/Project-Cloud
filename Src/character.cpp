@@ -1,7 +1,7 @@
 /*
  * player.cpp
  * 
- * Copyright 2014 Michael Davenport <Davenport.physics@gmail.com>
+ * Copyright 2014-2015 Michael Davenport <Davenport.physics@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

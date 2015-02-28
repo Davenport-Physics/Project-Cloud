@@ -41,7 +41,7 @@ string convert_float_to_string(float var) {
 
 	char buffer[512];
 
-	snprintf(buffer, sizeof(buffer) , "%f" , var);
+	snprintf(buffer, sizeof(buffer) , "%.2f" , var);
 	
 	return string(buffer);
 	

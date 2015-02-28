@@ -1,6 +1,6 @@
-//      player.h
+//      init.h
 //      
-//      Copyright 2011 Michael Davenport
+//      Copyright 2011-2015 Michael Davenport
 //      
 //      This program is free software; you can redistribute it and/or modify
 //      it under the terms of the GNU General Public License as published by
@@ -39,14 +39,14 @@
 using std::string;
 using std::vector;
 
-enum {
+typedef enum SuccessFailure {
 
 	SUCCESS = 0,
 	FAILURE
 	
-};
+} SuccessEnum;
 
-enum {
+typedef enum Saves {
 	
 	FIRST = 0,
 	SECOND,
@@ -54,7 +54,7 @@ enum {
 	FILLED,
 	EMPTY
 	
-};
+} SavesEnum;
 
 Player * new_game(string filename, vector<Map *> *maps);
 Player * load_game_db(string filename, vector<Map *> *maps);
@@ -65,8 +65,8 @@ string convert_map_vars_to_string(unsigned int index, Map *map);
 
 void save_game_db(string filename, Player *player , vector<Map *> maps);
 
-int load_player_vars_db(character *player , vector<string> str);
-int load_maps_db(vector<Map *> *maps , vector<string> str);
+SuccessEnum load_player_vars_db(character *player , vector<string> str);
+SuccessEnum load_maps_db(vector<Map *> *maps , vector<string> str);
 
 #endif
 

@@ -1,7 +1,7 @@
 /*
  * player.h
  * 
- * Copyright 2014 Michael Davenport <Davenport.physics@gmail.com>
+ * Copyright 2014-2015 Michael Davenport <Davenport.physics@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 using std::string;
 using std::cout;
 
-enum {
+typedef enum PlayerAttributes {
 
 	PLAYERHEALTH = 0,
 	MAXHEALTH,
@@ -49,7 +49,7 @@ enum {
 	MAXMANA,
 	MANAREGEN
 	
-};
+} PlayerEnum;
 
 typedef struct playervars {
 	

@@ -1,6 +1,6 @@
-//      player.cpp
+//      init.cpp
 //      
-//      Copyright 2011 Michael Davenport
+//      Copyright 2011-2015 Michael Davenport
 //      
 //      This program is free software; you can redistribute it and/or modify
 //      it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ string check_for_saves_db(string filename) {
 
 Player * new_game(string filename, vector<Map *> *maps) {
 	
-	string name;
+	string name = "";
 	/*
 	 * TODO
 	 * 
@@ -57,14 +57,24 @@ Player * new_game(string filename, vector<Map *> *maps) {
 	 * */
 	char c;
 	clear_screen();
-	draw_string("Please enter your name -> ");
+	draw_string("Please enter your name -> " + name);
 	while ((c = get_raw_input()) != '\n') {
 		
-		draw_append_char_horizontal(c);
+		if (c == 0x7f) {
 		
-		name += c;
+			name = name.substr(0, name.length()-1);
+			
+			
+		} else {
+			
+			name += c;
+		
+		}
+		clear_screen();
+		draw_string("Please enter your name -> " + name);
 		
 	}
+	
 	
 	for ( int x = 0; x < NUM_MAPS; x++ ) {
 	
@@ -115,7 +125,7 @@ Player * load_game_db(string filename, vector<Map *> *maps) {
 	
 	
 }
-int load_player_vars_db(character *player , vector<string> str) {
+SuccessEnum load_player_vars_db(character *player , vector<string> str) {
 	
 	if (str.size() == NUM_ATTRIBUTES ) {
 		
@@ -140,7 +150,7 @@ int load_player_vars_db(character *player , vector<string> str) {
 	
 }
 
-int load_maps_db(vector<Map *> *maps , vector<string> str) {
+SuccessEnum load_maps_db(vector<Map *> *maps , vector<string> str) {
 	
 	vector<string> StringDelimited;
 	int rows , columns;
@@ -178,7 +188,8 @@ int load_maps_db(vector<Map *> *maps , vector<string> str) {
 		(*maps)[y] = new Map(rows , columns , FirstPos , SecondPos , CharMap);
 			
 		delete [] CharMap;
-		CharMap = NULL;
+		
+		return SUCCESS;
 		
 	}
 	

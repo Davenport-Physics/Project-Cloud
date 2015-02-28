@@ -23,6 +23,10 @@
 
 #include "engine.h"
 
+static int WindowHeight = 800;
+static int WindowWidth  = 800;
+static int FontSize		= 20;
+
 static const string FontPath = "Fonts/LiberationMono-Regular.ttf";
 
 static SDL_Window *Window	= NULL;
@@ -32,6 +36,7 @@ static TTF_Font *Font 		= NULL;
 static SDL_Color Color 				= {255, 255, 255};
 //static SDL_Color BackgroundColor	= {0, 0, 0};
 
+//static SDL_Rect LastPosition;
 static SDL_Rect LastRect;
 
 static Text RenderingType;
@@ -47,8 +52,8 @@ void init_engine(Text type) {
 	Window = SDL_CreateWindow("Midnight-Cloud",
 							SDL_WINDOWPOS_UNDEFINED,
 							SDL_WINDOWPOS_UNDEFINED,
-							800,
-							800,
+							WindowHeight,
+							WindowWidth,
 							SDL_WINDOW_SHOWN);
 							
 	Screen = SDL_GetWindowSurface(Window);
@@ -64,7 +69,7 @@ void init_engine(Text type) {
 	 * Might want to give variable font depending on resolution
 	 * 
 	 * */
-	Font = TTF_OpenFont(FontPath.c_str(), 20);
+	Font = TTF_OpenFont(FontPath.c_str(), FontSize);
 	
 	if (!Font) {
 		
@@ -117,7 +122,7 @@ void draw_2d_array(char **array, int rows) {
 	
 	for (int y = 0;y < rows; y++) {
 	
-		Rect.y = y * 20;
+		Rect.y = y * FontSize;
 		
 		if (!(Surface = RenderFunction(Font, array[y], Color))) {
 		
@@ -167,12 +172,10 @@ void draw_string(string str) {
 		/*
 		 * TODO
 		 * 
-		 * May want to have last position variables and last rectangle
-		 * variable.
+		 * May want to have last position variables.
 		 * 
 		 * */
-		LastRect.y = Rect.y;
-		LastRect.x = str.length() * 15;
+		LastRect = Rect;
 		
 	}
 	
@@ -195,7 +198,7 @@ void draw_append_string(string str) {
 		
 	} else {
 		
-		LastRect.y += 20;
+		LastRect.y += FontSize;
 	
 		SDL_BlitSurface(Surface, NULL, Screen, &LastRect);
 		SDL_FreeSurface(Surface);
@@ -215,6 +218,15 @@ void draw_append_char_horizontal(char c) {
 
 	SDL_Surface *Surface;
 	
+	/*
+	 * TODO Fix this
+	 * 
+	 * There doesn't seem to be a good way to handle this, given that
+	 * each character on the screen takes up a different amount of
+	 * horizontal space, and drawing just to the right of a string of
+	 * text is very inconsistent.
+	 * 
+	 * */
 	LastRect.x += 20;
 	
 	if (!(Surface = RenderFunction(Font, array, Color))) {
@@ -224,6 +236,24 @@ void draw_append_char_horizontal(char c) {
 		
 	} else {
 		
+		SDL_BlitSurface(Surface, NULL, Screen, &LastRect);
+		SDL_FreeSurface(Surface);
+		
+		SDL_UpdateWindowSurface(Window);
+		
+	}
+	
+}
+
+void draw_append_string_horizontal(string str) {
+
+	SDL_Surface *Surface;
+	
+	if (!(Surface = RenderFunction(Font, (char *)str.c_str(), Color))) {
+		
+		
+	} else {
+	
 		SDL_BlitSurface(Surface, NULL, Screen, &LastRect);
 		SDL_FreeSurface(Surface);
 		
@@ -244,8 +274,8 @@ void draw_animation_bottom_top(char **array, int rows) {
 	
 	for (int y = 0;y < rows;y++) {
 	
-		Rect[y].x = 300;
-		Rect[y].y = 780 + y * 20;
+		Rect[y].x = (WindowWidth / 2 - 100);
+		Rect[y].y = (WindowHeight - FontSize) + y * FontSize;
 		
 	}
 	
@@ -253,7 +283,7 @@ void draw_animation_bottom_top(char **array, int rows) {
 		
 		for (int y = 0;y < rows;y++) {
 			
-			if (Rect[y].y < 780 && Rect[y].y > 0) {
+			if (Rect[y].y < (WindowHeight - FontSize) && Rect[y].y > 0) {
 			
 				if (!(Surface = RenderFunction(Font, array[y], Color))) {
 				

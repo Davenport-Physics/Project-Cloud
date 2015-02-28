@@ -1,7 +1,7 @@
 /*
  * controls.h
  * 
- * Copyright 2014 Michael Davenport <Davenport.physics@gmail.com>
+ * Copyright 2014-2015 Michael Davenport <Davenport.physics@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 using std::string;
 using std::cout;
 
-enum {
+typedef enum ControlType {
 	
 	UP = 0,
 	DOWN,
@@ -46,7 +46,7 @@ enum {
 	JOURNAL,
 	ENTER
 	
-};
+} ControlType;
 
 //TODO save keys to the savefile
 class Controls {
