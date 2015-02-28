@@ -1,7 +1,7 @@
 /*
  * music.cpp
  * 
- * Copyright 2012 Michael Davenport
+ * Copyright 2012-2015 Michael Davenport
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ static int SoundTrack;
 static pthread_t MusicThread;
 
 static const string tracks[5] = 
-{"Music/title1.ogg","Music/track1.ogg","Music/track2.ogg","Music/track3.ogg","Music/track4.ogg"};
+{"Data/Music/title1.ogg","Data/Music/track1.ogg","Data/Music/track2.ogg","Data/Music/track3.ogg","Data/Music/track4.ogg"};
 
 
 static const int audio_rate = 22050;

@@ -1,7 +1,7 @@
 /*
  * music.h
  * 
- * Copyright 2012 Michael Davenport
+ * Copyright 2012-2015 Michael Davenport
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

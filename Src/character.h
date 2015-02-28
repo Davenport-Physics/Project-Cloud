@@ -51,6 +51,13 @@ typedef enum PlayerAttributes {
 	
 } PlayerEnum;
 
+typedef enum SexType {
+	
+	FEMALE = 0,
+	MALE
+	
+} SexEnum;
+
 typedef struct playervars {
 	
 	int PlayerHealth , MaxHealth;
@@ -68,6 +75,8 @@ typedef struct playervars {
 	string name;
 	
 	float Mana, MaxMana, ManaRegen;
+	
+	SexEnum Sex;
 	
 } character;
 

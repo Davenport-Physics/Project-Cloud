@@ -46,7 +46,7 @@ int get_user_input();
 
 void run_game();
 
-static string files[3] = {"Saves/save1.db","Saves/save2.db","Saves/save3.db"};
+static string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
 static int SaveChoice;
 
 static vector<Map *> maps(30);

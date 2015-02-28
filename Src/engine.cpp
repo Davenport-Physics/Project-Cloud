@@ -27,7 +27,7 @@ static int WindowHeight = 800;
 static int WindowWidth  = 800;
 static int FontSize		= 20;
 
-static const string FontPath = "Fonts/LiberationMono-Regular.ttf";
+static const string FontPath = "Data/Fonts/LiberationMono-Regular.ttf";
 
 static SDL_Window *Window	= NULL;
 static SDL_Surface *Screen	= NULL;
