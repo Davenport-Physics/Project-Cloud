@@ -14,8 +14,10 @@ This project has goals to an eventual commercial release as paid software. With 
 Dependencies
 ------------
 
-SDL2,
-SDL2_mixer,
+SDL2
+
+SDL2_mixer
+
 SDL2_ttf
 
 Sqlite3 (This dependency may be removed later on however)
@@ -26,13 +28,16 @@ Build Instructions
 
 I have provided a make file which will hopefully allow for easy compilation. The dependencies listed above need to have their respective development packages installed in your current system in order to build properly.
 
-cd Src,
+cd Src
+
 make
 
 From here you'll want to copy the executable to the above directory. Make sure you have the following directories created
 
-Data/Saves,
-Data/Music,
+Data/Saves
+
+Data/Music
+
 Data/Fonts
 
 from here you should be able to run the game fine.
