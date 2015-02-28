@@ -36,6 +36,13 @@
 
 #define NUM_MAPS 30
 
+typedef enum MapType {
+	
+	STATIC = 0,
+	GENERATION
+	
+} MapType;
+
 /*
  * Can the player move to this current spot? YES or NO
  * 
@@ -43,7 +50,7 @@
  * point and that the game should handle it.
  * 
  * */
-enum {
+typedef enum MapVars {
 
 	YES = 0,
 	NO,
@@ -52,7 +59,7 @@ enum {
 	FORWARD,
 	BACKWARD
 	
-};
+} MapVars;
 
 using namespace std;
 

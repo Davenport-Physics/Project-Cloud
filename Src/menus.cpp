@@ -111,8 +111,7 @@ char MainArray[height][width] = {
 			oldy = y;
 			
 		}
-		
-		system("clear");	
+			
 		
 	}
 	

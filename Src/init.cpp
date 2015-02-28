@@ -275,3 +275,115 @@ string convert_map_vars_to_string(unsigned int index,Map *map) {
 	return values;
 	
 }
+
+Config::Config() {
+	
+	ifstream infile("Data/config");
+	
+	if (infile.good() == true) {
+	
+		
+		
+		infile.close();
+		return;
+		
+	}
+	infile.close();
+	
+	ofstream outfile("Data/config");
+	
+	outfile << "WindowHeight:800\n";
+	outfile << "WindowWidth:800\n";
+	outfile << "Rendering:BLENDED\n";
+	outfile << "MapType:Generation\n";
+	
+	this->WindowHeight  = 800;
+	this->WindowWidth   = 800;
+	this->RenderingType = BLENDED;
+	this->map			= GENERATION;
+	
+	outfile.close();
+	
+}
+
+bool Config::determine_window_height(string str) {
+	
+	if (str.find("WindowHeight") != string::npos) {
+		
+		
+		string temp = return_right_string_by_delimiter(str, ':');
+		this->WindowHeight = convert_string_to_int(temp);
+		
+		return true;
+		
+	}
+	
+	return false;
+	
+}
+bool Config::determine_window_width(string str) {
+
+	if (str.find("WindowWidth") != string::npos) {
+	
+		string temp = return_right_string_by_delimiter(str, ':');
+		this->WindowWidth = convert_string_to_int(temp);
+		
+		return true;
+		
+	}
+	
+	return false;
+	
+}
+bool Config::determine_rendering_type(string str) {
+
+	if (str.find("Rendering") != string::npos) {
+		
+		if (str.find("BLENDED") != string::npos) {
+		
+			this->RenderingType = BLENDED;
+			
+		} else if (str.find("SHADED") != string::npos) {
+			
+			this->RenderingType = SHADED;
+			
+		} else {
+		
+			return false;
+			
+		}
+		
+		
+		return true;
+		
+	}
+	
+	return false;
+	
+}
+bool Config::determine_map_type(string str) {
+	
+	if (str.find("MapType") != string::npos) {
+		
+		if (str.find("GENERATION") != string::npos) {
+		
+			this->map = GENERATION;
+			
+		} else if (str.find("STATIC") != string::npos) {
+		
+			this->map = STATIC;
+			
+		} else {
+		
+			return false;
+			
+		}
+	
+		return true;
+		
+	}
+	
+	
+	return false;
+	
+}

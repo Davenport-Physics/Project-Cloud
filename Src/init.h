@@ -68,5 +68,35 @@ void save_game_db(string filename, Player *player , vector<Map *> maps);
 SuccessEnum load_player_vars_db(character *player , vector<string> str);
 SuccessEnum load_maps_db(vector<Map *> *maps , vector<string> str);
 
+
+/*
+ * Possible TODO
+ * 
+ * As of this moment, this class assumes the data is saved in a static
+ * and correct manner. Any deviations with the saving, will result in
+ * some errors.
+ * 
+ * */
+class Config {
+	
+private:
+
+	int WindowHeight;
+	int WindowWidth;
+	
+	Text RenderingType;
+	MapType map;
+	
+	bool determine_window_height(string str);
+	bool determine_window_width(string str);
+	bool determine_rendering_type(string str);
+	bool determine_map_type(string str);
+	
+public:
+
+	Config();
+	
+};
+
 #endif
 
