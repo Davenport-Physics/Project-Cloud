@@ -27,7 +27,7 @@ string check_for_saves_db(string filename) {
 	
 		Database db(filename);
 	
-		vector<string> lines = db.retrieve_data("Player","name");
+		vector<string> lines = db.retrieve_data("Player", "name");
 	
 		if (lines.size() == 0) {
 	
@@ -48,13 +48,7 @@ string check_for_saves_db(string filename) {
 Player * new_game(string filename, vector<Map *> *maps) {
 	
 	string name = "";
-	/*
-	 * TODO
-	 * 
-	 * Backspace does not work, so most likely this will be
-	 * handled by a specific renderer function call.
-	 * 
-	 * */
+
 	char c;
 	clear_screen();
 	draw_string("Please enter your name -> " + name);
@@ -62,7 +56,7 @@ Player * new_game(string filename, vector<Map *> *maps) {
 		
 		if (c == 0x7f) {
 		
-			name = name.substr(0, name.length()-1);
+			name = name.substr(0, name.length() - 1);
 			
 			
 		} else {
@@ -276,12 +270,6 @@ string convert_map_vars_to_string(unsigned int index,Map *map) {
 	
 }
 
-/*
- * TODO
- * 
- * When infile.good() == true needs to be finished.
- * 
- * */
 Config::Config() {
 	
 	ifstream infile("Data/config");

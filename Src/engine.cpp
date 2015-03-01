@@ -109,7 +109,6 @@ void clear_screen() {
 	LastRect.x = 0;
 	
 	SDL_FillRect(Screen, NULL, 0x000000);
-	//SDL_UpdateWindowSurface(Window);
 	
 	
 }
