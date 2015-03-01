@@ -39,7 +39,7 @@ typedef enum TextRendering {
 	
 } Text;
 
-void init_engine(Text type);
+void init_engine(Text type, int Height, int Width);
 
 /*
  * TODO add parameter to change parameter. This will effect how append,

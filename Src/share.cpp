@@ -65,7 +65,7 @@ vector<string> delimit_string(string str, char delimiter) {
 
 string return_right_string_by_delimiter(string str, char delimiter) {
 	
-	return str.substr(str.find(delimiter), str.length());
+	return str.substr(str.find(delimiter)+1, str.length());
 	
 }
 

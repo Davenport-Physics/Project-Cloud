@@ -288,7 +288,26 @@ Config::Config() {
 	
 	if (infile.good() == true) {
 	
+		string temp;
 		
+		getline(infile, temp);
+		if (!determine_window_height(temp))
+			this->WindowHeight = 1024;
+		
+		temp = "";
+		getline(infile, temp);
+		if(!determine_window_width(temp))
+			this->WindowWidth = 768;
+		
+		temp = "";
+		getline(infile, temp);
+		if (!determine_rendering_type(temp))
+			this->RenderingType = BLENDED;
+		
+		temp = "";
+		getline(infile, temp);
+		if (!determine_map_type(temp))
+			this->map = GENERATION;
 		
 		infile.close();
 		return;
@@ -303,8 +322,8 @@ Config::Config() {
 	outfile << "Rendering:BLENDED\n";
 	outfile << "MapType:Generation\n";
 	
-	this->WindowHeight  = 800;
-	this->WindowWidth   = 800;
+	this->WindowHeight  = 1024;
+	this->WindowWidth   = 768;
 	this->RenderingType = BLENDED;
 	this->map			= GENERATION;
 	
@@ -353,6 +372,10 @@ bool Config::determine_rendering_type(string str) {
 			
 			this->RenderingType = SHADED;
 			
+		} else if (str.find("FAST") != string::npos) {
+		
+			this->RenderingType = FAST;
+			
 		} else {
 		
 			return false;
@@ -391,5 +414,29 @@ bool Config::determine_map_type(string str) {
 	
 	
 	return false;
+	
+}
+
+int Config::get_window_height() {
+
+	return this->WindowHeight;
+	
+}
+
+int Config::get_window_width() {
+
+	return this->WindowWidth;
+	
+}
+
+Text Config::get_rendering_type() {
+
+	return this->RenderingType;
+	
+}
+
+MapType Config::get_map_type() {
+
+	return this->map;
 	
 }

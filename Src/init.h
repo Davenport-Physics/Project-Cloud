@@ -96,6 +96,12 @@ public:
 
 	Config();
 	
+	int get_window_height();
+	int get_window_width();
+	
+	Text get_rendering_type();
+	MapType get_map_type();
+	
 };
 
 #endif

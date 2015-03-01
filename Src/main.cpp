@@ -61,6 +61,8 @@ static Player *player = NULL;
  * */
 int main(int argc, char **argv) {
 	
+	Config ConfigObj;
+	
 	srand(time(0));
 	
 	string saves[3];
@@ -72,7 +74,7 @@ int main(int argc, char **argv) {
 	 * This should be user defined later on, for now it is shaded.
 	 * 
 	 * */
-	init_engine(BLENDED);
+	init_engine(ConfigObj.get_rendering_type(), ConfigObj.get_window_height(), ConfigObj.get_window_width());
 	
 	int game = main_menu();
 	while (game != EXITGAME) {

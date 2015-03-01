@@ -45,9 +45,12 @@ static SDL_Surface *(*RenderFunction)(TTF_Font *, const char *, SDL_Color);
 
 void update_window();
 
-void init_engine(Text type) {
+void init_engine(Text type, int Height, int Width) {
 	
 	SDL_Init(SDL_INIT_VIDEO);
+	
+	WindowHeight = Height;
+	WindowWidth  = Width;
 
 	Window = SDL_CreateWindow("Midnight-Cloud",
 							SDL_WINDOWPOS_UNDEFINED,
