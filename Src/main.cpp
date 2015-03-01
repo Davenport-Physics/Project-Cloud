@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 	 * This should be user defined later on, for now it is shaded.
 	 * 
 	 * */
-	init_engine(SHADED);
+	init_engine(BLENDED);
 	
 	int game = main_menu();
 	while (game != EXITGAME) {
@@ -228,7 +228,7 @@ void run_game() {
 	
 	do {
 		
-		maps[player->vars.MapIndex]->print_map_around_player(15);
+		maps[player->vars.MapIndex]->print_map_around_player(10);
 		
 		string temp = "Health:" + SSTR(player->vars.PlayerHealth) + " Mana:" + convert_float_to_string(player->vars.Mana);
 		temp 	   += " gold:" + SSTR(player->vars.gold);

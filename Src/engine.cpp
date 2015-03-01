@@ -23,9 +23,9 @@
 
 #include "engine.h"
 
-static int WindowHeight = 800;
-static int WindowWidth  = 800;
-static int FontSize		= 20;
+static int WindowHeight = 1024;
+static int WindowWidth  = 768;
+static int FontSize		= 25;
 
 static const string FontPath = "Data/Fonts/LiberationMono-Regular.ttf";
 
@@ -106,7 +106,7 @@ void clear_screen() {
 	LastRect.x = 0;
 	
 	SDL_FillRect(Screen, NULL, 0x000000);
-	SDL_UpdateWindowSurface(Window);
+	//SDL_UpdateWindowSurface(Window);
 	
 	
 }

@@ -276,6 +276,12 @@ string convert_map_vars_to_string(unsigned int index,Map *map) {
 	
 }
 
+/*
+ * TODO
+ * 
+ * When infile.good() == true needs to be finished.
+ * 
+ * */
 Config::Config() {
 	
 	ifstream infile("Data/config");
@@ -292,8 +298,8 @@ Config::Config() {
 	
 	ofstream outfile("Data/config");
 	
-	outfile << "WindowHeight:800\n";
-	outfile << "WindowWidth:800\n";
+	outfile << "WindowHeight:1024\n";
+	outfile << "WindowWidth:768\n";
 	outfile << "Rendering:BLENDED\n";
 	outfile << "MapType:Generation\n";
 	
