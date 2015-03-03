@@ -36,12 +36,14 @@
 
 #define NUM_MAPS 30
 
-typedef enum MapType {
+using namespace std;
+
+enum MapType {
 	
 	STATIC = 0,
 	GENERATION
 	
-} MapType;
+};
 
 /*
  * Can the player move to this current spot? YES or NO
@@ -50,7 +52,7 @@ typedef enum MapType {
  * point and that the game should handle it.
  * 
  * */
-typedef enum MapVars {
+enum MapVars {
 
 	YES = 0,
 	NO,
@@ -59,11 +61,27 @@ typedef enum MapVars {
 	FORWARD,
 	BACKWARD
 	
-} MapVars;
-
-using namespace std;
+};
 
 class Map {
+
+private:
+
+	int rows, columns;
+	int FirstPosition[2];
+	int SecondPosition[2];
+	
+	char **map;
+
+public:
+
+	Map(int rows , int columns , int *firstpos , int *secondpos , char *map[]);
+	~Map();
+	
+	
+};
+
+class MapGenerator {
 	
 private:
 
@@ -127,10 +145,10 @@ private:
 	
 public:
 
-	Map(int Number);
-	Map(int rows , int columns , int Number);
-	Map(int rows , int columns , int *firstpos , int *secondpos , char *map[]);
-	~Map();
+	MapGenerator(int Number);
+	MapGenerator(int rows , int columns , int Number);
+	MapGenerator(int rows , int columns , int *firstpos , int *secondpos , char *map[]);
+	~MapGenerator();
 	
 	int get_rows();
 	int get_columns();

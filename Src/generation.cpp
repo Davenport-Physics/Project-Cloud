@@ -24,7 +24,33 @@
 
 #include "generation.h"
 
-Map::Map(int Number) {
+Map::Map(int rows , int columns , int *firstpos , int *secondpos , char *map[]) {
+	
+	this->rows    = rows;
+	this->columns = columns;
+	
+	this->FirstPosition[0]  = firstpos[0];
+	this->SecondPosition[0] = secondpos[0];
+	
+	this->map = new char *[rows];
+	
+	for (int y = 0;y < rows;y++) {
+	
+		this->map[y] = new char[columns];
+		
+		strcpy(this->map[y], map[y]);
+		
+	}
+	
+}
+
+Map::~Map() {
+
+	delete [] this->map;
+	
+}
+
+MapGenerator::MapGenerator(int Number) {
 
 	this->rows 		= 35 + rand()%60;
 	this->columns	= 35 + rand()%60;
@@ -35,7 +61,7 @@ Map::Map(int Number) {
 	
 }
 
-Map::Map(int rows , int columns , int Number ) {
+MapGenerator::MapGenerator(int rows , int columns , int Number ) {
 	
 	this->rows		= rows;
 	this->columns	= columns;
@@ -45,7 +71,7 @@ Map::Map(int rows , int columns , int Number ) {
 	
 }
 
-Map::Map(int rows , int columns , int *firstpos , int *secondpos , char *map[]) {
+MapGenerator::MapGenerator(int rows , int columns , int *firstpos , int *secondpos , char *map[]) {
 
 	this->rows		= rows;
 	this->columns	= columns;
@@ -67,7 +93,7 @@ Map::Map(int rows , int columns , int *firstpos , int *secondpos , char *map[]) 
 	
 }
 
-void Map::initialize() {
+void MapGenerator::initialize() {
 	
 	this->sum = this->rows + this->columns;
 	
@@ -94,7 +120,7 @@ void Map::initialize() {
 	
 }
 
-void Map::add_borders() {
+void MapGenerator::add_borders() {
 	
 	for (int y = 0;y < this->rows;y++) {
 		
@@ -112,7 +138,7 @@ void Map::add_borders() {
 	
 }
 
-void Map::add_holes() {
+void MapGenerator::add_holes() {
 
 	int numholes = rand()%((this->sum)/6);
 	
@@ -168,7 +194,7 @@ void Map::add_holes() {
 	
 }
 
-void Map::surround_holes() {
+void MapGenerator::surround_holes() {
 
 	for (int y = 0; y < this->rows; y++) {
 	
@@ -212,7 +238,7 @@ void Map::surround_holes() {
 	
 }
 
-void Map::add_walls() {
+void MapGenerator::add_walls() {
 	
 	int numwalls = 2 + rand()%((this->sum)/2);
 	
@@ -280,7 +306,7 @@ void Map::add_walls() {
 	
 }
 
-void Map::add_gold() {
+void MapGenerator::add_gold() {
 
 	int jackpot = 1 + rand()%100;
 	
@@ -314,7 +340,7 @@ void Map::add_gold() {
 }
 
 //TODO for some reason first map is getting both forward and backward points
-void Map::add_forward_backwards() {
+void MapGenerator::add_forward_backwards() {
 
 	//backward <
 	int x,y;
@@ -374,7 +400,7 @@ void Map::add_forward_backwards() {
 	
 }
 
-void Map::add_save_point() {
+void MapGenerator::add_save_point() {
 
 	int x,y;
 	while (true) {
@@ -392,7 +418,7 @@ void Map::add_save_point() {
 	
 }
 
-void Map::initialize_position(int x , int y , int *position) {
+void MapGenerator::initialize_position(int x , int y , int *position) {
 
 	if (determine_if_suitable_position(x+1,y)) {
 	
@@ -418,7 +444,7 @@ void Map::initialize_position(int x , int y , int *position) {
 	
 }
 
-int Map::determine_next_position() {
+int MapGenerator::determine_next_position() {
 
 	int next = rand() % 2;
 	
@@ -432,14 +458,14 @@ int Map::determine_next_position() {
 	}
 	
 }
-void Map::get_random_location_by_bounds(int *x, int *y) {
+void MapGenerator::get_random_location_by_bounds(int *x, int *y) {
 
 	*x = 1 + rand()%(this->columns - 2);
 	*y = 1 + rand()%(this->rows - 2);
 	
 }
 
-bool Map::determine_if_suitable_position(int x , int y) {
+bool MapGenerator::determine_if_suitable_position(int x , int y) {
 	
 	try {
 		
@@ -456,7 +482,7 @@ bool Map::determine_if_suitable_position(int x , int y) {
 	
 }
 
-void Map::print_map() {
+void MapGenerator::print_map() {
 
 	for (int y = 0; y < this->rows;y++) {
 	
@@ -471,7 +497,7 @@ void Map::print_map() {
 	}
 	
 }
-void Map::print_map_around_player(int bounds) {
+void MapGenerator::print_map_around_player(int bounds) {
 
 	int InitialX	= (*this->x) - bounds;
 	int FinalX		= (*this->x) + bounds;
@@ -540,7 +566,7 @@ void Map::print_map_around_player(int bounds) {
  * the SecondPosition Values.
  * 
  * */
-void Map::save_map(string filename) {
+void MapGenerator::save_map(string filename) {
 
 	ofstream out;
 	
@@ -565,19 +591,19 @@ void Map::save_map(string filename) {
 	
 }
 
-int * Map::get_first_position() {
+int * MapGenerator::get_first_position() {
 
 	return FirstPosition;
 	
 }
 
-int * Map::get_second_position() {
+int * MapGenerator::get_second_position() {
 
 	return SecondPosition;
 	
 }
 
-void Map::transition_to_new_map(int *x , int *y , int Direction) {
+void MapGenerator::transition_to_new_map(int *x , int *y , int Direction) {
 	
 	this->x = x;
 	this->y = y;
@@ -600,7 +626,7 @@ void Map::transition_to_new_map(int *x , int *y , int Direction) {
 	
 }
 
-int Map::check_if_player_can_move(int x , int y) {
+int MapGenerator::check_if_player_can_move(int x , int y) {
 	
 	switch (this->map[y][x]) {
 	
@@ -621,19 +647,19 @@ int Map::check_if_player_can_move(int x , int y) {
 	
 }
 
-int Map::get_rows() {
+int MapGenerator::get_rows() {
 
 	return this->rows;
 	
 }
 
-int Map::get_columns() {
+int MapGenerator::get_columns() {
 
 	return this->columns;
 	
 }
 
-string Map::convert_map_to_string() {
+string MapGenerator::convert_map_to_string() {
 	
 	string map = "";
 	for (int y = 0;y < this->rows;y++) {
@@ -651,7 +677,7 @@ string Map::convert_map_to_string() {
 	return map;
 }
 
-Map::~Map() {
+MapGenerator::~MapGenerator() {
 	
 	delete [] this->map;
 	
