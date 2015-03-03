@@ -57,6 +57,7 @@ typedef enum Saves {
 } SavesEnum;
 
 Player * new_game(string filename, vector<Map *> *maps);
+Player * load_game(string filename, vector<Map *> *maps);
 Player * load_game_db(string filename, vector<Map *> *maps);
 
 string check_for_saves_db(string fileame);

@@ -80,6 +80,17 @@ Player * new_game(string filename, vector<Map *> *maps) {
 
 }
 
+Player * load_game(string filename, vector<Map *> *maps) {
+	
+	ifstream infile(filename.c_str());
+	
+	
+	infile.close();
+	
+	return NULL;
+	
+}
+
 static string tables[] = {"Player","Map"};
 Player * load_game_db(string filename, vector<Map *> *maps) {
 
