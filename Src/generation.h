@@ -63,20 +63,47 @@ enum MapVars {
 	
 };
 
+struct Transition {
+	
+	int x;
+	int y;
+	
+	string name;
+	
+};
+
+/*
+ * Removed first and last position, for the transition points. During transition,
+ * the map will just place the player ontop of the transition marker. This
+ * may need to be re-added later when the game is allowed to refresh without
+ * player input.
+ * 
+ * */
 class Map {
 
 private:
 
 	int rows, columns;
-	int FirstPosition[2];
-	int SecondPosition[2];
+	
+	int *x, *y;
 	
 	char **map;
+	string name;
+	
+	int NumTransitionPoints;
+	struct Transition *point;
 
 public:
 
-	Map(int rows , int columns , int *firstpos , int *secondpos , char *map[]);
+	Map(int rows, int columns, int NumTransitionPoints, struct Transition *point, char *map[]);
 	~Map();
+	
+	int get_rows();
+	int get_columns();
+	
+	char ** get_map();
+	
+	void transition_to_new_map(int *x,int *y);
 	
 	
 };
@@ -147,21 +174,13 @@ public:
 
 	MapGenerator(int Number);
 	MapGenerator(int rows , int columns , int Number);
-	MapGenerator(int rows , int columns , int *firstpos , int *secondpos , char *map[]);
 	~MapGenerator();
 	
-	int get_rows();
-	int get_columns();
-	int * get_first_position();
-	int * get_second_position();
 	int check_if_player_can_move(int x, int y);
-	
-	char ** get_map();
 	
 	void print_map();
 	void print_map_around_player(int bounds);
 	void save_map(string filename);
-	void transition_to_new_map(int *x,int *y, int Direction);
 	
 	string convert_map_to_string();
 	

@@ -24,16 +24,22 @@
 
 #include "generation.h"
 
-Map::Map(int rows , int columns , int *firstpos , int *secondpos , char *map[]) {
+Map::Map(int rows, int columns, int NumTransitionPoints, struct Transition *point, char *map[]) {
 	
 	this->rows    = rows;
 	this->columns = columns;
 	
-	this->FirstPosition[0]  = firstpos[0];
-	this->SecondPosition[0] = secondpos[0];
+	this->NumTransitionPoints = NumTransitionPoints;
+	
+	this->point = new struct Transition[NumTransitionPoints];
+	
+	for (int y = 0;y < NumTransitionPoints;y++) {
+	
+		this->point[y] = point[y];
+		
+	}
 	
 	this->map = new char *[rows];
-	
 	for (int y = 0;y < rows;y++) {
 	
 		this->map[y] = new char[columns];
@@ -44,9 +50,35 @@ Map::Map(int rows , int columns , int *firstpos , int *secondpos , char *map[]) 
 	
 }
 
+void Map::transition_to_new_map(int *x, int *y) {
+
+	this->x = x;
+	this->y = y;
+	
+}
+
+int Map::get_rows() {
+
+	return this->rows;
+	
+}
+
+int Map::get_columns() {
+
+	return this->columns;
+	
+}
+
+char ** Map::get_map() {
+	
+	return this->map;
+	
+}
+
 Map::~Map() {
 
 	delete [] this->map;
+	delete [] this->point;
 	
 }
 
@@ -68,28 +100,6 @@ MapGenerator::MapGenerator(int rows , int columns , int Number ) {
 	this->Number	= Number;
 
 	initialize();
-	
-}
-
-MapGenerator::MapGenerator(int rows , int columns , int *firstpos , int *secondpos , char *map[]) {
-
-	this->rows		= rows;
-	this->columns	= columns;
-	
-	this->FirstPosition[0] = firstpos[0];
-	this->FirstPosition[1] = firstpos[1];
-	
-	this->SecondPosition[0] = secondpos[0];
-	this->SecondPosition[1] = secondpos[1];
-	
-	this->map = new char *[rows];
-	
-	for (int i = 0; i < rows;i++)
-		this->map[i] = new char[columns];
-		
-	for (int y = 0;y < rows;y++)
-		for (int x = 0;x < columns;x++)
-			this->map[y][x] = map[y][x];
 	
 }
 
@@ -591,41 +601,6 @@ void MapGenerator::save_map(string filename) {
 	
 }
 
-int * MapGenerator::get_first_position() {
-
-	return FirstPosition;
-	
-}
-
-int * MapGenerator::get_second_position() {
-
-	return SecondPosition;
-	
-}
-
-void MapGenerator::transition_to_new_map(int *x , int *y , int Direction) {
-	
-	this->x = x;
-	this->y = y;
-	
-	if (*this->x == RESET_POSITION && *this->y == RESET_POSITION) {
-	
-		if (Direction == FORWARD) {
-	
-			*this->x = FirstPosition[0];
-			*this->y = FirstPosition[1];
-		
-		} else if (Direction == BACKWARD) {
-	
-			*this->x = SecondPosition[0];
-			*this->y = SecondPosition[1];
-		
-		}
-		
-	}
-	
-}
-
 int MapGenerator::check_if_player_can_move(int x , int y) {
 	
 	switch (this->map[y][x]) {
@@ -647,17 +622,6 @@ int MapGenerator::check_if_player_can_move(int x , int y) {
 	
 }
 
-int MapGenerator::get_rows() {
-
-	return this->rows;
-	
-}
-
-int MapGenerator::get_columns() {
-
-	return this->columns;
-	
-}
 
 string MapGenerator::convert_map_to_string() {
 	
