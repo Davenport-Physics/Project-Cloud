@@ -57,6 +57,27 @@ void Map::transition_to_new_map(int *x, int *y) {
 	
 }
 
+enum MapVars Map::check_if_player_can_move(int x , int y) {
+	
+	switch (this->map[y][x]) {
+	
+		case '#':
+		case 'X':
+		
+			return NO;
+		
+		break;
+		
+		case '+': this->map[y][x] = '.'; return GOLD; break;
+		case 's': return SAVE; break;
+		case '>': return FORWARD; break;
+		case '<': return BACKWARD; break;
+		default: return YES; break;
+		
+	}
+	
+}
+
 int Map::get_rows() {
 
 	return this->rows;
@@ -72,6 +93,112 @@ int Map::get_columns() {
 char ** Map::get_map() {
 	
 	return this->map;
+	
+}
+
+/*
+ * TODO
+ * 
+ * This function should only update a texture
+ * 
+ * */
+void Map::print_map_around_player(int bounds) {
+
+	int InitialX	= (*this->x) - bounds;
+	int FinalX		= (*this->x) + bounds;
+	
+	if (InitialX < 0)
+		InitialX = 0;
+	if (FinalX > this->columns)
+		FinalX = this->columns;
+		
+	int InitialY	= (*this->y) - bounds;
+	int FinalY		= (*this->y) + bounds;
+		
+	if (InitialY < 0)
+		InitialY = 0;
+	if (FinalY > this->rows)
+		FinalY = this->rows;
+		
+	int dY = FinalY - InitialY;
+	int dX = FinalX - InitialX;
+		
+	char **map = new char *[dY];
+	
+	for (int y = 0;y < dY; y++) {
+	
+		map[y] = new char[dX + 1];
+		
+		for (int x = 0; x < dX; x++) {
+		
+			if (InitialY + y == (*this->y) && InitialX + x == (*this->x)) {
+			
+				map[y][x] = '@';
+				
+			} else if (this->map[InitialY + y][InitialX + x] == 'X') {
+				
+				map[y][x] = ' ';
+				
+			} else {
+				
+				map[y][x] = this->map[InitialY + y][InitialX + x];
+				
+			}
+			
+		}
+		map[y][dX] = '\0';
+		
+	}
+	
+	draw_2d_array(map, dY);
+		
+	delete [] map;
+	
+}
+/*
+ * Outputs something of this format
+ * 
+ * START(<x>,<y>)
+ * <2D Map>
+ * STOP
+ * TRANSITION()
+ * END
+ * 
+ * where attributes within greater than or less than signs are not literal
+ * but instead are a value.
+ * 
+ * The values after START, are the dimensions of the 2D array.
+ * 
+ * The values after END, are the FirstPosition values followed by
+ * the SecondPosition Values.
+ * 
+ * */
+void Map::save_map(string filename) {
+
+	ofstream out;
+	
+	out.open(filename.c_str(), ios_base::app);
+	
+	out << "START(" << this->name << "," << this->columns << "," << this->rows << ")\n";
+	for (int y = 0; y < this->rows;y++) {
+	
+		for (int x = 0; x < this->columns;x++) {
+		
+			out << this->map[y][x];
+			
+		}
+		out << "\n";
+	}
+	out << "STOP\n";
+	
+	for (int x = 0;x < NumTransitionPoints;x++) {
+	
+		out << "TRANSITION(" << this->point[x].name << ",";
+		out << this->point[x].x << "," << this->point[x].y << ")\n";
+		
+	}
+	out << "END\n";
+	out.close();
 	
 }
 
@@ -105,9 +232,9 @@ MapGenerator::MapGenerator(int rows , int columns , int Number ) {
 
 void MapGenerator::initialize() {
 	
-	this->sum = this->rows + this->columns;
-	
-	this->map = new char*[this->rows];
+	this->name = "GeneratedMap" + SSTR(this->Number);
+	this->sum  = this->rows + this->columns;
+	this->map  = new char *[this->rows];
 	
 	for (int y = 0; y < this->rows;y++) {
 	
@@ -116,9 +243,15 @@ void MapGenerator::initialize() {
 	}
 	
 
-	for (int y = 0; y < this->rows;y++)
-		for (int x = 0;x < this->columns;x++)
+	for (int y = 0; y < this->rows;y++) {
+		
+		for (int x = 0;x < this->columns;x++) {
+			
 			this->map[y][x] = '.';
+			
+		}
+			
+	}
 			
 	add_borders();
 	add_holes();
@@ -355,6 +488,8 @@ void MapGenerator::add_forward_backwards() {
 	//backward <
 	int x,y;
 	
+	struct Transition *temp;
+	
 	while (true) {
 		
 		get_random_location_by_bounds(&x,&y);
@@ -366,9 +501,23 @@ void MapGenerator::add_forward_backwards() {
 				if (this->Number != 0) {
 					
 					this->map[y][x] = '<';
+					this->points    = new struct Transition[2];
+					this->NumTransitionPoints = 2;
+					
+					this->points[0].name = "GeneratedMap" + SSTR(this->Number - 1);
+					this->points[0].x    = x;
+					this->points[0].y    = y;
+					
+					temp = &this->points[1];
+					
+				} else {
+				
+					this->points = new struct Transition[1];
+					this->NumTransitionPoints = 1;
+					
+					temp = &this->points[0];
 					
 				}
-				initialize_position(x , y , FirstPosition);
 					
 				break;
 					
@@ -389,11 +538,13 @@ void MapGenerator::add_forward_backwards() {
 				
 				if (determine_if_suitable_position(x,y)) {
 				
-					if (this->Number != NUM_MAPS-1) {
+					if (this->Number != NUM_MAPS - 1) {
 				
 						this->map[y][x] = '>';
 					
-						initialize_position(x , y , SecondPosition);
+						temp->name = "GeneratedMap" + SSTR(this->Number + 1);
+						temp->y    = y;
+						temp->x    = x;
 						
 					}
 					
@@ -428,31 +579,6 @@ void MapGenerator::add_save_point() {
 	
 }
 
-void MapGenerator::initialize_position(int x , int y , int *position) {
-
-	if (determine_if_suitable_position(x+1,y)) {
-	
-		position[0] = x+1;
-		position[1] = y;
-		
-	} else if (determine_if_suitable_position(x-1,y)) {
-	
-		position[0] = x-1;
-		position[1] = y;
-		
-	} else if (determine_if_suitable_position(x,y+1)) {
-	
-		position[0] = x;
-		position[1] = y+1;
-		
-	} else if (determine_if_suitable_position(x,y-1)) {
-	
-		position[0] = x;
-		position[1] = y-1;
-		
-	}
-	
-}
 
 int MapGenerator::determine_next_position() {
 
@@ -491,158 +617,15 @@ bool MapGenerator::determine_if_suitable_position(int x , int y) {
 	return false;
 	
 }
-
-void MapGenerator::print_map() {
-
-	for (int y = 0; y < this->rows;y++) {
+Map MapGenerator::get_map_object() {
 	
-		for (int x = 0; x < this->columns;x++) {
-		
-			cout << this->map[y][x];
-			
-		}
-		
-		cout << endl;
-		
-	}
+	return Map(this->rows, this->columns, this->NumTransitionPoints,points, this->map);
 	
-}
-void MapGenerator::print_map_around_player(int bounds) {
-
-	int InitialX	= (*this->x) - bounds;
-	int FinalX		= (*this->x) + bounds;
-	
-	if (InitialX < 0)
-		InitialX = 0;
-	if (FinalX > this->columns)
-		FinalX = this->columns;
-		
-	int InitialY	= (*this->y) - bounds;
-	int FinalY		= (*this->y) + bounds;
-		
-	if (InitialY < 0)
-		InitialY = 0;
-	if (FinalY > this->rows)
-		FinalY = this->rows;
-		
-	int dY = FinalY - InitialY;
-	int dX = FinalX - InitialX;
-		
-	char **map = new char *[dY];
-	
-	for (int y = 0;y < dY; y++) {
-	
-		map[y] = new char[dX + 1];
-		
-		for (int x = 0; x < dX; x++) {
-		
-			if (InitialY + y == (*this->y) && InitialX + x == (*this->x)) {
-			
-				map[y][x] = '@';
-				
-			} else if (this->map[InitialY + y][InitialX + x] == 'X') {
-				
-				map[y][x] = ' ';
-				
-			} else {
-				
-				map[y][x] = this->map[InitialY + y][InitialX + x];
-				
-			}
-			
-		}
-		map[y][dX] = '\0';
-		
-	}
-	
-	draw_2d_array(map, dY);
-		
-	delete [] map;
-}
-
-/*
- * Outputs something of this format
- * 
- * START(<x>,<y>)
- * <2D Map>
- * END(<Fx>,<Fy>)(<Sx>,<Sy>)
- * 
- * where attributes within greater than or less than signs are not literal
- * but instead are a value.
- * 
- * The values after START, are the dimensions of the 2D array.
- * 
- * The values after END, are the FirstPosition values followed by
- * the SecondPosition Values.
- * 
- * */
-void MapGenerator::save_map(string filename) {
-
-	ofstream out;
-	
-	out.open(filename.c_str(), ios_base::app);
-	
-	out << "START(" << this->columns << "," << this->rows << ")\n";
-	for (int y = 0; y < this->rows;y++) {
-	
-		for (int x = 0; x < this->columns;x++) {
-		
-			out << this->map[y][x];
-			
-		}
-		out << endl;
-	}
-	out << "END(" << this->FirstPosition[0] << "," << this->FirstPosition[1];
-	out << ")";
-	out <<  "(" << this->SecondPosition[0] << "," << this->SecondPosition[1];
-	out << ")" << endl;
-	
-	out.close();
-	
-}
-
-int MapGenerator::check_if_player_can_move(int x , int y) {
-	
-	switch (this->map[y][x]) {
-	
-		case '#':
-		case 'X':
-		
-			return NO;
-		
-		break;
-		
-		case '+': this->map[y][x] = '.'; return GOLD; break;
-		case 's': return SAVE; break;
-		case '>': return FORWARD; break;
-		case '<': return BACKWARD; break;
-		default: return YES; break;
-		
-	}
-	
-}
-
-
-string MapGenerator::convert_map_to_string() {
-	
-	string map = "";
-	for (int y = 0;y < this->rows;y++) {
-		
-		map += string(this->map[y]);
-		
-		if (y < this->rows-1) {
-		
-			map += "~";
-			
-		}
-		
-	}
-	
-	return map;
 }
 
 MapGenerator::~MapGenerator() {
 	
 	delete [] this->map;
+	delete [] this->points;
 	
 }

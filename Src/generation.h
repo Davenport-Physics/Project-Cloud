@@ -101,8 +101,12 @@ public:
 	int get_rows();
 	int get_columns();
 	
+	enum MapVars check_if_player_can_move(int x, int y);
+	
 	char ** get_map();
 	
+	void save_map(string filename);
+	void print_map_around_player(int bounds);
 	void transition_to_new_map(int *x,int *y);
 	
 	
@@ -111,6 +115,15 @@ public:
 class MapGenerator {
 	
 private:
+
+	/*
+	 * Number is the variable that will hold this map's index within
+	 * the vector located in main. It is used during map generation,
+	 * in determination of whether there should be two portals, or just
+	 * one specific one.
+	 * 
+	 * */
+	int Number;
 
 	/*
 	 * rows and columns are each variables that hold the amount of rows
@@ -122,34 +135,19 @@ private:
 	int sum;
 	
 	/*
-	 * Number is the variable that will hold this map's index within
-	 * the vector located in main. It is used during map generation,
-	 * in determination of whether there should be two portals, or just
-	 * one specific one.
-	 * 
-	 * */
-	int Number;
-	
-	
-	/*
-	 * FirstPosition is the position on the map where the player is
-	 * initially located on each separate map. SecondPosition is the position
-	 * the player will take upon re-entering a map using one of the
-	 * portals.
-	 * 
-	 * */
-	int FirstPosition[2];
-	int SecondPosition[2];
-	
-	char **map;
-	
-	/*
 	 * 
 	 * pointers to the player's current location
 	 * 
 	 * */
 	int *x;
 	int *y;
+	
+	char **map;
+	
+	string name;
+	
+	int NumTransitionPoints;
+	struct Transition *points;
 	
 	
 	void initialize();
@@ -164,7 +162,6 @@ private:
 	//TODO Add chests, and npc's
 	
 	void get_random_location_by_bounds(int *x, int *y);
-	void initialize_position(int x , int y, int *position);
 	
 	int determine_next_position();
 	
@@ -176,13 +173,7 @@ public:
 	MapGenerator(int rows , int columns , int Number);
 	~MapGenerator();
 	
-	int check_if_player_can_move(int x, int y);
-	
-	void print_map();
-	void print_map_around_player(int bounds);
-	void save_map(string filename);
-	
-	string convert_map_to_string();
+	Map get_map_object();
 	
 };
 
