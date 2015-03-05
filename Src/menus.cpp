@@ -1,6 +1,6 @@
 //      MainMenu.cpp
 //      
-//      Copyright 2011 Michael Davenport
+//      Copyright 2011-2015 Michael Davenport
 //      
 //      This program is free software; you can redistribute it and/or modify
 //      it under the terms of the GNU General Public License as published by
@@ -82,6 +82,7 @@ static char CreditsArray[13][20] =
  {' ',' ',' ',' ','/','d','e','v','/','z','e','r','o',' ',' ',' ',' ',' ',' ',' '}};
 
 
+
 void ResetPointers(enum MenuContext CurrentMenuContext) {
 	
 	
@@ -89,23 +90,23 @@ void ResetPointers(enum MenuContext CurrentMenuContext) {
 	
 		case MAINMENU:
 		
-			pointer.x = MainMenuVars.Min_x; 
-			pointer.y = MainMenuVars.Min.y;
+			MenuPointer.x = MainMenuVars.Min_x; 
+			MenuPointer.y = MainMenuVars.Min_y;
 			break;
 			
 		case OPTIONS:
 		
-			pointer.x = OptionsVars.Min_x;
-			pointer.y = OptionsVars.Min_y;
+			MenuPointer.x = OptionsVars.Min_x;
+			MenuPointer.y = OptionsVars.Min_y;
 			break;
 			
 		case CONTROLS:
 		
-			pointer.x = ControlsVars.Min_x;
-			pointer.y = ControlsVars.Min_y;
+			MenuPointer.x = ControlsVars.Min_x;
+			MenuPointer.y = ControlsVars.Min_y;
 			break;
 			
-		default: pointer.x = pointer.y = 0; break;
+		default: MenuPointer.x = MenuPointer.y = 0; break;
 		
 	}
 	
@@ -127,9 +128,27 @@ void UpdatePointer(enum ControlType type, enum MenuContext CurrentMenuContext) {
 	
 		case UP: 
 		
-			if ()
+			if (MenuPointer.y != Vars.Min_y && MenuPointer.x != Vars.Min_x) {
+				
+				MenuPointer.y -= Vars.Dy;
+				MenuPointer.x -= Vars.Dx;
+				
+			}
 		
-		break;
+			break;
+			
+		case DOWN:
+		
+			if (MenuPointer.y != Vars.Max_y && MenuPointer.x != Vars.Max_x) {
+			
+				MenuPointer.y -= Vars.Dy;
+				MenuPointer.x -= Vars.Dx;
+				
+			}
+			break;
+			
+		default: return; break;
+			
 		
 	}
 	
