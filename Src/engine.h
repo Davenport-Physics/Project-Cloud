@@ -31,23 +31,31 @@
 using std::string;
 using std::cout;
 
-typedef enum TextRendering {
+enum TextRendering {
 	
 	FAST = 0,
 	SHADED,
 	BLENDED
 	
-} Text;
+};
 
-void init_engine(Text type, int Height, int Width);
+enum RenderingContext {
+	
+	MENU = 0,
+	NEWGAME,
+	LOADGAME,
+	BOTTOMTOP,
+	GAME
+	
+};
+
+void init_engine(enum TextRendering type, int Height, int Width);
 
 /*
  * TODO add parameter to change parameter. This will effect how append,
  * works as well.
  * 
  * */
- 
-void clear_screen();
  
 void draw_1d_array(char *array);
 void draw_2d_array(char **array, int rows);
@@ -56,16 +64,16 @@ void draw_string(string str);
 void draw_append_1d_array(char *array);
 void draw_append_2d_array(char **array, int rows);
 void draw_append_string(string str);
-
 void draw_append_char_horizontal(char c);
 void draw_append_string_horizontal(string str);
 
 void draw_animation_bottom_top(char **array, int rows);
 
-void reset_horizontal();
-void reset_vertical();
-
+void render();
 void quit_engine();
+void clear_screen();
+void reset_vertical();
+void reset_horizontal();
 
 template<int numrows, int numcolumns>
 void draw_2d_stack_array(char (&array)[numrows][numcolumns], void (*DrawFunction)(char **, int)) {
@@ -85,6 +93,8 @@ void draw_2d_stack_array(char (&array)[numrows][numcolumns], void (*DrawFunction
 	
 	delete [] Stack;
 }
+
+extern RenderingContext CurrentRenderingContext;
 
 #endif
 

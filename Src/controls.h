@@ -36,7 +36,7 @@
 using std::string;
 using std::cout;
 
-typedef enum ControlType {
+enum ControlType {
 	
 	UP = 0,
 	DOWN,
@@ -46,7 +46,7 @@ typedef enum ControlType {
 	JOURNAL,
 	ENTER
 	
-} ControlType;
+};
 
 //TODO save keys to the savefile
 class Controls {

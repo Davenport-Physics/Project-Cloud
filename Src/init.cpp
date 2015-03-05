@@ -21,6 +21,8 @@
 
 #include "init.h"
 
+Config UserConfig;
+
 string check_for_saves_db(string filename) {
 	
 	if (check_if_database_exists(filename)) {
@@ -431,7 +433,7 @@ int Config::get_window_width() {
 	
 }
 
-Text Config::get_rendering_type() {
+enum TextRendering Config::get_rendering_type() {
 
 	return this->RenderingType;
 	

@@ -85,7 +85,7 @@ private:
 	int WindowHeight;
 	int WindowWidth;
 	
-	Text RenderingType;
+	enum TextRendering RenderingType;
 	enum MapType map;
 	
 	bool determine_window_height(string str);
@@ -100,10 +100,12 @@ public:
 	int get_window_height();
 	int get_window_width();
 	
-	Text get_rendering_type();
+	enum TextRendering get_rendering_type();
 	enum MapType get_map_type();
 	
 };
+
+extern Config UserConfig;
 
 #endif
 

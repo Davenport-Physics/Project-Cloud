@@ -23,6 +23,8 @@
 
 #include "engine.h"
 
+RenderingContext CurrentRenderingContext;
+
 static int WindowHeight = 1024;
 static int WindowWidth  = 768;
 static int FontSize		= 25;
@@ -39,13 +41,13 @@ static SDL_Color Color 				= {255, 255, 255};
 //static SDL_Rect LastPosition;
 static SDL_Rect LastRect;
 
-static Text RenderingType;
+static enum TextRendering RenderingType;
 
 static SDL_Surface *(*RenderFunction)(TTF_Font *, const char *, SDL_Color);
 
 void update_window();
 
-void init_engine(Text type, int Height, int Width) {
+void init_engine(enum TextRendering type, int Height, int Width) {
 	
 	SDL_Init(SDL_INIT_VIDEO);
 	
@@ -142,7 +144,6 @@ void draw_2d_array(char **array, int rows) {
 	}
 	LastRect = Rect;
 	
-	SDL_UpdateWindowSurface(Window);
 	
 }
 void draw_string(string str) {
@@ -169,7 +170,6 @@ void draw_string(string str) {
 		SDL_BlitSurface(Surface, NULL, Screen, &Rect);
 		SDL_FreeSurface(Surface);
 		
-		SDL_UpdateWindowSurface(Window);
 		
 		/*
 		 * TODO
@@ -205,7 +205,6 @@ void draw_append_string(string str) {
 		SDL_BlitSurface(Surface, NULL, Screen, &LastRect);
 		SDL_FreeSurface(Surface);
 	
-		SDL_UpdateWindowSurface(Window);
 	}
 	
 	delete [] array;
@@ -241,7 +240,6 @@ void draw_append_char_horizontal(char c) {
 		SDL_BlitSurface(Surface, NULL, Screen, &LastRect);
 		SDL_FreeSurface(Surface);
 		
-		SDL_UpdateWindowSurface(Window);
 		
 	}
 	
@@ -258,8 +256,6 @@ void draw_append_string_horizontal(string str) {
 	
 		SDL_BlitSurface(Surface, NULL, Screen, &LastRect);
 		SDL_FreeSurface(Surface);
-		
-		SDL_UpdateWindowSurface(Window);
 		
 	}
 	
@@ -302,7 +298,11 @@ void draw_animation_bottom_top(char **array, int rows) {
 			}
 			
 		}
-		SDL_UpdateWindowSurface(Window);
+		
+		/*
+		 * This needs to be fixed somehow.
+		 * 
+		 * */
 		
 		for (int y = 0;y < rows;y++) {
 			
@@ -325,6 +325,12 @@ void reset_horizontal() {
 void reset_vertical() {
 
 	LastRect.y = 0;
+	
+}
+
+void render() {
+
+	SDL_UpdateWindowSurface(Window);
 	
 }
 

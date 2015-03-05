@@ -40,25 +40,28 @@ using std::endl;
 using std::cin;
 using std::vector;
 
-enum {
 
-	NEWGAME = 0,
-	LOADGAME,
-	OPTIONS,
-	EXITGAME,
-	CREDITS,
-	CONTROLS
+enum MenuContext {
 	
+	MAINMENU = 0,
+	SAVES,
+	CONTROLS,
+	OPTIONS,
+	CREDITS,
+	NONE
 	
 };
 
-int options();
-int main_menu();
-
 int show_saves(string *saves);
 
+void options();
 void credits();
 void controls();
+void main_menu();
+
+void ResetPointers();
+void UpdatePointer(enum ControlType);
+void UpdateMenu();
 
 #endif
 

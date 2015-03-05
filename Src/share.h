@@ -63,10 +63,8 @@ void print_2d_array(char (&array)[numrows][numcolumns]) {
 	
 }
 
-int convert_string_to_int(string line);
-
-float convert_string_to_float(string line);
-
+int    convert_string_to_int(string line);
+float  convert_string_to_float(string line);
 string convert_float_to_string(float var);
 
 /*

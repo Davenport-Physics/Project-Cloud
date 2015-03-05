@@ -37,7 +37,6 @@
 #include "engine.h"
 
 int pick_save(string *saves);
-
 int determine_new_game(string *saves);
 int determine_load_game(string *saves);
 
@@ -45,6 +44,7 @@ int handle_user_input(int input);
 int get_user_input();
 
 void run_game();
+void update_state();
 
 static string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
 static int SaveChoice;
@@ -61,8 +61,6 @@ static Player *player = NULL;
  * */
 int main(int argc, char **argv) {
 	
-	Config ConfigObj;
-	
 	srand(time(0));
 	
 	string saves[3];
@@ -74,10 +72,15 @@ int main(int argc, char **argv) {
 	 * This should be user defined later on, for now it is shaded.
 	 * 
 	 * */
-	init_engine(ConfigObj.get_rendering_type(), ConfigObj.get_window_height(), ConfigObj.get_window_width());
+	init_engine(UserConfig.get_rendering_type(), UserConfig.get_window_height(), UserConfig.get_window_width());
 	
-	int game = main_menu();
-	while (game != EXITGAME) {
+	int game;
+	while ((game = main_menu()) != EXITGAME) {
+		
+		
+		UserControls.get_input();
+		//update
+		//render;
 		
 		stop_music_thread();
 		for (int x = 0; x < 3;x++) {
@@ -142,6 +145,21 @@ int main(int argc, char **argv) {
 	quit_sound_engine();
 	
 	return 0;
+}
+
+void update_state() {
+	
+	clear_screen();
+	switch (CurrentRenderingContext) {
+		
+		case MAINMENU:
+
+			
+
+		break;
+		
+	}
+	
 }
 
 

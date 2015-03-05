@@ -21,12 +21,24 @@
 
 #include "menus.h"
 
-static const int height = 10;
-static const int width = 22;
+typedef struct PointerVars {
 	
-int main_menu() {
+	int Dx, Dy;
+	int Min_x, Min_y;
+	int Max_x, Max_y;
 	
-char MainArray[height][width] = {
+}PointerVars;
+
+typedef struct Pointer {
+	
+	int x, y;
+	
+}Pointer;
+
+static Pointer MenuPointer = {0, 0};
+
+static const PointerVars MainMenuVars = {2, 2, 3, 5, 7, 9};
+static char MainMenuArray[10][22] = {
 {' ','/','\\','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','/','\\',' '},
 {'<','(',')','{','M','i','d','n','i','g','h','t',' ','C','l','o','u','d','}','(',')','>'},
 {' ',' ','\\','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-',' ',' ',' '},
@@ -37,241 +49,23 @@ char MainArray[height][width] = {
 {' ',' ',' ',' ',' ',' ','}','\\','_','/','L','o','a','d',' ','G','a','m','e',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ','\\',' ',' ',' ','_','_','_','_','_','_','_',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ','}','\\','_','/','O','p','t','i','o','n','s',' ',' ',' '}};
-	
-	int x = 3;
-	int y = 5;
-	int oldx = x;
-	int oldy = y;
-	string load = "";
-	
-	while (true) {
-		
-		MainArray[y][x] = '>';
-		
-		draw_2d_stack_array(MainArray,&draw_2d_array);
-		
-		//print_2d_array(MainArray);
-		
-		char command = mygetch();
-		switch (UserControls.check_control(command)) {
-		
-			case UP:
-			
-				y -= 2;
-				x -= 2;
-				
-			break;
-			
-			case DOWN:
-			
-				y += 2;
-				x += 2;
-			
-			break;
-			
-			case QUIT:
-			
-				cout << "Goodbye" << endl;
-				return EXITGAME;
-				
-			break;
-			
-			case ENTER:
-			
-				if ( oldy == 5 && oldx == 3 ) {
-				
-					return NEWGAME;
-				
-				} else if ( oldy == 7 && oldx == 5 ) {
-				
-					return LOADGAME;
-				
-				} else {
-			
-					return OPTIONS;
-				
-				}
-				
-			break;
-			
-			default: cout << command << endl;
-			
-		}
-		
-		
-		if (y <= 3 || y >= 10) {
-			
-			x = oldx;
-			y = oldy;
-			
-		} else {
-			
-			MainArray[oldy][oldx] = ' ';
-			oldx = x;
-			oldy = y;
-			
-		}
-			
-		
-	}
-	
-}
 
-
-/*
- * TODO Add music option to increase/decrease/mute volume
- * 
- * */
-int options() {
-
-char OptionsArray[5][10] = 
+static const PointerVars OptionsVars = {0, 2, 0, 0, 0, 2};
+static char OptionsArray[5][10] = 
 {{' ','C','o','n','t','r','o','l','s',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 {' ','C','r','e','d','i','t','s',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}};
 
-	int x = 0;
-	int y = 0;
-	int yo = y;
-	
-	while ( true ) {
-		
-		OptionsArray[y][x] = '>';
-		
-		draw_2d_stack_array(OptionsArray, &draw_2d_array);
-		
-		char command = mygetch();
-		switch (UserControls.check_control(command)) {
-			
-			case '\n':
-			
-				if ( y == 0 )
-				
-					return CONTROLS;
-					
-				else if ( y == 2 )
-				 
-					return CREDITS;
-					
-			break;
-			
-			case UP: y -= 2; break;
-			case DOWN: y += 2; break;
-			case QUIT: return QUIT; break; 
-			
-		}
-		
-		if (y < 0 || y > 2 ) {
-			
-			y = yo;
-			
-		} else {
-			
-			OptionsArray[yo][x] = ' ';
-			yo = y;
-			
-		}
-		
-	}
-	return -1;
-}
 
-int show_saves(string *saves) {
-	
-	int YPosition = 0;
-	
-	/*
-	 * Potential for issue if the user has a really large name;
-	 * 
-	 * */
-	char **SavesArray = new char *[3];
-	for (int y = 0;y < 3;y++) {
-	
-		SavesArray[y] = new char[64];
-		
-		memset(SavesArray[y], ' ', 64);
-		
-		SavesArray[y][63] = '\0';
-	}
-	
-	while (true) {
-		
-		for (int y = 0;y < 3;y++) {
-			
-			if (YPosition == y) {
-				
-				string temp = "> " + saves[y];
-				strncpy(SavesArray[y], temp.c_str(), 63);
-				
-			} else {
-			
-				strncpy(SavesArray[y], saves[y].c_str(), 63);
-				
-			}
-			
-		}
-		
-		draw_2d_array(SavesArray, 3);
-		
-		switch(UserControls.get_input()) {
-		
-			case ENTER: return YPosition; break;
-			case QUIT: return -1; break;
-			case UP:
-			
-				if (YPosition > 0) {
-				
-					YPosition--;
-					
-				}
-				
-			break;
-			case DOWN:
-			
-				if (YPosition < 2) {
-				
-					YPosition++;
-					
-				}
-			
-			break;
-			
-		}
-	
-	}
-
-	delete [] SavesArray;
-	
-}
-
-/*
- * TODO
- * 
- * Port to renderer. Add option to change controls.
- * 
- * */
-void controls() {
-	
-static char ControlsArray[3][20] = 
+static const PointerVars ControlsVars = {0, 2, 0, 0, 0, 2};
+static char ControlsMenuArray[3][20] = 
 {{' ','V','i','e','w',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' ',' ',' '},
  {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
  {' ','C','h','a','n','g','e',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' '}};
-	
-	cout << "Default Controls:" << endl;
-	cout << "w,a,s,d - Movement" << endl;
-	cout << "q - quit" << endl;
-	cout << "h - heal" << endl;
-	cout << "j - journal" << endl;
-	cout << endl;
-	cout << "Press enter to continue" << endl;
-	
-	cin.get();
 
-}
 
-void credits() {
-	
 static char CreditsArray[13][20] =
 {{'C','r','e','d','i','t','s',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
  {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
@@ -288,6 +82,78 @@ static char CreditsArray[13][20] =
  {' ',' ',' ',' ','/','d','e','v','/','z','e','r','o',' ',' ',' ',' ',' ',' ',' '}};
 
 
-	draw_2d_stack_array(CreditsArray, &draw_animation_bottom_top);
+void ResetPointers(enum MenuContext CurrentMenuContext) {
+	
+	
+	switch (CurrentMenuContext) {
+	
+		case MAINMENU:
+		
+			pointer.x = MainMenuVars.Min_x; 
+			pointer.y = MainMenuVars.Min.y;
+			break;
+			
+		case OPTIONS:
+		
+			pointer.x = OptionsVars.Min_x;
+			pointer.y = OptionsVars.Min_y;
+			break;
+			
+		case CONTROLS:
+		
+			pointer.x = ControlsVars.Min_x;
+			pointer.y = ControlsVars.Min_y;
+			break;
+			
+		default: pointer.x = pointer.y = 0; break;
+		
+	}
+	
+} 
+
+void UpdatePointer(enum ControlType type, enum MenuContext CurrentMenuContext) {
+	
+	PointerVars Vars;
+	switch (CurrentMenuContext) {
+		
+		case MAINMENU: Vars = MainMenuVars; break;
+		case OPTIONS:  Vars = OptionsVars; break;
+		case CONTROLS: Vars = ControlsVars; break;
+		default: return; break;
+		
+	}
+	
+	switch (type) {
+	
+		case UP: 
+		
+			if ()
+		
+		break;
+		
+	}
+	
+}
+
+void UpdateMenu(enum MenuContext CurrentMenuContext) {
+	
+	void (*DrawFunction)(char **, int);
+	switch (CurrentMenuContext) {
+		
+		case CREDITS: DrawFunction = &draw_animation_bottom_top; break;
+		default:      DrawFunction = &draw_2d_array; break;
+		
+	}
+	
+	switch (CurrentMenuContext) {
+	
+		case MAINMENU: draw_2d_stack_array(MainMenuArray, DrawFunction); break;
+		case OPTIONS:  draw_2d_stack_array(OptionsArray, DrawFunction); break;
+		case CONTROLS: draw_2d_stack_array(ControlsMenuArray, DrawFunction); break;
+		case CREDITS:  draw_2d_stack_array(CreditsArray, DrawFunction); break;
+		default: break;
+		
+		
+	}
 	
 }
