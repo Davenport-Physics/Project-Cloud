@@ -32,7 +32,7 @@
 #include "menus.h"
 #include "music.h"
 #include "character.h"
-#include "generation.h"
+#include "map.h"
 #include "mygetch.h"
 #include "engine.h"
 
@@ -103,7 +103,7 @@ int main(int argc, char **argv) {
 		switch (game) {
 		
 			case NEWGAME: 
-			case LOADGAME:
+			//case LOADGAME:
 			
 				{
 					bool done = false;
@@ -226,7 +226,7 @@ void run_game() {
 	create_music_thread(RANDOM);
 	
 	//Index needs to be saved to file and loaded
-	maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,FORWARD);
+	//maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y, FORWARD);
 	
 	do {
 		
@@ -282,6 +282,11 @@ int get_user_input() {
 	
 }
 
+/*
+ * Transitioning does not use the new method yet. The lines are just
+ * commented out
+ * 
+ * */
 int handle_user_input(int input) {
 	
 	switch (input) {
@@ -292,13 +297,13 @@ int handle_user_input(int input) {
 		case FORWARD: 
 		
 			player->vars.MapIndex++; player->reset_positions();
-			maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,FORWARD);
+			//maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,FORWARD);
 			
 		break;
 		case BACKWARD: 
 		
 			player->vars.MapIndex--; player->reset_positions(); 
-			maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,BACKWARD);
+			//maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,BACKWARD);
 		
 		break;
 	

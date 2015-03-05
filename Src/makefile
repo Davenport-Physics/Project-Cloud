@@ -1,4 +1,4 @@
-OBJS = main.o menus.o mygetch.o init.o music.o generation.o share.o controls.o character.o database.o engine.o
+OBJS = main.o menus.o mygetch.o init.o music.o map.o share.o controls.o character.o database.o engine.o
 CC = g++
 DEBUG =
 CFLAGS = -Wall -c -O3 $(DEBUG)
@@ -7,10 +7,10 @@ LFLAGS = -pthread -lSDL2 -lSDL2_mixer -lSDL2_ttf -lsqlite3 $(DEBUG)
 mc : $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o mc
 
-main.o : main.cpp init.h menus.h music.h character.h generation.h engine.h
+main.o : main.cpp init.h menus.h music.h character.h map.h engine.h
 	$(CC) $(CFLAGS) main.cpp
 
-init.o : init.h init.cpp character.h generation.h share.h database.h engine.h
+init.o : init.h init.cpp character.h map.h share.h database.h engine.h
 	$(CC) $(CFLAGS) init.cpp
 
 database.o : database.h database.cpp
@@ -28,8 +28,8 @@ controls.o : controls.h controls.cpp mygetch.h engine.h controls.h
 character.o : character.h character.cpp share.h engine.h
 	$(CC) $(CFLAGS) character.cpp
 
-generation.o : generation.h generation.cpp share.h
-	$(CC) $(CFLAGS) generation.cpp
+map.o : map.h map.cpp share.h
+	$(CC) $(CFLAGS) map.cpp
 
 mygetch.o : mygetch.h mygetch.cpp
 	$(CC) $(CFLAGS) mygetch.cpp

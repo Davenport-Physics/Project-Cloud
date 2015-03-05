@@ -1,7 +1,7 @@
 /*
- * generation.cpp
+ * map.cpp
  * 
- * Copyright 2014 Michael Davenport <Davenport.physics@gmail.com>
+ * Copyright 2014-2015 Michael Davenport <Davenport.physics@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  */
 
 
-#include "generation.h"
+#include "map.h"
 
 Map::Map(int rows, int columns, int NumTransitionPoints, struct Transition *point, char *map[]) {
 	
@@ -31,11 +31,11 @@ Map::Map(int rows, int columns, int NumTransitionPoints, struct Transition *poin
 	
 	this->NumTransitionPoints = NumTransitionPoints;
 	
-	this->point = new struct Transition[NumTransitionPoints];
+	this->points = new struct Transition[NumTransitionPoints];
 	
 	for (int y = 0;y < NumTransitionPoints;y++) {
 	
-		this->point[y] = point[y];
+		this->points[y] = points[y];
 		
 	}
 	
@@ -47,13 +47,6 @@ Map::Map(int rows, int columns, int NumTransitionPoints, struct Transition *poin
 		strcpy(this->map[y], map[y]);
 		
 	}
-	
-}
-
-void Map::transition_to_new_map(int *x, int *y) {
-
-	this->x = x;
-	this->y = y;
 	
 }
 
@@ -193,8 +186,8 @@ void Map::save_map(string filename) {
 	
 	for (int x = 0;x < NumTransitionPoints;x++) {
 	
-		out << "TRANSITION(" << this->point[x].name << ",";
-		out << this->point[x].x << "," << this->point[x].y << ")\n";
+		out << "TRANSITION(" << this->points[x].name << ",";
+		out << this->points[x].x << "," << this->points[x].y << ")\n";
 		
 	}
 	out << "END\n";
@@ -202,12 +195,33 @@ void Map::save_map(string filename) {
 	
 }
 
+string Map::transition_to_new_map(int *x, int *y) {
+
+	for ( int i = 0;i < this->NumTransitionPoints;i++) {
+	
+		if (*x == this->points[i].x && *y == this->points[i].y) {
+			
+			return this->points[i].name;
+			
+		
+		}
+		
+	}
+	return NULL;
+	
+}
+
 Map::~Map() {
 
 	delete [] this->map;
-	delete [] this->point;
+	delete [] this->points;
 	
 }
+
+/*
+ * MapGenerator Class methods
+ * 
+ * */
 
 MapGenerator::MapGenerator(int Number) {
 
@@ -605,8 +619,8 @@ bool MapGenerator::determine_if_suitable_position(int x , int y) {
 	
 	try {
 		
-		if (this->map[y+1][x] != '#' || this->map[y-1][x] != '#'
-			|| this->map[y][x+1] != '#' || this->map[y][x-1] != '#') {
+		if (this->map[y + 1][x] != '#' || this->map[y - 1][x] != '#'
+			|| this->map[y][x + 1] != '#' || this->map[y][x - 1] != '#') {
 					
 			return true;
 					
@@ -619,7 +633,13 @@ bool MapGenerator::determine_if_suitable_position(int x , int y) {
 }
 Map MapGenerator::get_map_object() {
 	
-	return Map(this->rows, this->columns, this->NumTransitionPoints,points, this->map);
+	return Map(this->rows, this->columns, this->NumTransitionPoints, points, this->map);
+	
+}
+Map *MapGenerator::get_map_object_heap() {
+	
+	
+	return new Map(this->rows, this->columns, this->NumTransitionPoints, points, this->map);
 	
 }
 

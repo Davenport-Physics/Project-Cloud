@@ -1,7 +1,7 @@
 /*
- * generation.h
+ * map.h
  * 
- * Copyright 2014 Michael Davenport <Davenport.physics@gmail.com>
+ * Copyright 2014-2015 Michael Davenport <Davenport.physics@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
  */
 
 
-#ifndef GENERATION_H
-#define GENERATION_H
+#ifndef MAP_H
+#define MAP_H
 
 #include <iostream>
 #include <fstream>
@@ -91,7 +91,7 @@ private:
 	string name;
 	
 	int NumTransitionPoints;
-	struct Transition *point;
+	struct Transition *points;
 
 public:
 
@@ -107,7 +107,7 @@ public:
 	
 	void save_map(string filename);
 	void print_map_around_player(int bounds);
-	void transition_to_new_map(int *x,int *y);
+	string transition_to_new_map(int *x, int *y);
 	
 	
 };
@@ -174,6 +174,7 @@ public:
 	~MapGenerator();
 	
 	Map get_map_object();
+	Map *get_map_object_heap();
 	
 };
 

@@ -31,7 +31,7 @@
 
 #include "character.h"
 #include "controls.h"
-#include "generation.h"
+#include "map.h"
 #include "share.h"
 #include "database.h"
 #include "engine.h"
@@ -39,14 +39,14 @@
 using std::string;
 using std::vector;
 
-typedef enum SuccessFailure {
+enum SuccessFailure {
 
 	SUCCESS = 0,
 	FAILURE
 	
-} SuccessEnum;
+};
 
-typedef enum Saves {
+enum Saves {
 	
 	FIRST = 0,
 	SECOND,
@@ -54,7 +54,7 @@ typedef enum Saves {
 	FILLED,
 	EMPTY
 	
-} SavesEnum;
+};
 
 Player * new_game(string filename, vector<Map *> *maps);
 Player * load_game(string filename, vector<Map *> *maps);
@@ -66,8 +66,8 @@ string convert_map_vars_to_string(unsigned int index, Map *map);
 
 void save_game_db(string filename, Player *player , vector<Map *> maps);
 
-SuccessEnum load_player_vars_db(character *player , vector<string> str);
-SuccessEnum load_maps_db(vector<Map *> *maps , vector<string> str);
+enum SuccessFailure load_player_vars_db(character *player , vector<string> str);
+enum SuccessFailure load_maps_db(vector<Map *> *maps , vector<string> str);
 
 
 /*
@@ -86,7 +86,7 @@ private:
 	int WindowWidth;
 	
 	Text RenderingType;
-	MapType map;
+	enum MapType map;
 	
 	bool determine_window_height(string str);
 	bool determine_window_width(string str);
@@ -101,7 +101,7 @@ public:
 	int get_window_width();
 	
 	Text get_rendering_type();
-	MapType get_map_type();
+	enum MapType get_map_type();
 	
 };
 

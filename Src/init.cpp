@@ -69,10 +69,10 @@ Player * new_game(string filename, vector<Map *> *maps) {
 		
 	}
 	
-	
 	for ( int x = 0; x < NUM_MAPS; x++ ) {
 	
-		( *maps )[x] = new Map(x);
+		MapGenerator temp(x);
+		( *maps )[x] = temp.get_map_object_heap();
 		
 	}
 	
@@ -130,7 +130,7 @@ Player * load_game_db(string filename, vector<Map *> *maps) {
 	
 	
 }
-SuccessEnum load_player_vars_db(character *player , vector<string> str) {
+enum SuccessFailure load_player_vars_db(character *player , vector<string> str) {
 	
 	if (str.size() == NUM_ATTRIBUTES ) {
 		
@@ -155,7 +155,8 @@ SuccessEnum load_player_vars_db(character *player , vector<string> str) {
 	
 }
 
-SuccessEnum load_maps_db(vector<Map *> *maps , vector<string> str) {
+/*
+enum SuccessFailure load_maps_db(vector<Map *> *maps , vector<string> str) {
 	
 	vector<string> StringDelimited;
 	int rows , columns;
@@ -201,6 +202,7 @@ SuccessEnum load_maps_db(vector<Map *> *maps , vector<string> str) {
 	return FAILURE;
 	
 }
+*/
 
 static string variables[] = 
 {"Name TINYTEXT,Health INT,MaxHealth INT,Level INT,Exp INT,Attack INT,Accuracy INT,MapIndex INT,Gold INT,Mana DOUBLE,MaxMana DOUBLE,ManaRegen DOUBLE",
@@ -260,6 +262,7 @@ string convert_player_vars_to_string(Player *player) {
 	return values;
 	
 }
+/*
 string convert_map_vars_to_string(unsigned int index,Map *map) {
 
 	string values = SSTR(index) + "," + SSTR(map->get_rows());
@@ -279,7 +282,7 @@ string convert_map_vars_to_string(unsigned int index,Map *map) {
 	
 	return values;
 	
-}
+}*/
 
 Config::Config() {
 	
@@ -434,7 +437,7 @@ Text Config::get_rendering_type() {
 	
 }
 
-MapType Config::get_map_type() {
+enum MapType Config::get_map_type() {
 
 	return this->map;
 	
