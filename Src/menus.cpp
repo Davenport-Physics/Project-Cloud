@@ -21,47 +21,40 @@
 
 #include "menus.h"
 
-typedef struct PointerVars {
-	
-	int Dx, Dy;
-	int Min_x, Min_y;
-	int Max_x, Max_y;
-	
-}PointerVars;
-
-typedef struct Pointer {
-	
-	int x, y;
-	
-}Pointer;
-
 static Pointer MenuPointer = {0, 0};
 
 static const PointerVars MainMenuVars = {2, 2, 3, 5, 7, 9};
+static const Pointer NewGamePointer   = {3, 5};
+static const Pointer LoadGamePointer  = {5, 7};
+static const Pointer OptionsPointer   = {7, 9};
 static char MainMenuArray[10][22] = {
 {' ','/','\\','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','/','\\',' '},
 {'<','(',')','{','M','i','d','n','i','g','h','t',' ','C','l','o','u','d','}','(',')','>'},
 {' ',' ','\\','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-',' ',' ',' '},
 {' ',' ',' ','\\',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 {' ',' ',' ',' ','\\',' ',' ',' ','_','_','_','_','_','_','_','_',' ',' ',' ',' ',' ',' '},
-{' ',' ',' ',' ','}','\\','_','/','N','e','w',' ','G','a','m','e',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ','>','}','\\','_','/','N','e','w',' ','G','a','m','e',' ',' ',' ',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ','\\',' ',' ',' ','_','_','_','_','_','_','_','_','_',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ','}','\\','_','/','L','o','a','d',' ','G','a','m','e',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ','\\',' ',' ',' ','_','_','_','_','_','_','_',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ','}','\\','_','/','O','p','t','i','o','n','s',' ',' ',' '}};
 
 static const PointerVars OptionsVars = {0, 2, 0, 0, 0, 2};
+static const Pointer ControlsPointer = {0, 0};
+static const Pointer CreditsPointer  = {0, 2};
 static char OptionsArray[5][10] = 
-{{' ','C','o','n','t','r','o','l','s',' '},
+{{'>','C','o','n','t','r','o','l','s',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 {' ','C','r','e','d','i','t','s',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}};
 
 
-static const PointerVars ControlsVars = {0, 2, 0, 0, 0, 2};
+static const PointerVars ControlsVars     = {0, 2, 0, 0, 0, 2};
+static const Pointer ViewControlsPointer  = {0, 0};
+static const Pointer ChangeControlPointer = {0, 2}; 
 static char ControlsMenuArray[3][20] = 
-{{' ','V','i','e','w',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' ',' ',' '},
+{{'>','V','i','e','w',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' ',' ',' '},
  {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
  {' ','C','h','a','n','g','e',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' '}};
 
@@ -77,9 +70,9 @@ static char CreditsArray[13][20] =
  {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
  {' ',' ',' ','G','e','o','r','g','e',' ','M','i','t','c','h','e','l','l',' ',' '},
  {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ',' ',' ',' ','a','k','a',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+ {' ',' ',' ',' ','(','/','d','e','v','/','z','e','r','o',')',' ',' ',' ',' ',' '},
  {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ','/','d','e','v','/','z','e','r','o',' ',' ',' ',' ',' ',' ',' '}};
+ {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}};
 
 
 
@@ -110,17 +103,61 @@ void ResetPointers(enum MenuContext CurrentMenuContext) {
 		
 	}
 	
+}
+
+/*
+ * TODO, because the arrays are static, there needs to be a simple
+ * way to remove extra pointers from the array.
+ * 
+ * */
+void RemoveExtraPointers(enum MenuContext CurrentMenuContext) {
+
+	PointerVars TempVars;
+	try {
+		
+		TempVars = GetPointerVars(CurrentMenuContext);
+		
+	} catch (exception &e) {
+	
+		return;
+		
+	}
+	
+	int temp_x = TempVars.Min_x;
+	int temp_y = TempVars.Min_y;
+	
+	while (temp_x <= TempVars.Max_x) {
+	
+		if (temp_x != MenuPointer.x && temp_y != MenuPointer.y) {
+		
+			switch (CurrentMenuContext) {
+			
+				case MAINMENU: MainMenuArray[temp_x][temp_y]     = ' '; break;
+				case OPTIONS:  OptionsArray[temp_x][temp_y]      = ' '; break;
+				case CONTROLS: ControlsMenuArray[temp_x][temp_y] = ' '; break;
+				default: return; break;
+				
+			}
+			
+		}
+		
+		temp_x += TempVars.Dx;
+		temp_y += TempVars.Dy;
+		
+	}
+	
 } 
 
-void UpdatePointer(enum ControlType type, enum MenuContext CurrentMenuContext) {
+enum MenuContext UpdatePointer(enum ControlType type, enum MenuContext CurrentMenuContext) {
 	
 	PointerVars Vars;
-	switch (CurrentMenuContext) {
+	try {
 		
-		case MAINMENU: Vars = MainMenuVars; break;
-		case OPTIONS:  Vars = OptionsVars; break;
-		case CONTROLS: Vars = ControlsVars; break;
-		default: return; break;
+		Vars = GetPointerVars(CurrentMenuContext);
+		
+	} catch (exception &e) {
+	
+		return CurrentMenuContext;
 		
 	}
 	
@@ -134,27 +171,83 @@ void UpdatePointer(enum ControlType type, enum MenuContext CurrentMenuContext) {
 				MenuPointer.x -= Vars.Dx;
 				
 			}
-		
 			break;
 			
 		case DOWN:
 		
 			if (MenuPointer.y != Vars.Max_y && MenuPointer.x != Vars.Max_x) {
 			
-				MenuPointer.y -= Vars.Dy;
-				MenuPointer.x -= Vars.Dx;
+				MenuPointer.y += Vars.Dy;
+				MenuPointer.x += Vars.Dx;
 				
 			}
 			break;
 			
-		default: return; break;
-			
+		case ENTER:
 		
+			switch (CurrentMenuContext) {
+			
+				case MAINMENU: 
+				
+					if (MenuPointer.x == NewGamePointer.x && MenuPointer.y == NewGamePointer.y) {
+						
+						return NEWGAME;
+						
+					} else if (MenuPointer.x == LoadGamePointer.x && MenuPointer.y == LoadGamePointer.y) {
+						
+						return LOADGAME;
+						
+					} else if (MenuPointer.x == OptionsPointer.x && MenuPointer.y == OptionsPointer.y) {
+					
+						return OPTIONS;
+						
+					}
+					break;
+					
+				case OPTIONS:
+				
+					if (MenuPointer.x == ControlsPointer.x && MenuPointer.y == ControlsPointer.y) {
+					
+						return CONTROLS;
+						
+					} else if (MenuPointer.x == CreditsPointer.x && MenuPointer.y == CreditsPointer.y) {
+						
+						return CREDITS;
+						
+					}
+					break;
+					
+				case CONTROLS:
+				
+					if (MenuPointer.x == ViewControlsPointer.x && MenuPointer.y == ViewControlsPointer.y) {
+					
+						return VIEWCONTROLS;
+						
+					} else if (MenuPointer.x == ChangeControlPointer.x && MenuPointer.y == ChangeControlPointer.y) {
+						
+						return CHANGECONTROLS;
+						
+					}
+					
+				default: return CurrentMenuContext; break;
+				
+			}
+		
+			break;
+			
+		default: return CurrentMenuContext; break;
+			
 	}
+	
+	RemoveExtraPointers(CurrentMenuContext);
+	
+	return CurrentMenuContext;
 	
 }
 
-void UpdateMenu(enum MenuContext CurrentMenuContext) {
+enum MenuContext UpdateMenu(enum ControlType type, enum MenuContext CurrentMenuContext) {
+	
+	enum MenuContext TempMenuContext = UpdatePointer(type, CurrentMenuContext);
 	
 	void (*DrawFunction)(char **, int);
 	switch (CurrentMenuContext) {
@@ -172,6 +265,21 @@ void UpdateMenu(enum MenuContext CurrentMenuContext) {
 		case CREDITS:  draw_2d_stack_array(CreditsArray, DrawFunction); break;
 		default: break;
 		
+		
+	}
+	
+	return TempMenuContext;
+	
+}
+
+PointerVars GetPointerVars(enum MenuContext CurrentMenuContext) {
+
+	switch (CurrentMenuContext) {
+		
+		case MAINMENU: return MainMenuVars; break;
+		case OPTIONS:  return OptionsVars; break;
+		case CONTROLS: return ControlsVars; break;
+		default: throw invalid_argument("No Structure to return"); break;
 		
 	}
 	

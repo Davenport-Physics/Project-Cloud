@@ -39,18 +39,19 @@
 int pick_save(string *saves);
 int determine_new_game(string *saves);
 int determine_load_game(string *saves);
-
 int handle_user_input(int input);
 int get_user_input();
 
+
 void run_game();
-void update_state();
+void UpdateState(enum ControlType type);
 
-static string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
 static int SaveChoice;
-
+static string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
 static vector<Map *> maps(30);
 static Player *player = NULL;
+
+static enum MenuContext CurrentMenuContext = MAINMENU;
 
 /*
  * TODO init functions return struct player_vars, which is instantly
@@ -79,7 +80,7 @@ int main(int argc, char **argv) {
 		
 		
 		UserControls.get_input();
-		//update
+		//update;
 		//render;
 		
 		stop_music_thread();
@@ -147,16 +148,13 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-void update_state() {
+void UpdateState(enum ControlType type) {
 	
 	clear_screen();
 	switch (CurrentRenderingContext) {
 		
-		case MAINMENU:
-
-			
-
-		break;
+		case MENU: UpdateMenu(type, CurrentMenuContext); break;
+		default: break;
 		
 	}
 	

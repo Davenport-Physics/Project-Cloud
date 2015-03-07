@@ -24,9 +24,9 @@
 #define MENUS_H
 
 #include <iostream>
+#include <stdexcept>
 #include <cstdlib>
 #include <cstring>
-#include <pthread.h>
 #include <vector>
 
 #include "init.h"
@@ -39,29 +39,47 @@ using std::cout;
 using std::endl;
 using std::cin;
 using std::vector;
+using std::invalid_argument;
 
 
 enum MenuContext {
 	
 	MAINMENU = 0,
+	NEWGAME,
+	LOADGAME,
 	SAVES,
-	CONTROLS,
 	OPTIONS,
+	CONTROLS,
+	VIEWCONTROLS,
+	CHANGECONTROLS,
 	CREDITS,
 	NONE
 	
 };
 
+typedef struct PointerVars {
+	
+	int Dx, Dy;
+	int Min_x, Min_y;
+	int Max_x, Max_y;
+	
+} PointerVars;
+
+typedef struct Pointer {
+	
+	int x, y;
+	
+} Pointer;
+
 int show_saves(string *saves);
 
-void options();
-void credits();
-void controls();
-void main_menu();
-
 void ResetPointers();
-void UpdatePointer(enum ControlType);
-void UpdateMenu();
+void RemoveExtraPointers(enum MenuContext CurrentMenuContext);
+
+enum MenuContext UpdatePointer(enum ControlType type, enum MenuContext CurrentMenuContext);
+enum MenuContext UpdateMenu(enum ControlType type, enum MenuContext CurrentMenuContext);
+
+PointerVars GetPointerVars(enum MenuContext CurrentMenuContext);
 
 #endif
 

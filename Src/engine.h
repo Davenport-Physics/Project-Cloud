@@ -42,8 +42,6 @@ enum TextRendering {
 enum RenderingContext {
 	
 	MENU = 0,
-	NEWGAME,
-	LOADGAME,
 	BOTTOMTOP,
 	GAME
 	
