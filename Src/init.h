@@ -33,11 +33,12 @@
 #include "controls.h"
 #include "map.h"
 #include "share.h"
-#include "database.h"
 #include "engine.h"
 
 using std::string;
 using std::vector;
+using std::ofstream;
+using std::ifstream;
 
 enum SuccessFailure {
 
@@ -56,18 +57,14 @@ enum Saves {
 	
 };
 
-Player * new_game(string filename, vector<Map *> *maps);
-Player * load_game(string filename, vector<Map *> *maps);
-Player * load_game_db(string filename, vector<Map *> *maps);
+Player * NewGame(string filename, vector<Map *> *maps);
+Player * LoadGame(string filename, vector<Map *> *maps);
 
-string check_for_saves_db(string fileame);
+string CheckForSaves(string filename);
 string convert_player_vars_to_string(Player *player);
 string convert_map_vars_to_string(unsigned int index, Map *map);
 
-void save_game_db(string filename, Player *player , vector<Map *> maps);
-
-enum SuccessFailure load_player_vars_db(character *player , vector<string> str);
-enum SuccessFailure load_maps_db(vector<Map *> *maps , vector<string> str);
+void SaveGame(string filename, Player *player , vector<Map *> *maps);
 
 
 /*

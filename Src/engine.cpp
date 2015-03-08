@@ -23,7 +23,7 @@
 
 #include "engine.h"
 
-RenderingContext CurrentRenderingContext;
+RenderingContext CurrentRenderingContext = MENU;
 
 static int WindowHeight = 1024;
 static int WindowWidth  = 768;

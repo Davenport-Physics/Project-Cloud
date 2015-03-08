@@ -111,13 +111,13 @@ void Controls::print_controls() {
 	
 }
 
-int Controls::check_control(char control) {
+enum ControlType Controls::check_control(char control) {
 
 	for (int i = 0;i < this->length;i++) {
 	
 		if ( this->controls[i] == control ) {
 		
-			return i;
+			return (enum ControlType)i;
 		
 		}
 		
@@ -132,9 +132,32 @@ int Controls::check_control(char control) {
  * using the terminal input.
  * 
  * */
-int Controls::get_input() {
+enum ControlType Controls::get_input(SDL_Event *event) {
+	
+	if (SDL_PollEvent(event)) {
+	
+		switch (event->type) {
 		
-	return check_control(mygetch());
+			case SDL_QUIT: 
+			
+				return QUIT; 
+				break;
+				
+			case SDL_KEYDOWN:
+				
+				return ControlType(event->key.keysym.sym);
+				break;
+			
+			default: 
+			
+				return NOTSET;
+				break;
+			
+		}
+		
+	}
+	
+	return NOTSET;
 	
 }
 

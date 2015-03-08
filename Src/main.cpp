@@ -24,7 +24,7 @@
 #include <vector>
 #include <cstdlib>
 
-
+#include <SDL2/SDL.h>
 #include <pthread.h>
 
 #include "controls.h"
@@ -44,9 +44,9 @@ int get_user_input();
 
 
 void run_game();
-void UpdateState(enum ControlType type);
+bool UpdateState(enum ControlType type);
 
-static int SaveChoice;
+//static int SaveChoice;
 static string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
 static vector<Map *> maps(30);
 static Player *player = NULL;
@@ -64,91 +64,40 @@ int main(int argc, char **argv) {
 	
 	srand(time(0));
 	
-	string saves[3];
-	
 	init_sound_engine();
 	create_music_thread(TITLE);
 	
-	/*
-	 * This should be user defined later on, for now it is shaded.
-	 * 
-	 * */
+	bool GameLoopDone = false;
+	
 	init_engine(UserConfig.get_rendering_type(), UserConfig.get_window_height(), UserConfig.get_window_width());
-	
-	int game;
-	while ((game = main_menu()) != EXITGAME) {
+	SDL_StartTextInput();
+	SDL_Event event;
+	while (!GameLoopDone) {
 		
+		GameLoopDone = UpdateState(UserControls.get_input(&event));
+		render();
 		
-		UserControls.get_input();
-		//update;
-		//render;
-		
-		stop_music_thread();
-		for (int x = 0; x < 3;x++) {
-		
-			saves[x] = check_for_saves_db(files[x]); 
-			
-		}
-		
-		int (*determine)(string *);
-		Player *(*start)(string, vector<Map *> *);
-		if (game == NEWGAME) {
-			
-			determine	= &determine_new_game;
-			start		= &new_game;
-			
-		} else if (game == LOADGAME) {
-		
-			determine	= &determine_load_game;
-			start		= &load_game_db;
-			
-		}
-	
-		switch (game) {
-		
-			case NEWGAME: 
-			//case LOADGAME:
-			
-				{
-					bool done = false;
-				
-					while (!done) {
-				
-						switch (determine(saves)) {
-					
-							case YES: player = start(files[SaveChoice], &maps); run_game(); done = true; break;
-							case NO: continue; break;
-							default: done = true; break;
-						
-						}
-					
-					}
-					
-				}
-			
-			break;
-			case OPTIONS: 
-			
-				switch (options()) { case CONTROLS: controls(); break; case CREDITS: credits(); break; }
-			
-			break;
-			
-			
-		}
-		create_music_thread(TITLE);
-		game = main_menu();
-		
+		SDL_Delay(1000/60);
 	}
-	
-	delete player;
+	stop_music_thread();
 	
 	quit_engine();
 	quit_sound_engine();
 	
+	delete player;
+	
 	return 0;
 }
 
-void UpdateState(enum ControlType type) {
+/*
+ * TODO
+ * 
+ * There needs to be several types of quits. One quit that exits the game
+ * fully. The other quit that just brings the player back to a previous
+ * context.
+ * 
+ * */
+bool UpdateState(enum ControlType type) {
 	
 	clear_screen();
 	switch (CurrentRenderingContext) {
@@ -157,11 +106,17 @@ void UpdateState(enum ControlType type) {
 		default: break;
 		
 	}
+	switch (type) {
+		
+		case QUIT: return true;  break;
+		default:   return false; break;
+		
+	}
 	
 }
 
 
-int determine_new_game(string *saves) {
+/*int determine_new_game(string *saves) {
 
 	int choice = pick_save(saves);
 				
@@ -296,13 +251,15 @@ int get_user_input() {
 	
 	return 0;
 	
-}
+}*/
 
 /*
  * Transitioning does not use the new method yet. The lines are just
  * commented out
  * 
  * */
+ 
+ /*
 int handle_user_input(int input) {
 	
 	switch (input) {
@@ -326,4 +283,4 @@ int handle_user_input(int input) {
 	}
 	return YES;
 	
-}
+}*/

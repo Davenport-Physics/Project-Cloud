@@ -25,6 +25,7 @@
 #define CHARACTER_H
 
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 
 #include "share.h"
@@ -34,6 +35,7 @@
 
 using std::string;
 using std::cout;
+using std::ofstream;
 
 typedef enum PlayerAttributes {
 
@@ -70,8 +72,7 @@ typedef struct playervars {
 	
 	int x , y;
 	
-	int MapIndex;
-	
+	string MapName;
 	string name;
 	
 	float Mana, MaxMana, ManaRegen;
@@ -80,7 +81,6 @@ typedef struct playervars {
 	
 } character;
 
-//TODO. possible change character vars to private, and write getter setter variables.
 class Player {
 
 
@@ -88,7 +88,7 @@ public:
 
 	character vars;
 	
-	Player(string name);
+	Player(string name, string MapName);
 	Player(character vars);
 	~Player();
 	
@@ -98,6 +98,8 @@ public:
 	void add_random_gold();
 	void check_if_leveled_up();
 	void reset_positions();
+	
+	void SavePlayer(ofstream *outfile);
 	
 	character get_character_vars();
 	

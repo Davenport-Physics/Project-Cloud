@@ -36,7 +36,10 @@
 
 #define NUM_MAPS 30
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::ofstream;
+using std::exception;
 
 enum MapType {
 	
@@ -105,7 +108,7 @@ public:
 	
 	char ** get_map();
 	
-	void save_map(string filename);
+	void SaveMap(ofstream *outfile);
 	void print_map_around_player(int bounds);
 	string transition_to_new_map(int *x, int *y);
 	

@@ -166,32 +166,27 @@ void Map::print_map_around_player(int bounds) {
  * the SecondPosition Values.
  * 
  * */
-void Map::save_map(string filename) {
-
-	ofstream out;
+void Map::SaveMap(ofstream *outfile) {
 	
-	out.open(filename.c_str(), ios_base::app);
-	
-	out << "START(" << this->name << "," << this->columns << "," << this->rows << ")\n";
+	*outfile << "MAP(" << this->name << "," << this->columns << "," << this->rows << ")\n";
 	for (int y = 0; y < this->rows;y++) {
 	
 		for (int x = 0; x < this->columns;x++) {
 		
-			out << this->map[y][x];
+			*outfile  << this->map[y][x];
 			
 		}
-		out << "\n";
+		*outfile  << "\n";
 	}
-	out << "STOP\n";
+	*outfile  << "STOP\n";
 	
 	for (int x = 0;x < NumTransitionPoints;x++) {
 	
-		out << "TRANSITION(" << this->points[x].name << ",";
-		out << this->points[x].x << "," << this->points[x].y << ")\n";
+		*outfile  << "TRANSITION(" << this->points[x].name << ",";
+		*outfile  << this->points[x].x << "," << this->points[x].y << ")\n";
 		
 	}
-	out << "END\n";
-	out.close();
+	*outfile  << "END\n";
 	
 }
 
@@ -288,7 +283,7 @@ void MapGenerator::add_borders() {
 	
 	for (int x = 0;x < this->columns;x++) {
 	
-		this->map[0][x]		= '#';
+		this->map[0][x]		    = '#';
 		this->map[rows-1][x]	= '#';
 		
 	}

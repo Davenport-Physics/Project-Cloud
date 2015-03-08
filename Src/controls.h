@@ -27,11 +27,10 @@
 
 #include <iostream>
 #include <cstring>
+#include <SDL2/SDL.h>
 
 #include "mygetch.h"
 #include "engine.h"
-
-#define NOTSET -1
 
 using std::string;
 using std::cout;
@@ -44,7 +43,8 @@ enum ControlType {
 	RIGHT,
 	QUIT,
 	JOURNAL,
-	ENTER
+	ENTER,
+	NOTSET
 	
 };
 
@@ -73,8 +73,8 @@ public:
 	
 	void print_controls();
 	
-	int check_control(char control);
-	int get_input();
+	enum ControlType check_control(char control);
+	enum ControlType get_input(SDL_Event *event);
 	
 };
 

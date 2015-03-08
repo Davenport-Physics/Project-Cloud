@@ -30,7 +30,7 @@ static int ExpPerLevel[30] =
 1159200, 1875625, 3034825, 4910450, 7945275, 
 12855725, 20801000, 33656725};
 
-Player::Player(string name) {
+Player::Player(string name, string MapName) {
 	
 	this->vars.name			= name;
 	this->vars.PlayerHealth = 10;
@@ -48,7 +48,7 @@ Player::Player(string name) {
 	this->vars.x			= 0;
 	this->vars.y			= 0;
 	
-	this->vars.MapIndex		= 0;
+	this->vars.MapName	    = MapName;
 	this->vars.gold			= 0;
 	
 }
@@ -56,8 +56,6 @@ Player::Player(string name) {
 Player::Player(character vars) {
 	
 	this->vars = vars;
-	
-	
 	
 }
 
@@ -115,6 +113,25 @@ void Player::reset_positions() {
 	
 	this->vars.x = RESET_POSITION;
 	this->vars.y = RESET_POSITION;
+	
+}
+void Player::SavePlayer(ofstream *outfile) {
+	
+	*outfile << "Name:"         << vars.name         << "\n";
+	*outfile << "PlayerHealth:" << vars.PlayerHealth << "\n";
+	*outfile << "MaxHealth:"    << vars.MaxHealth    << "\n";
+	*outfile << "PlayerLevel:"  << vars.PlayerLevel  << "\n";
+	*outfile << "Exp:"          << vars.exp          << "\n";
+	*outfile << "Mana:"         << vars.Mana         << "\n";
+	*outfile << "MaxMana:"      << vars.MaxMana      << "\n";
+	*outfile << "ManaRegen"     << vars.ManaRegen    << "\n";
+	*outfile << "gold:"         << vars.gold         << "\n";
+	*outfile << "attack:"       << vars.attack       << "\n";
+	*outfile << "accuracy:"     << vars.accuracy     << "\n";
+	
+	*outfile << "Position:(" << vars.MapName << "," << vars.x << ",";
+	*outfile << vars.y << ")\n";
+	
 	
 }
 
