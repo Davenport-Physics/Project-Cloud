@@ -144,8 +144,8 @@ enum ControlType Controls::get_input(SDL_Event *event) {
 				break;
 				
 			case SDL_KEYDOWN:
-				
-				return ControlType(event->key.keysym.sym);
+			
+				return check_control(event->key.keysym.sym);
 				break;
 			
 			default: 

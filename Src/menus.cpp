@@ -21,7 +21,7 @@
 
 #include "menus.h"
 
-static Pointer MenuPointer = {0, 0};
+static Pointer MenuPointer = {3, 5};
 
 static const PointerVars MainMenuVars = {2, 2, 3, 5, 7, 9};
 static const Pointer NewGamePointer   = {3, 5};
@@ -33,7 +33,7 @@ static char MainMenuArray[10][22] = {
 {' ',' ','\\','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-',' ',' ',' '},
 {' ',' ',' ','\\',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 {' ',' ',' ',' ','\\',' ',' ',' ','_','_','_','_','_','_','_','_',' ',' ',' ',' ',' ',' '},
-{' ',' ',' ','>','}','\\','_','/','N','e','w',' ','G','a','m','e',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ',' ','}','\\','_','/','N','e','w',' ','G','a','m','e',' ',' ',' ',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ','\\',' ',' ',' ','_','_','_','_','_','_','_','_','_',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ','}','\\','_','/','L','o','a','d',' ','G','a','m','e',' ',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ','\\',' ',' ',' ','_','_','_','_','_','_','_',' ',' ',' '},
@@ -150,6 +150,16 @@ void RemoveExtraPointers(enum MenuContext CurrentMenuContext) {
 
 enum MenuContext UpdatePointer(enum ControlType type, enum MenuContext CurrentMenuContext) {
 	
+	
+	switch (CurrentMenuContext) {
+	
+		case MAINMENU: MainMenuArray[MenuPointer.y][MenuPointer.x] = '>'; break;
+		case OPTIONS:  OptionsArray[MenuPointer.y][MenuPointer.x]  = '>'; break;
+		case CREDITS:  CreditsArray[MenuPointer.y][MenuPointer.x]  = '>'; break;
+		default: break;
+		
+	}
+	
 	PointerVars Vars;
 	try {
 		
@@ -235,7 +245,7 @@ enum MenuContext UpdatePointer(enum ControlType type, enum MenuContext CurrentMe
 		
 			break;
 			
-		default: return CurrentMenuContext; break;
+		default: return CurrentMenuContext;break;
 			
 	}
 	
@@ -245,19 +255,24 @@ enum MenuContext UpdatePointer(enum ControlType type, enum MenuContext CurrentMe
 	
 }
 
+/*
+ * Updates the pointer position and changes the rendering context
+ * 
+ * */
 enum MenuContext UpdateMenu(enum ControlType type, enum MenuContext CurrentMenuContext) {
+	
 	
 	enum MenuContext TempMenuContext = UpdatePointer(type, CurrentMenuContext);
 	
 	void (*DrawFunction)(char **, int);
-	switch (CurrentMenuContext) {
+	switch (TempMenuContext) {
 		
 		case CREDITS: DrawFunction = &draw_animation_bottom_top; break;
 		default:      DrawFunction = &draw_2d_array; break;
 		
 	}
 	
-	switch (CurrentMenuContext) {
+	switch (TempMenuContext) {
 	
 		case MAINMENU: draw_2d_stack_array(MainMenuArray, DrawFunction); break;
 		case OPTIONS:  draw_2d_stack_array(OptionsArray, DrawFunction); break;

@@ -78,6 +78,7 @@ int main(int argc, char **argv) {
 		render();
 		
 		SDL_Delay(1000/60);
+		
 	}
 	stop_music_thread();
 	
