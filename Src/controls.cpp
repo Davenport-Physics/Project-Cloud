@@ -145,7 +145,12 @@ enum ControlType Controls::get_input(SDL_Event *event) {
 				
 			case SDL_KEYDOWN:
 			
-				return check_control(event->key.keysym.sym);
+				switch (event->key.keysym.sym) {
+						
+					case SDLK_RETURN: return ENTER; break;
+					default: return check_control(event->key.keysym.sym); break;
+					
+				}
 				break;
 			
 			default: 

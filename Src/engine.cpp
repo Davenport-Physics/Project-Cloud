@@ -267,9 +267,6 @@ void draw_animation_bottom_top(char **array, int rows) {
 	SDL_Surface *Surface;
 	SDL_Rect Rect[rows];
 	
-	SDL_FillRect(Screen, NULL, 0x000000);
-	SDL_UpdateWindowSurface(Window);
-	
 	for (int y = 0;y < rows;y++) {
 	
 		Rect[y].x = (WindowWidth / 2 - 100);
@@ -278,6 +275,7 @@ void draw_animation_bottom_top(char **array, int rows) {
 	}
 	
 	while (Rect[rows - 1].y != 0) {
+		clear_screen();
 		
 		for (int y = 0;y < rows;y++) {
 			
@@ -299,19 +297,13 @@ void draw_animation_bottom_top(char **array, int rows) {
 			
 		}
 		
-		/*
-		 * This needs to be fixed somehow.
-		 * 
-		 * */
-		
 		for (int y = 0;y < rows;y++) {
 			
 			Rect[y].y -= 1;
 			
 		}
-		SDL_Delay(1000/60);
 		
-		clear_screen();
+		render();
 		
 	}
 	

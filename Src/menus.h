@@ -42,7 +42,7 @@ using std::vector;
 using std::invalid_argument;
 
 
-enum MenuContext {
+typedef enum MenuContext {
 	
 	MAINMENU = 0,
 	NEWGAME,
@@ -55,7 +55,7 @@ enum MenuContext {
 	CREDITS,
 	NONE
 	
-};
+}MenuContext;
 
 typedef struct PointerVars {
 	
@@ -73,13 +73,19 @@ typedef struct Pointer {
 
 int show_saves(string *saves);
 
-void ResetPointers();
-void RemoveExtraPointers(enum MenuContext CurrentMenuContext);
+void ResetPointers(MenuContext CurrentMenuContext);
+void RemoveExtraPointers(MenuContext CurrentMenuContext);
+void HandleBasicInputMenu(enum ControlType, MenuContext CurrentMenuContext);
 
-enum MenuContext UpdatePointer(enum ControlType type, enum MenuContext CurrentMenuContext);
-enum MenuContext UpdateMenu(enum ControlType type, enum MenuContext CurrentMenuContext);
+bool CheckPointerEquality(Pointer First, Pointer Second);
 
-PointerVars GetPointerVars(enum MenuContext CurrentMenuContext);
+MenuContext UpdateMainMenu();
+MenuContext UpdateOptionsMenu();
+MenuContext RunCredits();
+
+MenuContext UpdateMenu(enum ControlType type, MenuContext (*MenuFunction)(), MenuContext CurrentMenuContext);
+
+PointerVars GetCurrentPointerVars(MenuContext CurrentMenuContext);
 
 #endif
 

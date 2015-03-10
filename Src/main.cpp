@@ -36,22 +36,15 @@
 #include "mygetch.h"
 #include "engine.h"
 
-int pick_save(string *saves);
-int determine_new_game(string *saves);
-int determine_load_game(string *saves);
-int handle_user_input(int input);
-int get_user_input();
-
-
-void run_game();
 bool UpdateState(enum ControlType type);
+void UpdateState_Menu(enum ControlType type);
 
 //static int SaveChoice;
 static string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
 static vector<Map *> maps(30);
 static Player *player = NULL;
 
-static enum MenuContext CurrentMenuContext = MAINMENU;
+static MenuContext CurrentMenuContext = MAINMENU;
 
 /*
  * TODO init functions return struct player_vars, which is instantly
@@ -64,14 +57,14 @@ int main(int argc, char **argv) {
 	
 	srand(time(0));
 	
-	init_sound_engine();
-	create_music_thread(TITLE);
-	
+	SDL_Event event;
 	bool GameLoopDone = false;
 	
-	init_engine(UserConfig.get_rendering_type(), UserConfig.get_window_height(), UserConfig.get_window_width());
 	SDL_StartTextInput();
-	SDL_Event event;
+	init_sound_engine();
+	init_engine(UserConfig.get_rendering_type(), UserConfig.get_window_height(), UserConfig.get_window_width());
+	create_music_thread(TITLE);
+	
 	while (!GameLoopDone) {
 		
 		GameLoopDone = UpdateState(UserControls.get_input(&event));
@@ -103,7 +96,11 @@ bool UpdateState(enum ControlType type) {
 	clear_screen();
 	switch (CurrentRenderingContext) {
 		
-		case MENU: UpdateMenu(type, CurrentMenuContext); break;
+		case MENU: 
+		
+			UpdateState_Menu(type);
+			break;
+			
 		default: break;
 		
 	}
@@ -116,172 +113,19 @@ bool UpdateState(enum ControlType type) {
 	
 }
 
-
-/*int determine_new_game(string *saves) {
-
-	int choice = pick_save(saves);
-				
-	if (choice == QUIT) {
+void UpdateState_Menu(enum ControlType type) {
+	
+	MenuContext (*MenuFunction)();
+	switch (CurrentMenuContext) {
 		
-		return QUIT;
-				
-	} else if (choice != FILLED) {
-					
-		return YES;
-					
-	} else {
-				
-		draw_append_string("Do you wish to overwrite this file? y/n");
+		case MAINMENU: MenuFunction = &UpdateMainMenu;    break;
+		case OPTIONS:  MenuFunction = &UpdateOptionsMenu; break;
+		case CREDITS:  MenuFunction = &RunCredits;        break;
 		
-		if(get_raw_input() == 'y' || get_raw_input() == 'Y') {
+		default: return; break;
 		
-			return YES;
-			
-		} else {
-		
-			return NO;
-			
-		}
-									
 	}
+	
+	CurrentMenuContext = UpdateMenu(type, MenuFunction, CurrentMenuContext);
 	
 }
-
-int determine_load_game(string *saves) {
-	
-	int choice = pick_save(saves);
-	if (choice == FILLED) {
-				
-		return YES;
-				
-	} else if (choice == QUIT) {
-	
-		return QUIT;
-	
-	} else {
-				
-		draw_append_string("There is no save file here");
-		get_raw_input();
-		return NO;
-					
-	}
-	
-}
-
-
-int pick_save(string *saves) {
-	
-	SaveChoice = show_saves(saves);
-	
-	if (SaveChoice == -1) { 
-	
-		return QUIT;
-		
-	}
-	
-	if (saves[SaveChoice].compare("empty") == 0) {
-	
-		return SaveChoice;
-		
-	} else {
-		
-		return FILLED;
-		
-	}
-	
-}
-
-//TODO finish run_game
-void run_game() {
-	
-	stop_music_thread();
-	create_music_thread(RANDOM);
-	
-	//Index needs to be saved to file and loaded
-	//maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y, FORWARD);
-	
-	do {
-		
-		maps[player->vars.MapIndex]->print_map_around_player(10);
-		
-		string temp = "Health:" + SSTR(player->vars.PlayerHealth) + " Mana:" + convert_float_to_string(player->vars.Mana);
-		temp 	   += " gold:" + SSTR(player->vars.gold);
-		
-		draw_append_string(temp);
-		
-	} while (get_user_input() != QUIT);
-	
-	stop_music_thread();
-}
-
-int get_user_input() {
-
-		
-		//TODO refactor using a function.
-		switch (UserControls.get_input()) {
-		
-			case UP:
-			
-				if (handle_user_input(maps[player->vars.MapIndex]->check_if_player_can_move(player->vars.x,player->vars.y - 1)) == YES)
-					player->vars.y -= 1;
-			
-			break;
-			case DOWN:
-			
-				if (handle_user_input(maps[player->vars.MapIndex]->check_if_player_can_move(player->vars.x,player->vars.y + 1)) == YES)
-					player->vars.y += 1;
-
-				
-			break;
-			case LEFT:
-			
-				if (handle_user_input(maps[player->vars.MapIndex]->check_if_player_can_move(player->vars.x-1,player->vars.y)) == YES)				
-					player->vars.x -= 1;
-
-			break;
-			case RIGHT:
-			
-				if (handle_user_input(maps[player->vars.MapIndex]->check_if_player_can_move(player->vars.x+1,player->vars.y)) == YES)
-					player->vars.x += 1;
-			
-			break;
-			case QUIT: return QUIT; break;
-			default: cout << "command not implemented" << endl; break;
-			
-		}
-	
-	return 0;
-	
-}*/
-
-/*
- * Transitioning does not use the new method yet. The lines are just
- * commented out
- * 
- * */
- 
- /*
-int handle_user_input(int input) {
-	
-	switch (input) {
-		
-		case NO: return NO; break;
-		case SAVE: save_game_db(files[SaveChoice],player,maps); mygetch(); return NO; break;
-		case GOLD: player->add_random_gold(); mygetch(); break;
-		case FORWARD: 
-		
-			player->vars.MapIndex++; player->reset_positions();
-			//maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,FORWARD);
-			
-		break;
-		case BACKWARD: 
-		
-			player->vars.MapIndex--; player->reset_positions(); 
-			//maps[player->vars.MapIndex]->transition_to_new_map(&player->vars.x,&player->vars.y,BACKWARD);
-		
-		break;
-	
-	}
-	return YES;
-	
-}*/
