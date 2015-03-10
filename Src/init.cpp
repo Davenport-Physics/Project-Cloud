@@ -112,10 +112,19 @@ void SaveGame(string filename, Player *player , vector<Map *> *maps) {
 	outfile.close();
 	
 }
+#if __unix
+
+const string Config::ConfigPath = "Data/config";
+
+#elif __Win32
+
+const string Config::ConfigPath = "Data\\config";
+
+#endif
 
 Config::Config() {
 	
-	ifstream infile("Data/config");
+	ifstream infile(ConfigPath.c_str());
 	
 	if (infile.good() == true) {
 	

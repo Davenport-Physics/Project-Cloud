@@ -29,8 +29,25 @@ static int SoundTrack;
 
 static pthread_t MusicThread;
 
+#if __unix
+
 static const string tracks[5] = 
-{"Data/Music/title1.ogg","Data/Music/track1.ogg","Data/Music/track2.ogg","Data/Music/track3.ogg","Data/Music/track4.ogg"};
+{"Data/Music/title1.ogg",
+ "Data/Music/track1.ogg",
+ "Data/Music/track2.ogg",
+ "Data/Music/track3.ogg",
+ "Data/Music/track4.ogg"};
+
+#elif __WIN32
+
+static const string tracks[5] =
+{"Data\\Music\\title1.ogg", 
+ "Data\\Music\\track1.ogg", 
+ "Data\\Music\\track2.ogg",
+ "Data\\Music\\track3.ogg",
+ "Data\\Music\\track4.ogg"};
+ 
+#endif
 
 
 static const int audio_rate = 22050;

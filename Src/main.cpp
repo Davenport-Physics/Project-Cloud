@@ -40,7 +40,16 @@ bool UpdateState(enum ControlType type);
 void UpdateState_Menu(enum ControlType type);
 
 //static int SaveChoice;
-static string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
+
+#if __unix
+
+static const string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
+
+#elif __WIN32
+
+static const string files[3] = {"Data\\Saves\\save1.db", "Data\\Saves\\save2.db", "Data\\Saves\\save3.db"};
+
+#endif
 static vector<Map *> maps(30);
 static Player *player = NULL;
 

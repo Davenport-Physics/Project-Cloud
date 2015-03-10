@@ -29,7 +29,15 @@ static int WindowHeight = 1024;
 static int WindowWidth  = 768;
 static int FontSize		= 25;
 
+#if __unix
+
 static const string FontPath = "Data/Fonts/LiberationMono-Regular.ttf";
+
+#elif __WIN32
+
+static const string FontPath = "Data\\Fonts\\LiberationMono-Regular.ttf";
+
+#endif
 
 static SDL_Window *Window	= NULL;
 static SDL_Surface *Screen	= NULL;

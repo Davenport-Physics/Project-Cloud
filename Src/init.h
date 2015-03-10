@@ -90,6 +90,8 @@ private:
 	bool determine_rendering_type(string str);
 	bool determine_map_type(string str);
 	
+	static const string ConfigPath;
+	
 public:
 
 	Config();
