@@ -116,7 +116,7 @@ void SaveGame(string filename, Player *player , vector<Map *> *maps) {
 
 static const string ConfigPath = "Data/config";
 
-#elif __Win32
+#elif __WIN32
 
 static const string ConfigPath = "Data\\config";
 
