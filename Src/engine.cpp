@@ -308,7 +308,7 @@ void draw_animation_bottom_top(char **array, int rows) {
 			Rect[y].y -= 1;
 			
 		}
-		SDL_Delay(1000/60);
+		SDL_Delay(1000/30);
 		render();
 		
 	}
