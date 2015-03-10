@@ -73,6 +73,7 @@ typedef struct Pointer {
 int show_saves(string *saves);
 
 void ResetPointers(MenuContext CurrentMenuContext);
+void SetMenuPointer(MenuContext CurrentMenuContext);
 void RemoveExtraPointers(MenuContext CurrentMenuContext);
 void HandleBasicInputMenu(enum ControlType, MenuContext CurrentMenuContext);
 
@@ -80,6 +81,7 @@ bool CheckPointerEquality(Pointer First, Pointer Second);
 
 MenuContext UpdateMainMenu();
 MenuContext UpdateOptionsMenu();
+MenuContext UpdateControlsMenu();
 MenuContext RunCredits();
 
 MenuContext UpdateMenu(enum ControlType type, MenuContext (*MenuFunction)(), MenuContext CurrentMenuContext);

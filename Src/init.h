@@ -82,6 +82,8 @@ private:
 	int WindowHeight;
 	int WindowWidth;
 	
+	int MaximumFPS;
+	
 	enum TextRendering RenderingType;
 	enum MapType map;
 	
@@ -89,6 +91,7 @@ private:
 	bool determine_window_width(string str);
 	bool determine_rendering_type(string str);
 	bool determine_map_type(string str);
+	bool determine_max_fps(string str);
 	
 public:
 
@@ -96,6 +99,7 @@ public:
 	
 	int get_window_height();
 	int get_window_width();
+	int get_max_fps();
 	
 	enum TextRendering get_rendering_type();
 	enum MapType get_map_type();

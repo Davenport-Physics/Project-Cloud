@@ -148,6 +148,11 @@ Config::Config() {
 		getline(infile, temp);
 		if (!determine_map_type(temp))
 			this->map = GENERATION;
+			
+		temp = "";
+		getline(infile, temp);
+		if (!determine_max_fps(temp));
+			this->MaximumFPS = 60;
 		
 		infile.close();
 		return;
@@ -161,11 +166,13 @@ Config::Config() {
 	outfile << "WindowWidth:768\n";
 	outfile << "Rendering:BLENDED\n";
 	outfile << "MapType:Generation\n";
+	outfile << "MaxFPS:60\n";
 	
 	this->WindowHeight  = 1024;
 	this->WindowWidth   = 768;
 	this->RenderingType = BLENDED;
 	this->map			= GENERATION;
+	this->MaximumFPS    = 60;
 	
 	outfile.close();
 	
@@ -256,6 +263,15 @@ bool Config::determine_map_type(string str) {
 	return false;
 	
 }
+bool Config::determine_max_fps(string str) {
+
+	if (str.find("MaxFPS") != string::npos) {
+	
+		this->MaximumFPS = convert_string_to_int(return_right_string_by_delimiter(str,':'));
+		return true;
+	}
+	return false;
+}
 
 int Config::get_window_height() {
 
@@ -266,6 +282,12 @@ int Config::get_window_height() {
 int Config::get_window_width() {
 
 	return this->WindowWidth;
+	
+}
+
+int Config::get_max_fps() {
+
+	return this->MaximumFPS;
 	
 }
 

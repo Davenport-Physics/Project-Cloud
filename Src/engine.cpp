@@ -155,8 +155,6 @@ void draw_2d_array(char **array, int rows) {
 	
 }
 void draw_string(string str) {
-	
-	clear_screen();
 
 	char *array = new char[str.length() + 1];
 	strcpy(array, str.c_str());
@@ -310,7 +308,7 @@ void draw_animation_bottom_top(char **array, int rows) {
 			Rect[y].y -= 1;
 			
 		}
-		
+		SDL_Delay(1000/60);
 		render();
 		
 	}

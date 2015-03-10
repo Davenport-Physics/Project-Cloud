@@ -56,6 +56,8 @@ static Player *player = NULL;
 
 static MenuContext CurrentMenuContext = MAINMENU;
 
+static int MaximumFPS;
+
 /*
  * TODO init functions return struct player_vars, which is instantly
  * passed to an Player object.
@@ -73,14 +75,15 @@ int main(int argc, char **argv) {
 	SDL_StartTextInput();
 	init_sound_engine();
 	init_engine(UserConfig.get_rendering_type(), UserConfig.get_window_height(), UserConfig.get_window_width());
-	create_music_thread(TITLE);
+	create_music_thread(TITLETRACK);
 	
+	MaximumFPS = UserConfig.get_max_fps();
 	while (!GameLoopDone) {
 		
 		GameLoopDone = UpdateState(UserControls.get_input(&event));
 		render();
 		
-		SDL_Delay(1000/60);
+		SDL_Delay(1000/MaximumFPS);
 		
 	}
 	stop_music_thread();
@@ -130,12 +133,35 @@ void UpdateState_Menu(enum ControlType type) {
 		
 		case MAINMENU: MenuFunction = &UpdateMainMenu;    break;
 		case OPTIONS:  MenuFunction = &UpdateOptionsMenu; break;
-		case CREDITS:  MenuFunction = &RunCredits;        break;
+		case CONTROLS: MenuFunction = &UpdateControlsMenu; break;
+		
+		/*
+		 * This doesn't seem like it's needed, however
+		 * the animation won't run without a CREDITS case
+		 * */
+		case CREDITS: break;
 		
 		default: return; break;
 		
 	}
 	
-	CurrentMenuContext = UpdateMenu(type, MenuFunction, CurrentMenuContext);
+	switch (CurrentMenuContext) {
+		
+		case CREDITS: 
+		
+			stop_music_thread();
+			create_music_thread(CREDITSTRACK);
+			
+			CurrentMenuContext = RunCredits();
+			
+			stop_music_thread();
+			create_music_thread(TITLETRACK);
+			break;
+		
+		default:
+		
+			CurrentMenuContext = UpdateMenu(type, MenuFunction, CurrentMenuContext);
+			break;
 	
+	}
 }

@@ -42,8 +42,8 @@ static char MainMenuArray[10][22] = {
 static const PointerVars OptionsVars = {0, 2, 0, 0, 0, 2};
 static const Pointer ControlsPointer = {0, 0};
 static const Pointer CreditsPointer  = {0, 2};
-static char OptionsArray[5][10] = 
-{{' ','C','o','n','t','r','o','l','s',' '},
+static char OptionsArray[5][10] = {
+{' ','C','o','n','t','r','o','l','s',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 {' ','C','r','e','d','i','t','s',' ',' '},
 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
@@ -53,26 +53,27 @@ static char OptionsArray[5][10] =
 static const PointerVars ControlsVars     = {0, 2, 0, 0, 0, 2};
 static const Pointer ViewControlsPointer  = {0, 0};
 static const Pointer ChangeControlPointer = {0, 2}; 
-static char ControlsMenuArray[3][20] = 
-{{' ','V','i','e','w',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ','C','h','a','n','g','e',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' '}};
+static char ControlsMenuArray[3][20] = {
+{' ','V','i','e','w',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{' ','C','h','a','n','g','e',' ','C','o','n','t','r','o','l','s',' ',' ',' ',' '}};
 
 
-static char CreditsArray[13][20] =
-{{'C','r','e','d','i','t','s',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {'L','e','a','d',' ','P','r','o','g','r','a','m','m','e','r',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ','M','i','c','h','a','e','l',' ','D','a','v','e','n','p','o','r','t'},
- {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {'M','u','s','i','c',' ','b','y',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ','G','e','o','r','g','e',' ','M','i','t','c','h','e','l','l',' ',' '},
- {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ','(','/','d','e','v','/','z','e','r','o',')',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
- {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}};
+static char CreditsArray[13][20] = {
+{'C','r','e','d','i','t','s',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{'L','e','a','d',' ','P','r','o','g','r','a','m','m','e','r',' ',' ',' ',' ',' '},
+{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ','M','i','c','h','a','e','l',' ','D','a','v','e','n','p','o','r','t'},
+{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{'M','u','s','i','c',' ','b','y',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ','G','e','o','r','g','e',' ','M','i','t','c','h','e','l','l',' ',' '},
+{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ',' ','(','/','d','e','v','/','z','e','r','o',')',' ',' ',' ',' ',' '},
+{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}};
+
 
 MenuContext UpdateMenu(enum ControlType type, MenuContext (*MenuFunction)(), MenuContext CurrentMenuContext) {
 
@@ -83,9 +84,18 @@ MenuContext UpdateMenu(enum ControlType type, MenuContext (*MenuFunction)(), Men
 		
 			TempMenuContext = MenuFunction();
 			
-			if (TempMenuContext != CurrentMenuContext)
+			if (TempMenuContext != CurrentMenuContext) {
+				
+				ResetPointers(CurrentMenuContext);
+				RemoveExtraPointers(CurrentMenuContext);
 				ResetPointers(TempMenuContext);
 				
+			}
+			break;
+			
+		case NOTSET:
+		
+			SetMenuPointer(CurrentMenuContext);
 			break;
 			
 		default:
@@ -106,7 +116,11 @@ MenuContext UpdateMenu(enum ControlType type, MenuContext (*MenuFunction)(), Men
 	return TempMenuContext;
 	
 }
- 
+
+/*
+ * Update<context> handles the enter input. 
+ * 
+ * */
 MenuContext UpdateMainMenu() {
 	
 	if (CheckPointerEquality(MenuPointer, NewGamePointer)) 
@@ -121,8 +135,23 @@ MenuContext UpdateMainMenu() {
 
 MenuContext UpdateOptionsMenu() {
 	
+	if (CheckPointerEquality(MenuPointer, ControlsPointer))
+		return CONTROLS;
+	else if (CheckPointerEquality(MenuPointer, CreditsPointer))
+		return CREDITS;
+	else
+		return OPTIONS;
+	
+}
 
-	return OPTIONS;
+MenuContext UpdateControlsMenu() {
+
+	if (CheckPointerEquality(MenuPointer, ViewControlsPointer))
+		return VIEWCONTROLS;
+	else if (CheckPointerEquality(MenuPointer, ChangeControlPointer))
+		return CHANGECONTROLS;
+	else
+		return CONTROLS;
 	
 }
 
@@ -162,7 +191,7 @@ void HandleBasicInputMenu(enum ControlType type, MenuContext CurrentMenuContext)
 		case UP:
 			
 			cout << "UP\n";
-			if (MenuPointer.x > Tempvars.Min_x && MenuPointer.y > Tempvars.Min_y ) {
+			if (MenuPointer.x >= Tempvars.Min_x && MenuPointer.y > Tempvars.Min_y ) {
 				
 				MenuPointer.x -= Tempvars.Dx;
 				MenuPointer.y -= Tempvars.Dy;
@@ -173,7 +202,7 @@ void HandleBasicInputMenu(enum ControlType type, MenuContext CurrentMenuContext)
 		case DOWN:
 		
 			cout << "DOWN\n";
-			if (MenuPointer.x < Tempvars.Max_x && MenuPointer.y < Tempvars.Max_y) {
+			if (MenuPointer.x <= Tempvars.Max_x && MenuPointer.y < Tempvars.Max_y) {
 				
 				MenuPointer.x += Tempvars.Dx;
 				MenuPointer.y += Tempvars.Dy;
@@ -186,6 +215,12 @@ void HandleBasicInputMenu(enum ControlType type, MenuContext CurrentMenuContext)
 	}
 	
 	RemoveExtraPointers(CurrentMenuContext);
+	SetMenuPointer(CurrentMenuContext);
+	
+}
+
+void SetMenuPointer(MenuContext CurrentMenuContext) {
+	
 	switch (CurrentMenuContext) {
 	
 		case MAINMENU: 
@@ -221,10 +256,13 @@ void RemoveExtraPointers(MenuContext CurrentMenuContext) {
 	int temp_y = TempVars.Min_y;
 	
 	
-	while (temp_x <= TempVars.Max_x) {
+	while (temp_x <= TempVars.Max_x && temp_y <= TempVars.Max_y) {
 	
-		if (temp_x != MenuPointer.x && temp_y != MenuPointer.y) {
+		if (temp_x == MenuPointer.x && temp_y == MenuPointer.y) {
 		
+			
+		} else {
+			
 			switch (CurrentMenuContext) {
 			
 				case MAINMENU: MainMenuArray[temp_y][temp_x]     = ' '; break;

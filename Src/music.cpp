@@ -31,21 +31,23 @@ static pthread_t MusicThread;
 
 #if __unix
 
-static const string tracks[5] = 
+static const string tracks[] = 
 {"Data/Music/title1.ogg",
  "Data/Music/track1.ogg",
  "Data/Music/track2.ogg",
  "Data/Music/track3.ogg",
- "Data/Music/track4.ogg"};
+ "Data/Music/track4.ogg",
+ "Data/Music/credits.ogg"};
 
 #elif __WIN32
 
-static const string tracks[5] =
+static const string tracks[] =
 {"Data\\Music\\title1.ogg", 
  "Data\\Music\\track1.ogg", 
  "Data\\Music\\track2.ogg",
  "Data\\Music\\track3.ogg",
- "Data\\Music\\track4.ogg"};
+ "Data\\Music\\track4.ogg",
+ "Data\\Music\\credits.ogg"};
  
 #endif
 
@@ -96,10 +98,21 @@ void playerstart() {
 		
 			switch (SoundTrack) {
 		
-				case TITLE:
-				case MAP1:
-				case MAP2: 		music = Mix_LoadMUS(tracks[SoundTrack].c_str()); break;
-				case RANDOM:	music = Mix_LoadMUS(tracks[1 + rand() % NUMTRACKS].c_str()); break;
+				case TITLETRACK:
+				case TRACK1:
+				case TRACK2:
+				case TRACK3:
+				case TRACK4:
+				case CREDITSTRACK: 
+				
+					music = Mix_LoadMUS(tracks[SoundTrack].c_str()); 
+					break;
+					
+				case RANDOM:
+				
+					music = Mix_LoadMUS(tracks[1 + rand() % NUMTRACKS].c_str());
+					break;
+					
 				default: return; break;
 		
 			}

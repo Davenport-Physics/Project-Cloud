@@ -33,16 +33,19 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_mixer.h"
 
-#define NUMTRACKS 4
+#define NUMTRACKS 6
 
 using std::string;
 using std::cout;
 
 enum {
 
-	TITLE = 0,
-	MAP1,
-	MAP2,
+	TITLETRACK = 0,
+	TRACK1,
+	TRACK2,
+	TRACK3,
+	TRACK4,
+	CREDITSTRACK,
 	RANDOM
 	
 };
