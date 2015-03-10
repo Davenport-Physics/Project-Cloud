@@ -168,6 +168,8 @@ enum ControlType Controls::get_input(SDL_Event *event) {
 
 char get_raw_input() {
 
-	return mygetch();
+	cout << "get_raw_input not finished";
+	
+	return 'm';
 	
 }

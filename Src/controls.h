@@ -29,7 +29,6 @@
 #include <cstring>
 #include <SDL2/SDL.h>
 
-#include "mygetch.h"
 #include "engine.h"
 
 using std::string;

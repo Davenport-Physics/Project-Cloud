@@ -31,7 +31,6 @@
 
 #include "init.h"
 #include "controls.h"
-#include "mygetch.h"
 #include "share.h"
 #include "engine.h"
 

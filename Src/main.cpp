@@ -23,6 +23,7 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <ctime>
 
 #include <SDL2/SDL.h>
 #include <pthread.h>

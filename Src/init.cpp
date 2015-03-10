@@ -114,11 +114,11 @@ void SaveGame(string filename, Player *player , vector<Map *> *maps) {
 }
 #if __unix
 
-const string Config::ConfigPath = "Data/config";
+static const string ConfigPath = "Data/config";
 
 #elif __Win32
 
-const string Config::ConfigPath = "Data\\config";
+static const string ConfigPath = "Data\\config";
 
 #endif
 
