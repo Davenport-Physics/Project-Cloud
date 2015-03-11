@@ -83,19 +83,34 @@ void NewGame() {
 	 * Add static support
 	 * 
 	 * */
-	
-	for ( int x = 0; x < NUM_MAPS; x++ ) {
+	if (UserConfig.get_map_type() == GENERATION) {
 		
-		if (UserConfig.get_map_type() == GENERATION) {
+		for ( int x = 0; x < NUM_MAPS; x++ ) {
 		
-			MapGenerator temp(x);
-			maps[x] = temp.get_map_object_heap();
+			if (UserConfig.get_map_type() == GENERATION) {
+		
+				MapGenerator temp(x);
+				maps[x] = temp.get_map_object_heap();
 			
+			}
+		
 		}
 		
-	}
+		player = new Player(name, "GeneratedMap0");
+			
+	} else if (UserConfig.get_map_type() == STATIC) {
+		
+		/*
+		 * Add static map support. This will probably be
+		 * implemented in lua later on.
+		 * 
+		 * */
+		
+	} else {
 	
-	player = new Player(name, "GeneratedMap0");
+		DrawError_andQuit("Map type not specified for some reason");
+		
+	}
 
 }
 

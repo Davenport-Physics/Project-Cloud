@@ -25,7 +25,7 @@
 #include "music.h"
 
 static bool ContinueMusic;
-static int SoundTrack;
+static enum Track SoundTrack;
 
 static pthread_t MusicThread;
 
@@ -140,16 +140,23 @@ void playerstart() {
 	Mix_FreeMusic(music); 
 	
 }
-void create_music_thread(int track) {
+void create_music_thread(enum Track track) {
 
 	ContinueMusic 	= true;
 	SoundTrack		= track;
 	pthread_create(&MusicThread, NULL , playerthread , NULL);
 	
 }
+
 void stop_music_thread() {
 
 	ContinueMusic = false;
 	pthread_join(MusicThread, NULL);
+	
+}
+
+enum Track GetCurrentTrack() {
+
+	return SoundTrack;
 	
 }

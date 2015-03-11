@@ -47,19 +47,18 @@ using std::endl;
 using std::vector;
 
 template<int numrows,int numcolumns>
-void print_2d_array(char (&array)[numrows][numcolumns]) {
+char ** ConvertStackArrayToHeap(char (&array)[numrows][numcolumns]) {
 
-	for ( int y = 0; y < numrows; y++ ) {
+	char **HeapArray = new char *[numrows];
+	
+	for (int y = 0;y < numrows;y++) {
 		
-		for ( int x = 0; x < numcolumns; x++ ) {
-		
-			cout << array[y][x] << " ";
-			
-		}
-		
-		cout << endl;
-		
+		HeapArray[y] = new char[numcolumns + 1];
+		strncpy(HeapArray[y], array[y], numcolumns);
+		HeapArray[y][numcolumns] = '\0';
 	}
+	
+	return HeapArray;
 	
 }
 

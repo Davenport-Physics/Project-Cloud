@@ -123,8 +123,6 @@ void clear_screen() {
 
 void draw_2d_array(char **array, int rows) {
 	
-	clear_screen();
-	
 	SDL_Surface *Surface;
 	SDL_Rect Rect;
 	
@@ -150,6 +148,32 @@ void draw_2d_array(char **array, int rows) {
 	}
 	LastRect = Rect;
 	
+	
+}
+void draw_2d_array(char **array, int rows, SDL_Rect *Rect) {
+	
+	SDL_Surface *Surface;
+	
+	for (int y = 0; y < rows;y++) {
+	
+		if (Rect[y].y > 0) {
+			
+			if (!(Surface = RenderFunction(Font, array[y], Color))) {
+		
+				cout << "Something went wrong with drawing 2D array with Rects";
+				exit(EXIT_SUCCESS);
+			
+			} else {
+		
+				SDL_BlitSurface(Surface, NULL, Screen, &Rect[y]);
+				SDL_FreeSurface(Surface);
+			
+			}
+			
+		}
+		
+	}
+	LastRect = Rect[rows - 1];
 	
 }
 void draw_string(string str) {
@@ -363,5 +387,54 @@ void quit_engine() {
 	SDL_FreeSurface(Screen);
 	SDL_DestroyWindow(Window);
 	SDL_Quit();
+	
+}
+
+AnimationBottomTop::AnimationBottomTop(char **Array, int NumRows) {
+	
+	this->Array = Array;
+	this->NumRows      = NumRows;
+	this->Rect         = new SDL_Rect[NumRows];
+	
+	ResetRects();
+	
+}
+
+AnimationBottomTop::~AnimationBottomTop() {
+
+	delete [] Array;
+	delete [] Rect;
+	
+}
+
+void AnimationBottomTop::UpdateFrame() {
+	
+	draw_2d_array(this->Array, this->NumRows, this->Rect);
+	
+	for (int y = 0;y < this->NumRows;y++) {
+			
+			Rect[y].y -= 1;
+			
+	}
+	
+}
+
+void AnimationBottomTop::ResetRects() {
+	
+	for (int y = 0;y < this->NumRows; y++) {
+	
+		this->Rect[y].x = (WindowWidth / 2 - 100);
+		this->Rect[y].y = (WindowHeight - FontSize) + y * FontSize;
+		
+	}
+	
+}
+
+bool AnimationBottomTop::AnimationFinished() {
+	
+	if (this->Rect[this->NumRows - 1].y != 0)
+		return false;
+		
+	return true;
 	
 }

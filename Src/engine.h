@@ -28,6 +28,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "share.h"
+
 using std::string;
 using std::cout;
 
@@ -56,6 +58,7 @@ void init_engine(enum TextRendering type, int Height, int Width);
  
 void draw_1d_array(char *array);
 void draw_2d_array(char **array, int rows);
+void draw_2d_array(char **array, int rows, SDL_Rect *Rect);
 void draw_string(string str);
 
 void draw_append_1d_array(char *array);
@@ -92,6 +95,26 @@ void draw_2d_stack_array(char (&array)[numrows][numcolumns], void (*DrawFunction
 	
 	delete [] Stack;
 }
+
+class AnimationBottomTop {
+	
+private:
+
+	int NumRows;
+	char **Array;
+	SDL_Rect *Rect;
+
+public:
+	
+	AnimationBottomTop(char **Array, int NumRows);
+	~AnimationBottomTop();
+	
+	void UpdateFrame();
+	void ResetRects();
+	
+	bool AnimationFinished();
+	
+};
 
 #endif
 

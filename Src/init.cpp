@@ -63,13 +63,23 @@ static const string ConfigPath = "Data\\config";
 
 #endif
 
+/*
+ * TODO
+ * 
+ * There is a bug here. Probably because of the operating system macros.
+ * It works perfectly fine if you just type the location of the config
+ * file during the initialization of the ifstream/ofstream objects
+ * 
+ * */
 Config::Config() {
 	
 	ifstream infile(ConfigPath.c_str());
 	
+	//cout << ConfigPath.c_str();
 	if (infile.good() == true) {
-	
-		string temp;
+		
+		cout <<"infile.good = true";
+		string temp = "";
 		
 		getline(infile, temp);
 		if (!determine_window_height(temp))
@@ -92,7 +102,7 @@ Config::Config() {
 			
 		temp = "";
 		getline(infile, temp);
-		if (!determine_max_fps(temp));
+		if (!determine_max_fps(temp))
 			this->MaximumFPS = 60;
 		
 		infile.close();
@@ -101,7 +111,7 @@ Config::Config() {
 	}
 	infile.close();
 	
-	ofstream outfile("Data/config");
+	ofstream outfile(ConfigPath.c_str());
 	
 	outfile << "WindowHeight:1024\n";
 	outfile << "WindowWidth:768\n";

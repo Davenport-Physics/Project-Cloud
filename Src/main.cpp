@@ -85,6 +85,7 @@ int main(int argc, char **argv) {
 	create_music_thread(TITLETRACK);
 	
 	MaximumFPS = UserConfig.get_max_fps();
+	cout << "MaxFPS = " << MaximumFPS;
 	while (!GameLoopDone) {
 		
 		GameLoopDone = UpdateState(UserControls.get_input(&event));
@@ -157,15 +158,27 @@ void UpdateState_Menu(enum ControlType type) {
 			CurrentRenderingContext = GAME;
 			break;
 		
+		/*
+		 * Credits takes hold of the rendering context. The player cannot
+		 * give input while it's running. 
+		 * */
 		case CREDITS: 
 		
-			stop_music_thread();
-			create_music_thread(CREDITSTRACK);
+			if (GetCurrentTrack() != CREDITSTRACK) {
+				
+				stop_music_thread();
+				create_music_thread(CREDITSTRACK);
+				
+			}
 			
 			CurrentMenuContext = RunCredits();
 			
-			stop_music_thread();
-			create_music_thread(TITLETRACK);
+			if (CurrentMenuContext == MAINMENU) {
+				
+				stop_music_thread();
+				create_music_thread(TITLETRACK);
+				
+			}
 			break;
 		
 		default:

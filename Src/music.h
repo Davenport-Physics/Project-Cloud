@@ -38,7 +38,7 @@
 using std::string;
 using std::cout;
 
-enum {
+enum Track {
 
 	TITLETRACK = 0,
 	TRACK1,
@@ -54,9 +54,11 @@ void *playerthread(void *n);
 void playerstart();
 
 void init_sound_engine();
-void create_music_thread(int track);
+void create_music_thread(enum Track track);
 void stop_music_thread();
 
 void quit_sound_engine();
+
+enum Track GetCurrentTrack();
 
 #endif

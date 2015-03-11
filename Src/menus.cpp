@@ -157,10 +157,20 @@ MenuContext UpdateControlsMenu() {
 
 MenuContext RunCredits() {
 	
-	draw_2d_stack_array(CreditsArray, &draw_animation_bottom_top);
-	ResetPointers(MAINMENU);
+	static AnimationBottomTop CreditsAnimation(ConvertStackArrayToHeap(CreditsArray), 13);
 	
-	return MAINMENU;
+	if (CreditsAnimation.AnimationFinished() == true) {
+	
+		ResetPointers(MAINMENU);
+		CreditsAnimation.ResetRects();
+		return MAINMENU;
+		
+	} else {
+	
+		CreditsAnimation.UpdateFrame();
+		return CREDITS;
+		
+	}
 	
 }
 
