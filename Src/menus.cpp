@@ -124,9 +124,9 @@ MenuContext UpdateMenu(enum ControlType type, MenuContext (*MenuFunction)(), Men
 MenuContext UpdateMainMenu() {
 	
 	if (CheckPointerEquality(MenuPointer, NewGamePointer)) 
-		return NEWGAME;
+		return MENU_NEWGAME;
 	else if (CheckPointerEquality(MenuPointer, LoadGamePointer))
-		return LOADGAME;
+		return MENU_LOADGAME;
 	else if (CheckPointerEquality(MenuPointer, OptionsPointer))
 		return OPTIONS;
 	else

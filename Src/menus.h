@@ -44,8 +44,8 @@ using std::invalid_argument;
 typedef enum MenuContext {
 	
 	MAINMENU = 0,
-	NEWGAME,
-	LOADGAME,
+	MENU_NEWGAME,
+	MENU_LOADGAME,
 	SAVES,
 	OPTIONS,
 	CONTROLS,

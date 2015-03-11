@@ -42,7 +42,6 @@ enum TextRendering {
 enum RenderingContext {
 	
 	MENU = 0,
-	BOTTOMTOP,
 	GAME
 	
 };
@@ -91,8 +90,6 @@ void draw_2d_stack_array(char (&array)[numrows][numcolumns], void (*DrawFunction
 	
 	delete [] Stack;
 }
-
-extern RenderingContext CurrentRenderingContext;
 
 #endif
 

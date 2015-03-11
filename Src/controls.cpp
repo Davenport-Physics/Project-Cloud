@@ -68,6 +68,9 @@ void Controls::set_controls_to_chars(char *controls) {
 	
 }
 
+/*
+ * This function needs refactoring.
+ * */
 void Controls::set_controls_manually() {
 	
 	bool Error;
@@ -79,7 +82,7 @@ void Controls::set_controls_manually() {
 		for (int i = 0; i < this->length;i++) {
 	
 			draw_append_string(this->control_types[i]);
-			this->controls[i] = get_raw_input();
+			//this->controls[i] = get_raw_input();
 			
 			draw_append_char_horizontal(this->controls[i]);
 			reset_horizontal();
@@ -166,10 +169,21 @@ enum ControlType Controls::get_input(SDL_Event *event) {
 	
 }
 
-char get_raw_input() {
+char get_raw_input(SDL_Event *event) {
 
-	cout << "get_raw_input not finished";
+	if (SDL_PollEvent(event)) {
 	
-	return 'm';
+		if (event->type == SDL_KEYDOWN) {
+		
+			if (event->key.keysym.sym == SDLK_RETURN)
+				return '\n';
+			else
+				return event->key.keysym.sym;
+			
+		}
+		
+	}
+	
+	return 0;
 	
 }

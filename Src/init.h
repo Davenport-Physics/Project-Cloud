@@ -29,11 +29,12 @@
 #include <cstring>
 #include <sstream>
 
-#include "character.h"
-#include "controls.h"
 #include "map.h"
 #include "share.h"
 #include "engine.h"
+#include "controls.h"
+#include "character.h"
+
 
 using std::string;
 using std::vector;
@@ -57,12 +58,8 @@ enum Saves {
 	
 };
 
-Player * NewGame(string filename, vector<Map *> *maps);
-Player * LoadGame(string filename, vector<Map *> *maps);
 
 string CheckForSaves(string filename);
-string convert_player_vars_to_string(Player *player);
-string convert_map_vars_to_string(unsigned int index, Map *map);
 
 void SaveGame(string filename, Player *player , vector<Map *> *maps);
 

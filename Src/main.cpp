@@ -28,17 +28,18 @@
 #include <SDL2/SDL.h>
 #include <pthread.h>
 
-#include "controls.h"
+#include "map.h"
+#include "game.h"
 #include "init.h"
 #include "menus.h"
 #include "music.h"
-#include "character.h"
-#include "map.h"
-#include "mygetch.h"
 #include "engine.h"
+#include "controls.h"
+#include "character.h"
 
 bool UpdateState(enum ControlType type);
 void UpdateState_Menu(enum ControlType type);
+void UpdateState_Game(enum ControlType type);
 
 //static int SaveChoice;
 
@@ -51,10 +52,10 @@ static const string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Dat
 static const string files[3] = {"Data\\Saves\\save1.db", "Data\\Saves\\save2.db", "Data\\Saves\\save3.db"};
 
 #endif
-static vector<Map *> maps(30);
-static Player *player = NULL;
 
-static MenuContext CurrentMenuContext = MAINMENU;
+static MenuContext CurrentMenuContext           = MAINMENU;
+static RenderingContext CurrentRenderingContext = MENU;
+static GameContext CurrentGameContext           = NOT_IN_GAME;
 
 static int MaximumFPS;
 
@@ -91,8 +92,6 @@ int main(int argc, char **argv) {
 	quit_engine();
 	quit_sound_engine();
 	
-	delete player;
-	
 	return 0;
 }
 
@@ -113,6 +112,10 @@ bool UpdateState(enum ControlType type) {
 		
 			UpdateState_Menu(type);
 			break;
+			
+		case GAME:
+		
+			
 			
 		default: break;
 		
@@ -137,7 +140,8 @@ void UpdateState_Menu(enum ControlType type) {
 		
 		/*
 		 * This doesn't seem like it's needed, however
-		 * the animation won't run without a CREDITS case
+		 * the animation won't run without a CREDITS case. The reason why
+		 * is because it goes to the default case, and just exits the function.
 		 * */
 		case CREDITS: break;
 		
@@ -164,4 +168,11 @@ void UpdateState_Menu(enum ControlType type) {
 			break;
 	
 	}
+	
+}
+
+void UpdateState_Game(enum ControlType type) {
+
+	
+	
 }

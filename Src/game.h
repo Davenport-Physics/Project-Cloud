@@ -1,7 +1,7 @@
 /*
- * controls.h
+ * game.h
  * 
- * Copyright 2014-2015 Michael Davenport <Davenport.physics@gmail.com>
+ * Copyright 2015 Michael Davenport <Davenport.physics@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,65 +21,39 @@
  * 
  */
 
-
-#ifndef CONTROLS_H
-#define CONTROLS_H
+#ifndef GAME_H
+#define GAME_H
 
 #include <iostream>
-#include <cstring>
+#include <vector>
+#include <fstream>
+
 #include <SDL2/SDL.h>
 
+#include "map.h"
+#include "init.h"
 #include "engine.h"
+#include "controls.h"
+#include "character.h"
 
-using std::string;
-using std::cout;
 
-enum ControlType {
+enum GameContext {
 	
-	UP = 0,
-	DOWN,
-	LEFT,
-	RIGHT,
-	QUIT,
-	JOURNAL,
-	ENTER,
-	NOTSET
+	NEWGAME = 0,
+	LOADGAME,
+	INGAME,
+	NOT_IN_GAME
 	
 };
 
-//TODO save keys to the savefile
-class Controls {
-	
-private:
+void InitializeGameState(string SaveFile, SDL_Event *event);
+void DeinitializeGameState();
 
-	static const int length = 7;
+void NewGame();
+void LoadGame();
+void SaveGame();
 
-	char controls[length];
-	
-	string control_types[length];
-	
-	void initialize_control_types();
-
-public:
-
-	Controls();
-	Controls(char *controls);
-	~Controls();
-	
-	void set_controls_to_default();
-	void set_controls_to_chars(char *controls);
-	void set_controls_manually();
-	
-	void print_controls();
-	
-	enum ControlType check_control(char control);
-	enum ControlType get_input(SDL_Event *event);
-	
-};
-
-char get_raw_input(SDL_Event *event);
-
-extern Controls UserControls;
+enum GameContext UpdateGame(enum GameContext context);
 
 #endif
 

@@ -41,51 +41,6 @@ string CheckForSaves(string filename) {
 	
 }
 
-Player * new_game(string filename, vector<Map *> *maps) {
-	
-	string name = "";
-
-	char c;
-	clear_screen();
-	draw_string("Please enter your name -> " + name);
-	while ((c = get_raw_input()) != '\n') {
-		
-		if (c == 0x7f) {
-		
-			name = name.substr(0, name.length() - 1);
-			
-			
-		} else {
-			
-			name += c;
-		
-		}
-		clear_screen();
-		draw_string("Please enter your name -> " + name);
-		
-	}
-	
-	/*
-	 * TODO
-	 * Add static support
-	 * 
-	 * */
-	
-	for ( int x = 0; x < NUM_MAPS; x++ ) {
-		
-		if (UserConfig.get_map_type() == GENERATION) {
-		
-			MapGenerator temp(x);
-			( *maps )[x] = temp.get_map_object_heap();
-			
-		}
-		
-	}
-	
-	return new Player(name, "GeneratedMap0");
-
-}
-
 Player * load_game(string filename, vector<Map *> *maps) {
 	
 	ifstream infile(filename.c_str());
@@ -97,21 +52,7 @@ Player * load_game(string filename, vector<Map *> *maps) {
 	return NULL;
 	
 }
-void SaveGame(string filename, Player *player , vector<Map *> *maps) {
-	
-	ofstream outfile(filename.c_str());
-	
-	player->SavePlayer(&outfile);
-	
-	for (unsigned int x = 0; x < maps->size();x++) {
-	
-		(*maps)[x]->SaveMap(&outfile);
-		
-	}
-	
-	outfile.close();
-	
-}
+
 #if __unix
 
 static const string ConfigPath = "Data/config";
