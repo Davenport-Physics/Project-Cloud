@@ -41,6 +41,12 @@ bool UpdateState(enum ControlType type);
 void UpdateState_Menu(enum ControlType type);
 void UpdateState_Game(enum ControlType type);
 
+void ResetState_Menu();
+void ResetState_Game();
+void ResetState_Rendering();
+
+void ResetStates();
+
 //static int SaveChoice;
 
 #if __unix
@@ -115,7 +121,8 @@ bool UpdateState(enum ControlType type) {
 			
 		case GAME:
 		
-			
+			UpdateState_Game(type);
+			break;
 			
 		default: break;
 		
@@ -131,25 +138,24 @@ bool UpdateState(enum ControlType type) {
 
 void UpdateState_Menu(enum ControlType type) {
 	
-	MenuContext (*MenuFunction)();
+	MenuContext (*MenuFunction)() = NULL;
 	switch (CurrentMenuContext) {
 		
 		case MAINMENU: MenuFunction = &UpdateMainMenu;    break;
 		case OPTIONS:  MenuFunction = &UpdateOptionsMenu; break;
 		case CONTROLS: MenuFunction = &UpdateControlsMenu; break;
 		
-		/*
-		 * This doesn't seem like it's needed, however
-		 * the animation won't run without a CREDITS case. The reason why
-		 * is because it goes to the default case, and just exits the function.
-		 * */
-		case CREDITS: break;
-		
-		default: return; break;
+		default: break;
 		
 	}
-	
+		
 	switch (CurrentMenuContext) {
+		
+		case MENU_NEWGAME:
+		case MENU_LOADGAME:
+		
+			CurrentRenderingContext = GAME;
+			break;
 		
 		case CREDITS: 
 		
@@ -164,6 +170,9 @@ void UpdateState_Menu(enum ControlType type) {
 		
 		default:
 		
+			if (MenuFunction == NULL)
+				return;
+				
 			CurrentMenuContext = UpdateMenu(type, MenuFunction, CurrentMenuContext);
 			break;
 	
@@ -173,6 +182,50 @@ void UpdateState_Menu(enum ControlType type) {
 
 void UpdateState_Game(enum ControlType type) {
 
+	switch (CurrentMenuContext) {
 	
+		case MENU_NEWGAME:  CurrentGameContext = NEWGAME;  break;
+		case MENU_LOADGAME: CurrentGameContext = LOADGAME; break;
+		
+		/*
+		 * If the default is chosen, it means the game didn't change
+		 * the MenuContext correctly, and this may go into an infinite
+		 * loop. Best to just exit the game.
+		 * 
+		 * */
+		default:
+		
+			cout << "Something seems to be wrong. UpdateState_Game. default called";
+			exit(EXIT_FAILURE);
+			break;
+		
+	}
+	CurrentMenuContext = MAINMENU;
+	
+}
+
+void ResetState_Menu() {
+
+	CurrentMenuContext = MAINMENU;
+	
+}
+
+void ResetState_Game() {
+
+	CurrentGameContext = NOT_IN_GAME;
+	
+}
+
+void ResetState_Rendering() {
+
+	CurrentRenderingContext = MENU;
+	
+}
+
+void ResetStates() {
+
+	CurrentMenuContext      = MAINMENU;
+	CurrentGameContext      = NOT_IN_GAME;
+	CurrentRenderingContext = MENU;
 	
 }

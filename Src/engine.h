@@ -72,6 +72,8 @@ void clear_screen();
 void reset_vertical();
 void reset_horizontal();
 
+void DrawError_andQuit(string ErrorMessage);
+
 template<int numrows, int numcolumns>
 void draw_2d_stack_array(char (&array)[numrows][numcolumns], void (*DrawFunction)(char **, int)) {
 

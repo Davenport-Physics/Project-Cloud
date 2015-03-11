@@ -287,8 +287,7 @@ void draw_animation_bottom_top(char **array, int rows) {
 			
 				if (!(Surface = RenderFunction(Font, array[y], Color))) {
 				
-					cout << "Unable to run draw_animation_bottom_top function";
-					exit(2);
+					DrawError_andQuit("Unable to run draw_animation_bottom_top function");
 				
 				} else {
 			
@@ -328,6 +327,35 @@ void render() {
 
 	SDL_UpdateWindowSurface(Window);
 	
+}
+
+void DrawError_andQuit(string ErrorMessage) {
+	
+	clear_screen();
+	char *array = new char[ErrorMessage.length() + 1];
+	strcpy(array, ErrorMessage.c_str());
+	array[ErrorMessage.length()] = '\0';
+	
+	SDL_Surface *Surface;
+	SDL_Rect Rect;
+	Rect.x = 0;
+	Rect.y = 0;
+	
+	if (!(Surface = RenderFunction(Font, array, Color))) {
+		
+		cout << "\nSomething is terribly wrong. Cannot even print Error message\n";
+		exit(EXIT_FAILURE);
+		
+	} else {
+	
+		SDL_BlitSurface(Surface, NULL, Screen, &Rect);
+		SDL_FreeSurface(Surface);
+		
+	}
+	SDL_Delay(3000);
+	
+	delete [] array;
+	exit(EXIT_FAILURE);
 }
 
 void quit_engine() {
