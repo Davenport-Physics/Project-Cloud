@@ -21,7 +21,7 @@
 
 #include "init.h"
 
-Config UserConfig;
+
 
 string CheckForSaves(string filename) {
 
@@ -63,6 +63,14 @@ static const string ConfigPath = "Data\\config";
 
 #endif
 
+static int WindowHeight;
+static int WindowWidth;
+	
+static int MaximumFPS;
+	
+static enum TextRendering RenderingType;
+static enum MapType map;
+
 /*
  * TODO
  * 
@@ -71,39 +79,38 @@ static const string ConfigPath = "Data\\config";
  * file during the initialization of the ifstream/ofstream objects
  * 
  * */
-Config::Config() {
+void InitConfigFile() {
 	
 	ifstream infile(ConfigPath.c_str());
 	
 	//cout << ConfigPath.c_str();
 	if (infile.good() == true) {
 		
-		cout <<"infile.good = true";
 		string temp = "";
 		
 		getline(infile, temp);
 		if (!determine_window_height(temp))
-			this->WindowHeight = 1024;
+			WindowHeight = 1024;
 		
 		temp = "";
 		getline(infile, temp);
 		if(!determine_window_width(temp))
-			this->WindowWidth = 768;
+			WindowWidth = 768;
 		
 		temp = "";
 		getline(infile, temp);
 		if (!determine_rendering_type(temp))
-			this->RenderingType = BLENDED;
+			RenderingType = BLENDED;
 		
 		temp = "";
 		getline(infile, temp);
 		if (!determine_map_type(temp))
-			this->map = GENERATION;
+			map = GENERATION;
 			
 		temp = "";
 		getline(infile, temp);
 		if (!determine_max_fps(temp))
-			this->MaximumFPS = 60;
+			MaximumFPS = 60;
 		
 		infile.close();
 		return;
@@ -119,23 +126,23 @@ Config::Config() {
 	outfile << "MapType:Generation\n";
 	outfile << "MaxFPS:60\n";
 	
-	this->WindowHeight  = 1024;
-	this->WindowWidth   = 768;
-	this->RenderingType = BLENDED;
-	this->map			= GENERATION;
-	this->MaximumFPS    = 60;
+	WindowHeight  = 1024;
+	WindowWidth   = 768;
+	RenderingType = BLENDED;
+	map			  = GENERATION;
+	MaximumFPS    = 60;
 	
 	outfile.close();
 	
 }
 
-bool Config::determine_window_height(string str) {
+bool determine_window_height(string str) {
 	
 	if (str.find("WindowHeight") != string::npos) {
 		
 		
 		string temp = return_right_string_by_delimiter(str, ':');
-		this->WindowHeight = convert_string_to_int(temp);
+		WindowHeight = convert_string_to_int(temp);
 		
 		return true;
 		
@@ -144,12 +151,12 @@ bool Config::determine_window_height(string str) {
 	return false;
 	
 }
-bool Config::determine_window_width(string str) {
+bool determine_window_width(string str) {
 
 	if (str.find("WindowWidth") != string::npos) {
 	
 		string temp = return_right_string_by_delimiter(str, ':');
-		this->WindowWidth = convert_string_to_int(temp);
+		WindowWidth = convert_string_to_int(temp);
 		
 		return true;
 		
@@ -158,21 +165,21 @@ bool Config::determine_window_width(string str) {
 	return false;
 	
 }
-bool Config::determine_rendering_type(string str) {
+bool determine_rendering_type(string str) {
 
 	if (str.find("Rendering") != string::npos) {
 		
 		if (str.find("BLENDED") != string::npos) {
 		
-			this->RenderingType = BLENDED;
+			RenderingType = BLENDED;
 			
 		} else if (str.find("SHADED") != string::npos) {
 			
-			this->RenderingType = SHADED;
+			RenderingType = SHADED;
 			
 		} else if (str.find("FAST") != string::npos) {
 		
-			this->RenderingType = FAST;
+			RenderingType = FAST;
 			
 		} else {
 		
@@ -188,17 +195,17 @@ bool Config::determine_rendering_type(string str) {
 	return false;
 	
 }
-bool Config::determine_map_type(string str) {
+bool determine_map_type(string str) {
 	
 	if (str.find("MapType") != string::npos) {
 		
 		if (str.find("GENERATION") != string::npos) {
 		
-			this->map = GENERATION;
+			map = GENERATION;
 			
 		} else if (str.find("STATIC") != string::npos) {
 		
-			this->map = STATIC;
+			map = STATIC;
 			
 		} else {
 		
@@ -214,42 +221,42 @@ bool Config::determine_map_type(string str) {
 	return false;
 	
 }
-bool Config::determine_max_fps(string str) {
+bool determine_max_fps(string str) {
 
 	if (str.find("MaxFPS") != string::npos) {
 	
-		this->MaximumFPS = convert_string_to_int(return_right_string_by_delimiter(str,':'));
+		MaximumFPS = convert_string_to_int(return_right_string_by_delimiter(str,':'));
 		return true;
 	}
 	return false;
 }
 
-int Config::get_window_height() {
+int get_window_height() {
 
-	return this->WindowHeight;
+	return WindowHeight;
 	
 }
 
-int Config::get_window_width() {
+int get_window_width() {
 
-	return this->WindowWidth;
+	return WindowWidth;
 	
 }
 
-int Config::get_max_fps() {
+int get_max_fps() {
 
-	return this->MaximumFPS;
+	return MaximumFPS;
 	
 }
 
-enum TextRendering Config::get_rendering_type() {
+enum TextRendering get_rendering_type() {
 
-	return this->RenderingType;
+	return RenderingType;
 	
 }
 
-enum MapType Config::get_map_type() {
+enum MapType get_map_type() {
 
-	return this->map;
+	return map;
 	
 }

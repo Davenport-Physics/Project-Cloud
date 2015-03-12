@@ -109,7 +109,20 @@ MenuContext UpdateMenu(enum ControlType type, MenuContext (*MenuFunction)(), Men
 	
 		case MAINMENU: draw_2d_stack_array(MainMenuArray, &draw_2d_array); break;
 		case OPTIONS:  draw_2d_stack_array(OptionsArray,  &draw_2d_array); break;
-		default: break;
+		
+		case CREDITS: break;
+		/*
+		 * The menu context isn't support yet, so it defaults to the
+		 * previous context.
+		 * 
+		 * */
+		default:
+		
+			cout << "MenuContext " << TempMenuContext << " is not supported\n";
+			TempMenuContext = CurrentMenuContext;
+			ResetPointers(TempMenuContext);
+			RemoveExtraPointers(TempMenuContext);
+			break;
 		
 	}
 	

@@ -80,12 +80,13 @@ int main(int argc, char **argv) {
 	bool GameLoopDone = false;
 	
 	SDL_StartTextInput();
+	InitConfigFile();
 	init_sound_engine();
-	init_engine(UserConfig.get_rendering_type(), UserConfig.get_window_height(), UserConfig.get_window_width());
+	init_engine(get_rendering_type(), get_window_height(), get_window_width());
 	create_music_thread(TITLETRACK);
 	
-	MaximumFPS = UserConfig.get_max_fps();
-	cout << "MaxFPS = " << MaximumFPS;
+	MaximumFPS = get_max_fps();
+	cout << "MaxFPS = " << MaximumFPS << "\n";
 	while (!GameLoopDone) {
 		
 		GameLoopDone = UpdateState(UserControls.get_input(&event));

@@ -83,11 +83,11 @@ void NewGame() {
 	 * Add static support
 	 * 
 	 * */
-	if (UserConfig.get_map_type() == GENERATION) {
+	if (get_map_type() == GENERATION) {
 		
 		for ( int x = 0; x < NUM_MAPS; x++ ) {
 		
-			if (UserConfig.get_map_type() == GENERATION) {
+			if (get_map_type() == GENERATION) {
 		
 				MapGenerator temp(x);
 				maps[x] = temp.get_map_object_heap();
@@ -98,7 +98,7 @@ void NewGame() {
 		
 		player = new Player(name, "GeneratedMap0");
 			
-	} else if (UserConfig.get_map_type() == STATIC) {
+	} else if (get_map_type() == STATIC) {
 		
 		/*
 		 * Add static map support. This will probably be

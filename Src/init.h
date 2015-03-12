@@ -61,49 +61,20 @@ enum Saves {
 
 string CheckForSaves(string filename);
 
-void SaveGame(string filename, Player *player , vector<Map *> *maps);
-
-
-/*
- * Possible TODO
- * 
- * As of this moment, this class assumes the data is saved in a static
- * and correct manner. Any deviations with the saving, will result in
- * some errors.
- * 
- * */
-class Config {
+void InitConfigFile();	
 	
-private:
-
-	int WindowHeight;
-	int WindowWidth;
+bool determine_window_height(string str);
+bool determine_window_width(string str);
+bool determine_rendering_type(string str);
+bool determine_map_type(string str);
+bool determine_max_fps(string str);
 	
-	int MaximumFPS;
+int get_window_height();
+int get_window_width();
+int get_max_fps();
 	
-	enum TextRendering RenderingType;
-	enum MapType map;
-	
-	bool determine_window_height(string str);
-	bool determine_window_width(string str);
-	bool determine_rendering_type(string str);
-	bool determine_map_type(string str);
-	bool determine_max_fps(string str);
-	
-public:
-
-	Config();
-	
-	int get_window_height();
-	int get_window_width();
-	int get_max_fps();
-	
-	enum TextRendering get_rendering_type();
-	enum MapType get_map_type();
-	
-};
-
-extern Config UserConfig;
+enum TextRendering get_rendering_type();
+enum MapType get_map_type();
 
 #endif
 
