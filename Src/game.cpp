@@ -33,12 +33,40 @@ static vector<Map *> maps;
 
 static SDL_Event *Event;
 
-void InitializeGameState(string SaveFile, SDL_Event *event) {
+#if __unix
 
-	SaveFileName = SaveFile;
-	Event        = event;
+static const string SaveFiles[3] = {
+	"Data/Saves/save1",
+	"Data/Saves/save2",
+	"Data/Saves/save3"};
+
+#elif __WIN32
+
+static const string SaveFiles[3] = {
+	"Data\\Saves\\save1", 
+	"Data\\Saves\\save2", 
+	"Data\\Saves\\save3"};
+
+#endif
+
+/*
+ * InitializeGameState : SDL_Event
+ * 
+ * This function initializes variables that are required to have
+ * a working game state.
+ * 
+ * */
+void InitializeGameState(SDL_Event *event) {
+	
+	Event = event;
 	
 }
+/*
+ * DeinitializeGameState
+ * 
+ * This function resets the static variables to their initial state. 
+ * 
+ * */
 void DeinitializeGameState() {
 
 	SaveFileName = "";
@@ -54,63 +82,72 @@ void DeinitializeGameState() {
 	
 }
 
-void NewGame() {
-	
-	string name = "";
+/*
+ * NewGame
+ * 
+ * This function initializes a variety of static variables that will be used
+ * once the game is actually running. For example it initializes the name
+ * of the player and also the maps that the player is going play on.
+ * 
+ * */
+enum GameContext NewGame(char Input) {
 
-	char c;
-	clear_screen();
-	draw_string("Please enter your name -> " + name);
-	while ((c = get_raw_input(Event)) != '\n') {
-		
-		if (c == SDLK_BACKSPACE) {
-		
-			name = name.substr(0, name.length() - 1);
-			
-			
-		} else {
-			
-			name += c;
-		
-		}
-		clear_screen();
-		draw_string("Please enter your name -> " + name);
-		
-	}
+	static string name = "";
 	
-	/*
-	 * TODO
-	 * Add static support
-	 * 
-	 * */
-	if (get_map_type() == GENERATION) {
+	draw_string("Please enter your name -> " + name);
+	if (Input != '\n') {
 		
-		for ( int x = 0; x < NUM_MAPS; x++ ) {
+			if (Input == '\0') {
+				
+				return NEWGAME;
+				
+			} else if (Input == SDLK_BACKSPACE) {
 		
-			if (get_map_type() == GENERATION) {
-		
-				MapGenerator temp(x);
-				maps[x] = temp.get_map_object_heap();
+				name = name.substr(0, name.length() - 1);
 			
+			
+			} else {
+			
+				name += Input;
+		
 			}
 		
+	} else {
+		goto skip;
+		if (get_map_type() == GENERATION) {
+		
+			for ( int x = 0; x < NUM_MAPS; x++ ) {
+		
+				if (get_map_type() == GENERATION) {
+		
+					MapGenerator temp(x);
+					maps[x] = temp.get_map_object_heap();
+			
+				}
+		
+			}
+		
+			player = new Player(name, "GeneratedMap0");
+			
+		} else if (get_map_type() == STATIC) {
+		
+			/*
+			* Add static map support. This will probably be
+			* implemented in lua later on.
+			* 
+			* */
+		
+		} else {
+	
+			DrawError_andQuit("Map type not specified for some reason");
+		
 		}
 		
-		player = new Player(name, "GeneratedMap0");
-			
-	} else if (get_map_type() == STATIC) {
-		
-		/*
-		 * Add static map support. This will probably be
-		 * implemented in lua later on.
-		 * 
-		 * */
-		
-	} else {
-	
-		DrawError_andQuit("Map type not specified for some reason");
+		return INGAME;
 		
 	}
+	skip:
+	return NEWGAME;
 
 }
 
@@ -129,7 +166,7 @@ void SaveGame() {
 	outfile.close();
 	
 }
-void LoadGame() {
+enum GameContext LoadGame() {
 	
 	ifstream infile(SaveFileName.c_str());
 	
@@ -137,5 +174,13 @@ void LoadGame() {
 	
 	infile.close();
 	
+	return LOADGAME;
+	
+}
+
+enum GameContext UpdateGame(enum GameContext context) {
+
+	
+	return NOT_IN_GAME;
 	
 }
