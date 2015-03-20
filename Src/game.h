@@ -36,7 +36,6 @@
 #include "controls.h"
 #include "character.h"
 
-
 enum GameContext {
 	
 	NEWGAME = 0,
@@ -46,11 +45,11 @@ enum GameContext {
 	
 };
 
-void InitializeGameState(string SaveFile, SDL_Event *event);
+void InitializeGameState(SDL_Event *event);
 void DeinitializeGameState();
 
-void NewGame();
-void LoadGame();
+enum GameContext NewGame(char Input);
+enum GameContext LoadGame();
 void SaveGame();
 
 enum GameContext UpdateGame(enum GameContext context);

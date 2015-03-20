@@ -110,6 +110,7 @@ MenuContext UpdateMenu(enum ControlType type, MenuContext (*MenuFunction)(), Men
 		case MAINMENU: draw_2d_stack_array(MainMenuArray, &draw_2d_array); break;
 		case OPTIONS:  draw_2d_stack_array(OptionsArray,  &draw_2d_array); break;
 		
+		case MENU_NEWGAME:
 		case CREDITS: break;
 		/*
 		 * The menu context isn't support yet, so it defaults to the

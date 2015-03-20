@@ -37,9 +37,11 @@
 #include "controls.h"
 #include "character.h"
 
-bool UpdateState(enum ControlType type);
-void UpdateState_Menu(enum ControlType type);
-void UpdateState_Game(enum ControlType type);
+void InitializeSystems();
+
+bool UpdateState(char Input);
+void UpdateState_Menu(char Input);
+void UpdateState_Game(char Input);
 
 void ResetState_Menu();
 void ResetState_Game();
@@ -47,23 +49,13 @@ void ResetState_Rendering();
 
 void ResetStates();
 
-//static int SaveChoice;
-
-#if __unix
-
-static const string files[3] = {"Data/Saves/save1.db","Data/Saves/save2.db","Data/Saves/save3.db"};
-
-#elif __WIN32
-
-static const string files[3] = {"Data\\Saves\\save1.db", "Data\\Saves\\save2.db", "Data\\Saves\\save3.db"};
-
-#endif
-
 static MenuContext CurrentMenuContext           = MAINMENU;
 static RenderingContext CurrentRenderingContext = MENU;
 static GameContext CurrentGameContext           = NOT_IN_GAME;
 
 static int MaximumFPS;
+
+static SDL_Event event;
 
 /*
  * TODO init functions return struct player_vars, which is instantly
@@ -74,22 +66,12 @@ static int MaximumFPS;
  * */
 int main(int argc, char **argv) {
 	
-	srand(time(0));
-	
-	SDL_Event event;
+	InitializeSystems();
+
 	bool GameLoopDone = false;
-	
-	SDL_StartTextInput();
-	InitConfigFile();
-	init_sound_engine();
-	init_engine(get_rendering_type(), get_window_height(), get_window_width());
-	create_music_thread(TITLETRACK);
-	
-	MaximumFPS = get_max_fps();
-	cout << "MaxFPS = " << MaximumFPS << "\n";
 	while (!GameLoopDone) {
 		
-		GameLoopDone = UpdateState(UserControls.get_input(&event));
+		GameLoopDone = UpdateState(get_raw_input(&event));
 		render();
 		
 		SDL_Delay(1000/MaximumFPS);
@@ -104,32 +86,57 @@ int main(int argc, char **argv) {
 }
 
 /*
- * TODO
+ * InitializeSystems
  * 
- * There needs to be several types of quits. One quit that exits the game
- * fully. The other quit that just brings the player back to a previous
- * context.
+ * Initializes the state of the program by calling a variety of 
+ * initialize functions throughout the program.
  * 
  * */
-bool UpdateState(enum ControlType type) {
+void InitializeSystems() {
+	
+	srand(time(0));
+
+	SDL_StartTextInput();
+	InitConfigFile();
+	init_sound_engine();
+	init_engine(get_rendering_type(), get_window_height(), get_window_width());
+	InitializeGameState(&event);
+	MaximumFPS = get_max_fps();
+	
+	create_music_thread(TITLETRACK);
+	
+}
+
+
+/*
+ * 
+ * UpdateState : enum ControlType
+ * 
+ * This function calls the correct update function depending on the
+ * CurrentRenderingContext value. It returns a boolean function, that is
+ * only false when the enum ControlType value is QUIT.
+ * 
+ * 
+ * */
+bool UpdateState(char Input) {
 	
 	clear_screen();
 	switch (CurrentRenderingContext) {
 		
 		case MENU: 
 		
-			UpdateState_Menu(type);
+			UpdateState_Menu(Input);
 			break;
 			
 		case GAME:
 		
-			UpdateState_Game(type);
+			UpdateState_Game(Input);
 			break;
 			
 		default: break;
 		
 	}
-	switch (type) {
+	switch (UserControls.check_control(Input)) {
 		
 		case QUIT: return true;  break;
 		default:   return false; break;
@@ -138,7 +145,16 @@ bool UpdateState(enum ControlType type) {
 	
 }
 
-void UpdateState_Menu(enum ControlType type) {
+/*
+ * UpdateState_Menu : enum ControlType
+ * 
+ * This function determines what Menu Function to call based
+ * on the value stored in the variable CurrentMenuContext. It may
+ * set up more specific conditions if a menu item has requirements that
+ * are not needed by other menu functions.
+ * 
+ * */
+void UpdateState_Menu(char Input) {
 	
 	MenuContext (*MenuFunction)() = NULL;
 	switch (CurrentMenuContext) {
@@ -187,36 +203,77 @@ void UpdateState_Menu(enum ControlType type) {
 			if (MenuFunction == NULL)
 				return;
 				
-			CurrentMenuContext = UpdateMenu(type, MenuFunction, CurrentMenuContext);
+			CurrentMenuContext = UpdateMenu(UserControls.check_control(Input), MenuFunction, CurrentMenuContext);
 			break;
 	
 	}
 	
 }
 
-void UpdateState_Game(enum ControlType type) {
+/*
+ * UpdateState_Game : enum ControlType
+ * 
+ * This function determines which Game Function to called based
+ * on the value stored in the variable CurrentMenuContext. If function
+ * notices that the CurrentMenuContext does not correspond to any
+ * game function, it will halt the program passing the value EXIT_FAILURE.
+ * 
+ * */
 
-	switch (CurrentMenuContext) {
+void UpdateState_Game(char Input) {
+
+	if (CurrentGameContext == NOT_IN_GAME) {
+		
+		switch (CurrentMenuContext) {
 	
-		case MENU_NEWGAME:  CurrentGameContext = NEWGAME;  break;
-		case MENU_LOADGAME: CurrentGameContext = LOADGAME; break;
+			case MENU_NEWGAME:  CurrentGameContext = NEWGAME;  break;
+			case MENU_LOADGAME: CurrentGameContext = LOADGAME; break;
 		
-		/*
-		 * If the default is chosen, it means the game didn't change
-		 * the MenuContext correctly, and this may go into an infinite
-		 * loop. Best to just exit the game.
-		 * 
-		 * */
-		default:
+			/*
+			* If the default is chosen, it means the game didn't change
+			* the MenuContext correctly, and this may go into an infinite
+			* loop. Best to just exit the game.
+			* 
+			* */
+			default:
 		
-			cout << "Something seems to be wrong. UpdateState_Game. default called";
-			exit(EXIT_FAILURE);
-			break;
+				cout << "Something seems to be wrong. UpdateState_Game. default called";
+				exit(EXIT_FAILURE);
+				break;
+		
+		}
 		
 	}
-	CurrentMenuContext = MAINMENU;
+	
+	
+	switch (CurrentGameContext) {
+	
+		case NEWGAME:  CurrentGameContext = NewGame(Input);    break;
+		case LOADGAME: CurrentGameContext = LoadGame();   break;
+		case INGAME:   CurrentGameContext = UpdateGame(CurrentGameContext); break;
+		case NOT_IN_GAME:
+		
+			CurrentMenuContext = MAINMENU;
+			break;
+		
+		default: 
+			
+			CurrentGameContext = NOT_IN_GAME;
+			CurrentMenuContext = MAINMENU; 
+			break;
+			
+	}
 	
 }
+
+/*
+ * ResetState_Menu
+ * 
+ * Resets the variable CurrentMenuContext to the default value being
+ * MAINMENU
+ * 
+ * 
+ * */
 
 void ResetState_Menu() {
 
@@ -224,17 +281,40 @@ void ResetState_Menu() {
 	
 }
 
+/*
+ * ResetState_Game
+ * 
+ * Resets the variable CurrentGameContext to the default value being
+ * NOT_IN_GAME
+ * 
+ * */
 void ResetState_Game() {
 
 	CurrentGameContext = NOT_IN_GAME;
 	
 }
 
+/*
+ * ResetState_Rendering
+ * 
+ * Resets the variable CurrentRenderingContext to the default value
+ * being MENU
+ * 
+ * */
+
 void ResetState_Rendering() {
 
 	CurrentRenderingContext = MENU;
 	
 }
+
+/*
+ * ResetStates
+ * 
+ * Resets the variables CurrentMenuContext, CurrentGameContext and
+ * CurrentRenderingContext to their default values.
+ * 
+ * */
 
 void ResetStates() {
 

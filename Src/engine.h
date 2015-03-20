@@ -93,7 +93,15 @@ void draw_2d_stack_array(char (&array)[numrows][numcolumns], void (*DrawFunction
 	
 	DrawFunction(Stack, numrows);
 	
-	delete [] Stack;
+	/*
+	 * Seems pointless, but this seemingly fixes the continuous leak
+	 * that was caused when this function was called.
+	 * 
+	 * I was expecting that "delete [] Stack" would have been sufficient.
+	 * */
+	 
+	for (int y = 0;y < numrows;y++)
+		delete [] Stack[y];
 }
 
 class AnimationBottomTop {
