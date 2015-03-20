@@ -62,9 +62,9 @@ char ** ConvertStackArrayToHeap(char (&array)[numrows][numcolumns]) {
 	
 }
 
-int    convert_string_to_int(string line);
-float  convert_string_to_float(string line);
-string convert_float_to_string(float var);
+int    StringToInt(string line);
+float  StringToFloat(string line);
+string FloatToString(float var);
 
 /*
  * delimits the string passed by the delimiter. Returns a vector<string>
@@ -75,7 +75,7 @@ string convert_float_to_string(float var);
  * 
  * vector[1] = par, vector[2] = zar * 
  * */
-vector<string> delimit_string(string str, char delimiter);
+vector<string> GetVectorByDelimiter(string str, char delimiter);
 
 /*
  * delimits the string passed by the delimiter. Returns string
@@ -87,6 +87,6 @@ vector<string> delimit_string(string str, char delimiter);
  * passed(WindowHeight:800:900) returns a string that has value 800:900
  * 
  * */
-string return_right_string_by_delimiter(string str, char delimiter);
+string DelimitString(string str, char delimiter);
 
 #endif

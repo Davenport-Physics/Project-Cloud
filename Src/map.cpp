@@ -44,7 +44,7 @@ Map::Map(int rows, int columns, int NumTransitionPoints, struct Transition *poin
 	
 		this->map[y] = new char[columns];
 		
-		strcpy(this->map[y], map[y]);
+		strncpy(this->map[y], map[y], columns);
 		
 	}
 	
@@ -87,6 +87,21 @@ char ** Map::get_map() {
 	
 	return this->map;
 	
+}
+
+void Map::print_map() {
+	
+	char **map = new char *[this->rows];
+	for (int y = 0;y < this->rows; y++) {
+	
+		map[y] = new char[this->columns + 1];
+		strncpy(map[y], this->map[y], this->columns);
+		map[y][columns] = '\0';
+		
+	}
+	draw_2d_array(map, this->rows);
+	
+	delete [] map;
 }
 
 /*
@@ -190,6 +205,13 @@ void Map::SaveMap(ofstream *outfile) {
 	
 }
 
+void Map::SetPlayerPosition(int *x, int *y) {
+	
+	this->x = x;
+	this->y = y;
+	
+}
+
 string Map::transition_to_new_map(int *x, int *y) {
 
 	for ( int i = 0;i < this->NumTransitionPoints;i++) {
@@ -203,6 +225,12 @@ string Map::transition_to_new_map(int *x, int *y) {
 		
 	}
 	return NULL;
+	
+}
+
+string Map::GetName() {
+	
+	return this->name;
 	
 }
 
@@ -632,7 +660,6 @@ Map MapGenerator::get_map_object() {
 	
 }
 Map *MapGenerator::get_map_object_heap() {
-	
 	
 	return new Map(this->rows, this->columns, this->NumTransitionPoints, points, this->map);
 	

@@ -25,19 +25,19 @@
 #include "share.h"
 
 //Potential for error, with typecast of long int to int.
-int convert_string_to_int(string line) {
+int StringToInt(string line) {
 
 	return (int)strtol( line.c_str() , NULL , 10 );
 	
 }
 
-float convert_string_to_float(string line) {
+float StringToFloat(string line) {
 
 	return strtof(line.c_str(), NULL);
 	
 }
 
-string convert_float_to_string(float var) {
+string FloatToString(float var) {
 
 	char buffer[512];
 
@@ -47,7 +47,7 @@ string convert_float_to_string(float var) {
 	
 }
 
-vector<string> delimit_string(string str, char delimiter) {
+vector<string> GetVectorByDelimiter(string str, char delimiter) {
 	
 	vector<string> strings;
 	
@@ -63,7 +63,7 @@ vector<string> delimit_string(string str, char delimiter) {
 	
 }
 
-string return_right_string_by_delimiter(string str, char delimiter) {
+string DelimitString(string str, char delimiter) {
 	
 	return str.substr(str.find(delimiter)+1, str.length());
 	

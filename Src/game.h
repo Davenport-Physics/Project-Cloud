@@ -52,7 +52,8 @@ enum GameContext NewGame(char Input);
 enum GameContext LoadGame();
 void SaveGame();
 
-enum GameContext UpdateGame(enum GameContext context);
+void HandleGameInput(char Input);
+enum GameContext UpdateGame(char Input);
 
 #endif
 

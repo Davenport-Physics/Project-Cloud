@@ -89,6 +89,10 @@ void DeinitializeGameState() {
  * once the game is actually running. For example it initializes the name
  * of the player and also the maps that the player is going play on.
  * 
+ * TODO
+ * 
+ * player x and y pointers are not passed to the map objects.
+ * 
  * */
 enum GameContext NewGame(char Input) {
 
@@ -113,7 +117,7 @@ enum GameContext NewGame(char Input) {
 			}
 		
 	} else {
-		goto skip;
+
 		if (get_map_type() == GENERATION) {
 		
 			for ( int x = 0; x < NUM_MAPS; x++ ) {
@@ -121,13 +125,15 @@ enum GameContext NewGame(char Input) {
 				if (get_map_type() == GENERATION) {
 		
 					MapGenerator temp(x);
-					maps[x] = temp.get_map_object_heap();
+					maps.push_back(temp.get_map_object_heap());
 			
 				}
 		
 			}
 		
 			player = new Player(name, "GeneratedMap0");
+			maps[0]->SetPlayerPosition(&player->vars.x, &player->vars.y);
+			player->vars.x = player->vars.y = 1;
 			
 		} else if (get_map_type() == STATIC) {
 		
@@ -146,11 +152,18 @@ enum GameContext NewGame(char Input) {
 		return INGAME;
 		
 	}
-	skip:
+
 	return NEWGAME;
 
 }
 
+/*
+ * SaveGame
+ * 
+ * This function saves a variety of variables to a file specified by the
+ * SaveFileName static string variable.
+ * 
+ * */
 void SaveGame() {
 	
 	ofstream outfile(SaveFileName.c_str());
@@ -166,6 +179,15 @@ void SaveGame() {
 	outfile.close();
 	
 }
+
+/*
+ * LoadGame
+ * 
+ * This function will eventually load variables from a file.
+ * 
+ * TODO This function is not complete.
+ * 
+ * */
 enum GameContext LoadGame() {
 	
 	ifstream infile(SaveFileName.c_str());
@@ -178,9 +200,52 @@ enum GameContext LoadGame() {
 	
 }
 
-enum GameContext UpdateGame(enum GameContext context) {
+/*
+ * UpdateGame
+ * 
+ * This function handles both player input, and also updating surfaces
+ * that the game engine will eventually render.
+ * 
+ * */
+enum GameContext UpdateGame(char Input) {
 
+	if (UserControls.check_control(Input) == QUIT)
+		return NOT_IN_GAME;
+		
+	HandleGameInput(Input);
 	
-	return NOT_IN_GAME;
+	maps[0]->print_map_around_player(10);
+	
+	return INGAME;
+}
+
+void HandleGameInput(char Input) {
+	
+	switch (UserControls.check_control(Input)) {
+	
+		case UP:
+		
+			if (maps[0]->check_if_player_can_move(player->vars.x, player->vars.y-1) == YES)
+				player->vars.y -= 1;
+			break;
+		case DOWN:
+		
+			if (maps[0]->check_if_player_can_move(player->vars.x, player->vars.y+1) == YES)
+				player->vars.y += 1;
+			break;
+		case LEFT:
+		
+			if (maps[0]->check_if_player_can_move(player->vars.x-1, player->vars.y) == YES)
+				player->vars.x -= 1;
+			break;
+		case RIGHT:
+		
+			if (maps[0]->check_if_player_can_move(player->vars.x+1, player->vars.y) == YES)
+				player->vars.x += 1;
+			break;
+			
+		default: break;
+		
+	}
 	
 }

@@ -108,9 +108,12 @@ public:
 	
 	char ** get_map();
 	
+	void SetPlayerPosition(int *x, int *y);
 	void SaveMap(ofstream *outfile);
+	void print_map();
 	void print_map_around_player(int bounds);
 	string transition_to_new_map(int *x, int *y);
+	string GetName();
 	
 	
 };
@@ -162,7 +165,6 @@ private:
 	void add_gold();
 	void add_forward_backwards();
 	void add_save_point();
-	//TODO Add chests, and npc's
 	
 	void get_random_location_by_bounds(int *x, int *y);
 	

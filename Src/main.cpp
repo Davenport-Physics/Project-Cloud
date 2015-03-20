@@ -245,24 +245,20 @@ void UpdateState_Game(char Input) {
 		
 	}
 	
-	
 	switch (CurrentGameContext) {
 	
 		case NEWGAME:  CurrentGameContext = NewGame(Input);    break;
 		case LOADGAME: CurrentGameContext = LoadGame();   break;
-		case INGAME:   CurrentGameContext = UpdateGame(CurrentGameContext); break;
-		case NOT_IN_GAME:
-		
-			CurrentMenuContext = MAINMENU;
-			break;
+		case INGAME:   CurrentGameContext = UpdateGame(Input); break;
 		
 		default: 
 			
-			CurrentGameContext = NOT_IN_GAME;
-			CurrentMenuContext = MAINMENU; 
+			ResetStates();
 			break;
 			
 	}
+	if (CurrentGameContext == NOT_IN_GAME)
+		ResetStates();
 	
 }
 

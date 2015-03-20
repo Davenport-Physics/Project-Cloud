@@ -33,7 +33,7 @@ string CheckForSaves(string filename) {
 		getline(infile, temp);
 		infile.close();
 		
-		return return_right_string_by_delimiter(temp,':');
+		return DelimitString(temp,':');
 	}
 	infile.close();
 	
@@ -141,8 +141,8 @@ bool determine_window_height(string str) {
 	if (str.find("WindowHeight") != string::npos) {
 		
 		
-		string temp = return_right_string_by_delimiter(str, ':');
-		WindowHeight = convert_string_to_int(temp);
+		string temp = DelimitString(str, ':');
+		WindowHeight = StringToInt(temp);
 		
 		return true;
 		
@@ -155,8 +155,8 @@ bool determine_window_width(string str) {
 
 	if (str.find("WindowWidth") != string::npos) {
 	
-		string temp = return_right_string_by_delimiter(str, ':');
-		WindowWidth = convert_string_to_int(temp);
+		string temp = DelimitString(str, ':');
+		WindowWidth = StringToInt(temp);
 		
 		return true;
 		
@@ -225,7 +225,7 @@ bool determine_max_fps(string str) {
 
 	if (str.find("MaxFPS") != string::npos) {
 	
-		MaximumFPS = convert_string_to_int(return_right_string_by_delimiter(str,':'));
+		MaximumFPS = StringToInt(DelimitString(str,':'));
 		return true;
 	}
 	return false;
