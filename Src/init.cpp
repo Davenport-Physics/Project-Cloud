@@ -63,54 +63,47 @@ static const string ConfigPath = "Data\\config";
 
 #endif
 
-static int WindowHeight;
-static int WindowWidth;
+static int WindowHeight = 1024;
+static int WindowWidth  = 768;
+static int MaximumFPS   = 60;
 	
-static int MaximumFPS;
-	
-static enum TextRendering RenderingType;
-static enum MapType map;
+static enum TextRendering RenderingType = BLENDED;
+static enum MapType map                 = GENERATION;
+
+static const int NumConfig = 6;
+static bool (*ConfigFunction[NumConfig])(string) = {
+	determine_window_height,
+	determine_window_width,
+	determine_rendering_type,
+	determine_map_type,
+	determine_max_fps,
+	determine_controls
+};
 
 /*
  * TODO
  * 
- * There is a bug here. Probably because of the operating system macros.
- * It works perfectly fine if you just type the location of the config
- * file during the initialization of the ifstream/ofstream objects
+ * For some reason the j is not being read in. It could have something to
+ * do with the escape sequence. It might be best to just have escape and
+ * enter as non-modifiable keys.
  * 
  * */
 void InitConfigFile() {
 	
 	ifstream infile(ConfigPath.c_str());
 	
-	//cout << ConfigPath.c_str();
+	string temp;
 	if (infile.good() == true) {
 		
-		string temp = "";
+		for (int x = 0;x < NumConfig;x++) {
 		
-		getline(infile, temp);
-		if (!determine_window_height(temp))
-			WindowHeight = 1024;
-		
-		temp = "";
-		getline(infile, temp);
-		if(!determine_window_width(temp))
-			WindowWidth = 768;
-		
-		temp = "";
-		getline(infile, temp);
-		if (!determine_rendering_type(temp))
-			RenderingType = BLENDED;
-		
-		temp = "";
-		getline(infile, temp);
-		if (!determine_map_type(temp))
-			map = GENERATION;
+			temp = "";
+			getline(infile, temp);
+			cout << temp << "\n";
+			if(!ConfigFunction[x](temp))
+				continue;
 			
-		temp = "";
-		getline(infile, temp);
-		if (!determine_max_fps(temp))
-			MaximumFPS = 60;
+		}
 		
 		infile.close();
 		return;
@@ -123,14 +116,9 @@ void InitConfigFile() {
 	outfile << "WindowHeight:1024\n";
 	outfile << "WindowWidth:768\n";
 	outfile << "Rendering:BLENDED\n";
-	outfile << "MapType:Generation\n";
+	outfile << "MapType:GENERATION\n";
 	outfile << "MaxFPS:60\n";
-	
-	WindowHeight  = 1024;
-	WindowWidth   = 768;
-	RenderingType = BLENDED;
-	map			  = GENERATION;
-	MaximumFPS    = 60;
+	outfile << "Controls:wsad" << (char)27 << "j" << "\\n\n";
 	
 	outfile.close();
 	
@@ -216,17 +204,42 @@ bool determine_map_type(string str) {
 		return true;
 		
 	}
-	
-	
 	return false;
 	
 }
+
 bool determine_max_fps(string str) {
 
 	if (str.find("MaxFPS") != string::npos) {
 	
 		MaximumFPS = StringToInt(DelimitString(str,':'));
 		return true;
+		
+	}
+	return false;
+	
+}
+
+/*
+ * TODO
+ * 
+ * This function is misbehaving badly.
+ * 
+ * */
+bool determine_controls(string str) {
+	
+	if (str.find("Controls") != string::npos) {
+	
+		char *controls = new char[NUMCONTROLS];
+		
+		str = DelimitString(str, ':');
+		cout << "str = " << str << "\n";
+		strncpy(controls, str.c_str(), NUMCONTROLS);
+		UserControls.set_controls_to_chars(controls);
+		
+		delete [] controls;
+		return true;
+		
 	}
 	return false;
 }

@@ -31,6 +31,8 @@
 
 #include "engine.h"
 
+#define NUMCONTROLS 5
+
 using std::string;
 using std::cout;
 
@@ -40,9 +42,9 @@ enum ControlType {
 	DOWN,
 	LEFT,
 	RIGHT,
-	QUIT,
 	JOURNAL,
 	ENTER,
+	QUIT,
 	NOTSET
 	
 };
@@ -52,11 +54,10 @@ class Controls {
 	
 private:
 
-	static const int length = 7;
-
-	char controls[length];
+	char controls[NUMCONTROLS];
+	static const char ConstControls[2];
 	
-	string control_types[length];
+	string control_types[NUMCONTROLS];
 	
 	void initialize_control_types();
 

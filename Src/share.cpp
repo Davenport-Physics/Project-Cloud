@@ -63,6 +63,54 @@ vector<string> GetVectorByDelimiter(string str, char delimiter) {
 	
 }
 
+/*
+ * GetCharsByDelimiter : string str, char delimiter
+ * 
+ * This function takes in a string that is formatted as such
+ * a,b,c,d,... and returns a char array delimited by the passed delimiter.
+ * 
+ * WARNING
+ * This is both a potentially expensive function call, and at the same time
+ * can lead to a potential issue if for some reason the player decides to
+ * use , as a control.
+ * 
+ * Also be sure to delete the passed char pointer.
+ * 
+ * 
+ * */
+char * GetCharsByDelimiter(string str, char delimiter) {
+	
+	vector<string> strings = GetVectorByDelimiter(str, delimiter);
+	
+	cout << strings[0] << "\n";
+	cout << strings.size();
+	char *chars = new char[strings.size()];
+	for (unsigned int x = 0;x < strings.size();x++) {
+	
+		chars[x] = SingleCharStringToChar(strings[x]);
+		
+	}
+	return chars;
+	
+}
+
+char SingleCharStringToChar(string str) {
+
+	if (str.length() > 2) {
+		cout << "str = " << str << "\n";
+		throw invalid_argument("String length larger than 2");
+	}
+		
+	char ThisChar[1];
+	
+	strncpy(ThisChar, str.c_str(), 1);
+	
+	char temp = ThisChar[0];
+	
+	return temp;
+	
+}
+
 string DelimitString(string str, char delimiter) {
 	
 	return str.substr(str.find(delimiter)+1, str.length());

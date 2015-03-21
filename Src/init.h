@@ -58,7 +58,6 @@ enum Saves {
 	
 };
 
-
 string CheckForSaves(string filename);
 
 void InitConfigFile();	
@@ -68,6 +67,7 @@ bool determine_window_width(string str);
 bool determine_rendering_type(string str);
 bool determine_map_type(string str);
 bool determine_max_fps(string str);
+bool determine_controls(string str);
 	
 int get_window_height();
 int get_window_width();

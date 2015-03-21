@@ -48,6 +48,7 @@ Player::Player(string name, string MapName) {
 	this->vars.x			= 0;
 	this->vars.y			= 0;
 	
+	this->vars.MapIndex     = 0;
 	this->vars.MapName	    = MapName;
 	this->vars.gold			= 0;
 	

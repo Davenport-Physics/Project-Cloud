@@ -25,6 +25,8 @@
 
 Controls UserControls;
 
+const char Controls::ConstControls[2] = {'\n', 27};
+
 Controls::Controls() {
 	
 	initialize_control_types();
@@ -50,21 +52,23 @@ void Controls::initialize_control_types() {
 	this->control_types[1] = "Down";
 	this->control_types[2] = "Left";
 	this->control_types[3] = "Right";
-	this->control_types[4] = "Quit";
-	this->control_types[5] = "Journal";
-	this->control_types[6] = "Enter";
+	this->control_types[4] = "Journal";
 	
 }
 
 void Controls::set_controls_to_default() {
-
-	strcpy(this->controls , "wsadqj\n");
+	
+	this->controls[0] = 'w';
+	this->controls[1] = 's';
+	this->controls[2] = 'a';
+	this->controls[3] = 'd';
+	this->controls[4] = 'j';
 	
 }
 
 void Controls::set_controls_to_chars(char *controls) {
 
-	strcpy(this->controls , controls);
+	strncpy(this->controls , controls, 5);
 	
 }
 
@@ -79,7 +83,7 @@ void Controls::set_controls_manually() {
 	
 		Error = false;
 		clear_screen();
-		for (int i = 0; i < this->length;i++) {
+		for (int i = 0; i < NUMCONTROLS;i++) {
 	
 			draw_append_string(this->control_types[i]);
 			//this->controls[i] = get_raw_input();
@@ -89,8 +93,8 @@ void Controls::set_controls_manually() {
 		
 		}
 		
-		for (int x = 0;x < this->length;x++)
-		for (int i = x+1;i < this->length;i++) {
+		for (int x = 0;x < NUMCONTROLS;x++)
+		for (int i = x+1;i < NUMCONTROLS;i++) {
 		
 			if (this->controls[x] == this->controls[i]) {
 			
@@ -106,7 +110,7 @@ void Controls::set_controls_manually() {
 
 void Controls::print_controls() {
 
-	for (int i = 0; i < this->length; i++) {
+	for (int i = 0; i < NUMCONTROLS; i++) {
 	
 		cout << this->controls[i] << "\n";
 		
@@ -116,13 +120,16 @@ void Controls::print_controls() {
 
 enum ControlType Controls::check_control(char control) {
 
-	for (int i = 0;i < this->length;i++) {
+	for (int i = 0;i < NUMCONTROLS;i++) {
 	
-		if ( this->controls[i] == control ) {
-		
+		if ( this->controls[i] == control )
 			return (enum ControlType)i;
 		
-		}
+	}
+	for (int i = 0; i < 2;i++) {
+	
+		if (this->ConstControls[i] == control)
+			return (enum ControlType)(i+NUMCONTROLS);
 		
 	}
 	
@@ -142,7 +149,7 @@ enum ControlType Controls::get_input(SDL_Event *event) {
 		switch (event->type) {
 		
 			case SDL_QUIT: 
-			
+				
 				return QUIT; 
 				break;
 				
@@ -184,6 +191,6 @@ char get_raw_input(SDL_Event *event) {
 		
 	}
 	
-	return 0;
+	return '\0';
 	
 }

@@ -71,6 +71,7 @@ typedef struct playervars {
 	int accuracy;
 	
 	int x , y;
+	int MapIndex;
 	
 	string MapName;
 	string name;

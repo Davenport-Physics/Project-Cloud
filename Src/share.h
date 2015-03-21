@@ -26,10 +26,12 @@
 
 #include <iostream>
 #include <cstdio>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <cstdlib>
 #include <sstream>
+#include <stdexcept>
 
 #define MAXCOLUMNS 40
 #define RESET_POSITION 0
@@ -45,6 +47,7 @@ using std::cout;
 using std::string;
 using std::endl;
 using std::vector;
+using std::invalid_argument;
 
 template<int numrows,int numcolumns>
 char ** ConvertStackArrayToHeap(char (&array)[numrows][numcolumns]) {
@@ -66,6 +69,8 @@ int    StringToInt(string line);
 float  StringToFloat(string line);
 string FloatToString(float var);
 
+char SingleCharStringToChar(string str);
+
 /*
  * delimits the string passed by the delimiter. Returns a vector<string>
  * 
@@ -76,6 +81,8 @@ string FloatToString(float var);
  * vector[1] = par, vector[2] = zar * 
  * */
 vector<string> GetVectorByDelimiter(string str, char delimiter);
+
+char *GetCharsByDelimiter(string str, char delimiter);
 
 /*
  * delimits the string passed by the delimiter. Returns string

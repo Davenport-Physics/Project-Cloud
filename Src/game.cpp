@@ -130,7 +130,8 @@ enum GameContext NewGame(char Input) {
 				}
 		
 			}
-		
+			
+			//Temporary fix. This needs to be fleshed out later.
 			player = new Player(name, "GeneratedMap0");
 			maps[0]->SetPlayerPosition(&player->vars.x, &player->vars.y);
 			player->vars.x = player->vars.y = 1;
@@ -214,7 +215,7 @@ enum GameContext UpdateGame(char Input) {
 		
 	HandleGameInput(Input);
 	
-	maps[0]->print_map_around_player(10);
+	maps[player->vars.MapIndex]->print_map_around_player(10);
 	
 	return INGAME;
 }
@@ -225,22 +226,22 @@ void HandleGameInput(char Input) {
 	
 		case UP:
 		
-			if (maps[0]->check_if_player_can_move(player->vars.x, player->vars.y-1) == YES)
+			if (maps[player->vars.MapIndex]->check_if_player_can_move(player->vars.x, player->vars.y-1) == YES)
 				player->vars.y -= 1;
 			break;
 		case DOWN:
 		
-			if (maps[0]->check_if_player_can_move(player->vars.x, player->vars.y+1) == YES)
+			if (maps[player->vars.MapIndex]->check_if_player_can_move(player->vars.x, player->vars.y+1) == YES)
 				player->vars.y += 1;
 			break;
 		case LEFT:
 		
-			if (maps[0]->check_if_player_can_move(player->vars.x-1, player->vars.y) == YES)
+			if (maps[player->vars.MapIndex]->check_if_player_can_move(player->vars.x-1, player->vars.y) == YES)
 				player->vars.x -= 1;
 			break;
 		case RIGHT:
 		
-			if (maps[0]->check_if_player_can_move(player->vars.x+1, player->vars.y) == YES)
+			if (maps[player->vars.MapIndex]->check_if_player_can_move(player->vars.x+1, player->vars.y) == YES)
 				player->vars.x += 1;
 			break;
 			
